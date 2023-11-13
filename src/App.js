@@ -10,7 +10,7 @@ import Lading from "./components/lading.component"
 class App extends Component {
     render() {
         return (
-            <div className="container m-0 pt-3">
+            <div className="w-full m-0 pt-3">
                 <Routes>
                     <Route path="/" element={<Home />} />
                     <Route path="/login" element={<Login />} />
