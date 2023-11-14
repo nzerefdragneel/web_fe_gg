@@ -28,27 +28,76 @@ function Lading() {
                     </div>
                 </div>
             </div>
-            <div>
-                Content
+            <div className='flex flex-col items-start gap-2 px-5 py-2 my-5 mx-16'>
+                <div className='grid grid-cols-1 md:grid-cols-2 gap-6 items-center '>
+                    <div className='mr-4 ml-4'>
+                        <div className='text-4xl text-dark-green font-bold mt-3'>
+                            Classroom
+                        </div>
+                        <div className='text-xl mt-3'>
+                            Where teaching and learning come together
+                        </div>
+                        <div className='text-base mt-3 text-neutral-600'>
+                            Classroom helps educators create engaging learning experiences they can personalize, manage, and measure. Classroom is a Workspace for Education, which empowers your institution with simple, safer, collaborative tools.
+                        </div>
+                    </div>
+                    <div className='justify-self-center'>
+                        <img src='./assets/online-class.jpg' className='h-96 rounded-2xl' alt='online-class' />
+                    </div>
+                </div>
+                <div className='flex flex-col gap-4 mt-24 items-start'>
+                    <div className='text-3xl text-dark-green font-bold'>
+                        Designed in collaboration with educators
+                    </div>
+                    <div className='text-base text-neutral-600'>
+                        Classroom is designed with feedback from the educational community, always building new features and functionality that lets educators focus on teaching and students focus on learning.
+                    </div>
+                    <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 w-full place-items-center mt-3'>
+                        <div className='p-5 rounded-lg bg-slate-50 w-80'>
+                            <div className='text-right text-5xl text-medium-green font-bold my-2'>
+                                01
+                            </div>
+                            <div className='text-base font-bold'>
+                                Personalize learning
+                            </div>
+                        </div>
+                        <div className='p-5 rounded-lg bg-slate-50 w-80'>
+                            <div className='text-right text-5xl text-medium-green font-bold my-2'>
+                                02
+                            </div>
+                            <div className='text-base font-bold'>
+                                Simplify everyday tasks
+                            </div>
+                        </div>
+                        <div className='p-5 rounded-lg bg-slate-50 w-80'>
+                            <div className='text-right text-5xl text-medium-green font-bold my-2'>
+                                03
+                            </div>
+                            <div className='text-base font-bold'>
+                                Gain insights and visibility
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div className='border-t mt-2 bottom-0 px-40 pb-8 pt-20 flex flex-row flex-wrap gap-2 justify-between'>
                 <div className='flex flex-col mt-2 mr-5'>
                     <img src='./assets/logo.png' className='w-14 h-14 mb-4' alt='logo' />
-                    <div className='mt-2 flex flex-row'>
+                    <div className='mt-2 flex flex-row items-center'>
                         <EnvelopeIcon className='h-6 w-6 mr-2' />
                         <div className='text-base'>admin@class.com</div>
                     </div>
-                    <div className='mt-2 flex flex-row'>
+                    <div className='mt-2 flex flex-row items-center'>
                         <PhoneIcon className='h-6 w-6 mr-2' />
                         <div className='text-base'>+84 123 456 789</div>
                     </div>
-                    <div className='mt-2 flex flex-row'>
+                    <div className='mt-2 flex flex-row items-center'>
                         <MapPinIcon className='h-6 w-6 mr-2' />
                         <div className='text-base'>Ho Chi Minh City, Viet Nam</div>
                     </div>
                 </div>
                 <div className='mr-2 mt-2 flex flex-row flex-wrap gap-3'>
-                    <div className='flex flex-col items-start mr-5'>
+                    <div className='flex flex-col items-start mr-5 gap-2'>
                         <div className='text-lg'>
                             Home
                         </div>
@@ -65,7 +114,7 @@ function Lading() {
                             FAQ
                         </div>
                     </div>
-                    <div className='flex flex-col items-start mr-5'>
+                    <div className='flex flex-col items-start mr-5 gap-2'>
                         <div className='text-lg'>
                             About Us
                         </div>
@@ -79,7 +128,7 @@ function Lading() {
                             Our Goals
                         </div>
                     </div>
-                    <div className='flex flex-col items-start mr-5'>
+                    <div className='flex flex-col items-start mr-5 gap-2'>
                         <div className='text-lg'>
                             Follow Us
                         </div>
