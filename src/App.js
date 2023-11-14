@@ -6,20 +6,21 @@ import { Routes, Route, Link } from "react-router-dom";
 
 import Login from "./components/login.component";
 import Home from "./components/home.component";
-import Lading from "./components/lading.component"
+import EditUser from "./components/edituser.component";
 class App extends Component {
-    render() {
-        return (
-            <div className="container m-0 pt-3">
-                <Routes>
-                    <Route path="/" element={<Home />} />
-                    <Route path="/login" element={<Login />} />
-                    <Route path='/lading' element={<Lading/>}/>
-                </Routes>
-            </div>
-        )
-    }
-
+  render() {
+    return (
+      <div className="container mt-3">
+      <Routes>
+      <Route path="/" element={<Home/>} />
+      <Route path="/login" element={<Login/>} />
+      <Route path="/edituser" element={<EditUser/>} />
+      
+      </Routes>
+    </div>
+    )
+  }
+  
 }
 
 export default App;
