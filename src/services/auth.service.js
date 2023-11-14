@@ -1,19 +1,20 @@
 import axios from "axios";
+const bcrypt = require('bcryptjs');
 
 const API_URL = "http://localhost:8080/api/auth/";
 
 class AuthService {
   login(username, password) {
+    const hashedPassword = bcrypt.hashSync(password, 8)
     return axios
       .post(API_URL + "signin", {
         username,
-        password
+        hashedPassword
       })
       .then(response => {
         if (response.data.accessToken) {
           localStorage.setItem("user", JSON.stringify(response.data));
         }
-
         return response.data;
       });
   }
