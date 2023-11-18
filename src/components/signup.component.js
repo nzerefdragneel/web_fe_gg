@@ -1,9 +1,85 @@
-import React from 'react'
+import React, { useRef, useState } from 'react'
 import { withRouter } from '../common/with-router'
-
 import { EnvelopeIcon, PhoneIcon, MapPinIcon } from '@heroicons/react/24/solid'
+import Form from "react-validation/build/form";
+import Input from "react-validation/build/input";
+import { isEmail } from "validator";
 
-function Lading() {
+import AuthService from "../services/auth.service";
+
+
+const required = value => {
+    if (!value) {
+        return (
+            <div className="text-error-color text-base" role="alert">
+                This field is required!
+            </div>
+        );
+    }
+};
+
+const vemail = value => {
+    if (!isEmail(value)) {
+        return (
+            <div className="text-error-color text-base" role="alert">
+                This is not a valid email.
+            </div>
+        );
+    }
+};
+
+const vusername = value => {
+    if (value.length < 3 || value.length > 20) {
+        return (
+            <div className="text-error-color text-base" role="alert">
+                The username must be between 3 and 20 characters.
+            </div>
+        );
+    }
+};
+
+const vpassword = value => {
+    if (value.length < 6 || value.length > 40) {
+        return (
+            <div className="text-error-color text-base" role="alert">
+                The password must be between 6 and 40 characters.
+            </div>
+        );
+    }
+};
+
+
+function Signup() {
+    const [username, setUsername] = useState('')
+    const [password, setPassword] = useState('')
+    const [email, setEmail] = useState('')
+    const fref = useRef(null)
+    const [message, setMessage] = useState('')
+    const [isSubmit, setIsSubmit] = useState(false)
+
+    const handleRegister = (e) => {
+
+        e.preventDefault();
+
+        fref.current.validateAll();
+
+        AuthService.register(
+            username,
+            email,
+            password,
+        ).then(
+            response => {
+                setMessage(response.data.message)
+                setIsSubmit(true)
+            },
+            error => {
+                setMessage(error.data.message)
+                setIsSubmit(true)
+            }
+
+        );
+    }
+
     return (
         <div className="flex flex-col h-48 w-full">
             <div className='pt-3 pb-4 px-32 flex flex-row flex-wrap justify-between border-b mb-2'>
@@ -28,8 +104,8 @@ function Lading() {
                     </div>
                 </div>
             </div>
-            <div className='flex flex-col items-start gap-2 px-5 py-2 my-5 mx-16'>
-                <div className='grid grid-cols-1 md:grid-cols-2 gap-6 items-center '>
+            <div className='grid grid-cols-1 md:grid-cols-2 gap-6 justify-items-center content-around place-items-center px-5 py-2 my-5 mx-16'>
+                <div className='flex flex-col flex-wrap'>
                     <div className='mr-4 ml-4'>
                         <div className='text-4xl text-dark-green font-bold mt-3'>
                             Classroom
@@ -41,58 +117,70 @@ function Lading() {
                             Classroom helps educators create engaging learning experiences they can personalize, manage, and measure. Classroom is a Workspace for Education, which empowers your institution with simple, safer, collaborative tools.
                         </div>
                     </div>
-                    <div className='justify-self-center'>
-                        <img src='./assets/online-class.jpg' className='h-96 rounded-2xl' alt='online-class' />
-                    </div>
                 </div>
-                <div className='flex flex-col gap-4 mt-24 items-start'>
-                    <div className='text-3xl text-dark-green font-bold'>
-                        Designed in collaboration with educators
+                <div className='bg-gray-50 m-3 p-5'>
+                    <div className='text-4xl font-bold text-center mb-3'>
+                        Sign Up
                     </div>
-                    <div className='text-base text-neutral-600'>
-                        Classroom is designed with feedback from the educational community, always building new features and functionality that lets educators focus on teaching and students focus on learning.
+                    <div className='text-base text-neutral-600 mb-6'>
+                        Create an account to unlock exclusive features.
                     </div>
-                    <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 w-full place-items-center mt-3'>
-                        <div className='p-5 rounded-lg bg-slate-50 w-80'>
-                            <div className='text-right text-5xl text-medium-green font-bold my-2'>
-                                01
+                    <Form
+                        onSubmit={handleRegister}
+                        ref={fref}
+                    >
+                        <div>
+                            <div className="form-group">
+                                <label htmlFor="username" className='font-semibold mb-2'>Username</label>
+                                <Input
+                                    type="text"
+                                    className="form-control p-3 rounded required"
+                                    name="username"
+                                    placeholder='Enter your Username'
+                                    onChange={(e) => {
+                                        setUsername(e.target.value)
+                                    }}
+                                    validations={[required, vusername]}
+                                />
                             </div>
-                            <div className='text-base font-bold'>
-                                Personalize learning
+
+                            <div className="form-group">
+                                <label htmlFor="email" className='font-semibold mb-2 mt-2'>Email</label>
+                                <Input
+                                    type="text"
+                                    className="form-control p-3 rounded"
+                                    name="email"
+                                    placeholder='Enter your Email'
+                                    onChange={(e) => {
+                                        setEmail(e.target.value)
+                                    }}
+                                    validations={[required, vemail]}
+                                />
+                            </div>
+
+                            <div className="form-group">
+                                <label htmlFor="password" className='font-semibold mb-2 mt-2'>Password</label>
+                                <Input
+                                    type="password"
+                                    className="form-control p-3 rounded"
+                                    name="password"
+                                    placeholder='Enter your Password'
+                                    onChange={(e) => {
+                                        setPassword(e.target.value)
+                                    }}
+                                    validations={[required, vpassword]}
+                                />
+                            </div>
+                            <div className="form-group">
+                                <button className="w-full py-2.5 text-white bg-dark-green rounded-lg text-sm mt-3">Sign Up</button>
                             </div>
                         </div>
-                        <div className='p-5 rounded-lg bg-slate-50 w-80'>
-                            <div className='text-right text-5xl text-medium-green font-bold my-2'>
-                                02
-                            </div>
-                            <div className='text-base font-bold'>
-                                Simplify everyday tasks
-                            </div>
+                    </Form>
+                    {isSubmit &&
+                        <div className="text-error-color text-base">
+                            {message}
                         </div>
-                        <div className='p-5 rounded-lg bg-slate-50 w-80'>
-                            <div className='text-right text-5xl text-medium-green font-bold my-2'>
-                                03
-                            </div>
-                            <div className='text-base font-bold'>
-                                Gain insights and visibility
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div className='flex flex-col gap-4 mt-20 items-start'>
-                    <div className='text-3xl text-dark-green font-bold mb-5'>
-                        How Classroom can make a difference for you
-                    </div>
-                    <div className='grid grid-cols-1 md:grid-cols-2 gap-6 items-center'>
-                        <div className='p-5 rounded-lg bg-slate-50 w-full'>
-                            <div className='text-base text-neutral-600'>
-                                Classroom can be learned in minutes and serves all types of learners and educators, regardless of their tech savviness. Empower educators, and encourage adoption and proficiency with new tools and techniques, with a broad range of resources.
-                            </div>
-                            <div className='text-base border-t'>
-                                Personalize learning
-                            </div>
-                        </div>
-                    </div>
+                    }
                 </div>
             </div>
             <div className='border-t mt-2 bottom-0 px-40 pb-8 pt-20 flex flex-row flex-wrap gap-2 justify-between'>
@@ -168,4 +256,4 @@ function Lading() {
     )
 }
 
-export default withRouter(Lading)
+export default withRouter(Signup)

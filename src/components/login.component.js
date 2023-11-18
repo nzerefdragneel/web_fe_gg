@@ -5,9 +5,9 @@ import CheckButton from "react-validation/build/button";
 
 import AuthService from "../services/auth.service";
 
-import { withRouter } from '../common/with-router';
+import { withRouter } from "../common/with-router";
 
-const required = value => {
+const required = (value) => {
   if (!value) {
     return (
       <div className="alert alert-danger" role="alert">
@@ -17,7 +17,7 @@ const required = value => {
   }
 };
 
-class Login extends Component {
+class LoginForm extends Component {
   constructor(props) {
     super(props);
     this.handleLogin = this.handleLogin.bind(this);
@@ -28,19 +28,26 @@ class Login extends Component {
       username: "",
       password: "",
       loading: false,
-      message: ""
+      message: "",
+      rememberMe: false,
     };
   }
 
   onChangeUsername(e) {
     this.setState({
-      username: e.target.value
+      username: e.target.value,
     });
   }
 
+  onChangeRememberMe = () => {
+    this.setState({
+      rememberMe: !this.state.rememberMe,
+    });
+  };
+
   onChangePassword(e) {
     this.setState({
-      password: e.target.value
+      password: e.target.value,
     });
   }
 
@@ -49,7 +56,7 @@ class Login extends Component {
 
     this.setState({
       message: "",
-      loading: true
+      loading: true,
     });
 
     this.form.validateAll();
@@ -58,9 +65,9 @@ class Login extends Component {
       AuthService.login(this.state.username, this.state.password).then(
         () => {
           //this.props.router.navigate("/profile");
-          window.location.reload();
+          // window.location.reload();
         },
-        error => {
+        (error) => {
           const resMessage =
             (error.response &&
               error.response.data &&
@@ -70,13 +77,13 @@ class Login extends Component {
 
           this.setState({
             loading: false,
-            message: resMessage
+            message: resMessage,
           });
         }
       );
     } else {
       this.setState({
-        loading: false
+        loading: false,
       });
     }
   }
@@ -84,16 +91,10 @@ class Login extends Component {
   render() {
     return (
       <div className="col-md-12">
-        <div className="card card-container">
-          <img
-            src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
-            alt="profile-img"
-            className="profile-img-card"
-          />
-
+        <div className="">
           <Form
             onSubmit={this.handleLogin}
-            ref={c => {
+            ref={(c) => {
               this.form = c;
             }}
           >
@@ -112,7 +113,7 @@ class Login extends Component {
             <div className="form-group">
               <label htmlFor="password">Password</label>
               <Input
-                type="password"
+                type={this.state.showPassword ? "text" : "password"}
                 className="form-control"
                 name="password"
                 value={this.state.password}
@@ -122,7 +123,24 @@ class Login extends Component {
             </div>
 
             <div className="form-group">
+              <a href="#null" style={{ color: "black" }}>
+                Forgot password?
+              </a>
+            </div>
+
+            <div className="form-group">
+              <input
+                type="checkbox"
+                value={this.state.rememberMe}
+                onChange={this.onChangeRememberMe}
+                id="rememberMe"
+              />{" "}
+              <label for="rememberMe">Remember me</label>
+            </div>
+
+            <div className="form-group">
               <button
+                style={{ backgroundColor: "#557C55", borderColor: "#557C55" }}
                 className="btn btn-primary btn-block"
                 disabled={this.state.loading}
               >
@@ -140,9 +158,9 @@ class Login extends Component {
                 </div>
               </div>
             )}
+
             <CheckButton
-              style={{ display: "none" }}
-              ref={c => {
+              ref={(c) => {
                 this.checkBtn = c;
               }}
             />
@@ -153,4 +171,4 @@ class Login extends Component {
   }
 }
 
-export default withRouter(Login);
+export default withRouter(LoginForm);
