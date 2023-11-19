@@ -60,7 +60,7 @@ export function SimpleSidebar() {
           Profile
         </ListItem>
         </Link>
-        <Link to={"/landing"} className=" text-gray-900 hover:none">
+        <Link to={"/"} className=" text-gray-900 hover:none">
         <ListItem>
           <ListItemPrefix>
             <ShoppingBagIcon className="h-5 w-5" />
@@ -83,7 +83,6 @@ export default class Home extends Component {
   render() {
     return (
     <>
-      <SimpleNavbar></SimpleNavbar>
       <div className="flex ">
           <SimpleSidebar></SimpleSidebar>
           <div className="grid grid-flow-row-dense grid-cols-2  ">
@@ -97,10 +96,7 @@ export default class Home extends Component {
           <SimpleCard></SimpleCard>
           <SimpleCard></SimpleCard> 
           <SimpleCard></SimpleCard>
-          <SimpleCard></SimpleCard>
-          <SimpleCard></SimpleCard>
-          <SimpleCard></SimpleCard>
-          <SimpleCard></SimpleCard>
+        
           </div>
       </div>
     </>

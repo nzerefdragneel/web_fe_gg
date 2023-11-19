@@ -4,30 +4,9 @@ import { withRouter } from '../common/with-router'
 import { EnvelopeIcon, PhoneIcon, MapPinIcon } from '@heroicons/react/24/solid'
 
 function Lading() {
+    
     return (
         <div className="flex flex-col h-48 w-full">
-            <div className='pt-3 pb-4 px-32 flex flex-row flex-wrap justify-between border-b mb-2'>
-                <div className='flex flex-row flex-wrap text-lg items-center'>
-                    <img src='./assets/logo.png' className='w-10 h-10 mr-2' alt='logo' />
-                    <div className='px-6 py-2.5 mr-2 rounded-lg hover:bg-medium-green hover:cursor-pointer hover:ease-linear duration-300'>
-                        Home
-                    </div>
-                    <div className='px-6 py-2.5 mr-2 rounded-lg hover:bg-medium-green hover:cursor-pointer hover:ease-linear duration-300'>
-                        About Us
-                    </div>
-                    <div className='px-6 py-2.5 mr-2 rounded-lg hover:bg-medium-green hover:cursor-pointer hover:ease-linear duration-300'>
-                        Contact
-                    </div>
-                </div>
-                <div className='flex flex-row gap-2 text-lg'>
-                    <div className='px-6 py-2.5 rounded-lg hover:bg-medium-green hover:cursor-pointer hover:ease-linear duration-300'>
-                        Sign up
-                    </div>
-                    <div className='px-6 py-2.5 rounded-lg hover:bg-medium-green hover:cursor-pointer hover:ease-linear duration-300'>
-                        Log in
-                    </div>
-                </div>
-            </div>
             <div className='flex flex-col items-start gap-2 px-5 py-2 my-5 mx-16'>
                 <div className='grid grid-cols-1 md:grid-cols-2 gap-6 items-center '>
                     <div className='mr-4 ml-4'>

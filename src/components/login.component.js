@@ -64,8 +64,8 @@ class LoginForm extends Component {
     if (this.checkBtn.context._errors.length === 0) {
       AuthService.login(this.state.username, this.state.password).then(
         () => {
-          //this.props.router.navigate("/profile");
-          // window.location.reload();
+          this.props.router.navigate("/home");
+          window.location.reload();
         },
         (error) => {
           const resMessage =
