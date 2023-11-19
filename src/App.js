@@ -65,20 +65,25 @@ class App extends Component {
                 </div>
                 {currentUser ? (
                 <div className='flex flex-row gap-2 text-lg'>
-                    <Link to={"/Profile"}>
+                    <a href="/profile" className="nav-link">
                     <div className='px-6 py-2.5 rounded-lg hover:bg-medium-green hover:cursor-pointer hover:ease-linear duration-300'>
                         Profile
                     </div>
-                    </Link>
+                    </a>
+                    <a href="/login" className="nav-link" onClick={this.logOut}>
+                    <div className='px-6 py-2.5 rounded-lg hover:bg-medium-green hover:cursor-pointer hover:ease-linear duration-300'>
+                        LogOut
+                    </div>
+                    </a>
                 </div>
                 ):(
                   <div className='flex flex-row gap-2 text-lg'>
-                    <Link to={"/signup"}>
+                    <Link to={"/signup"} className="nav-link">
                     <div className='px-6 py-2.5 rounded-lg hover:bg-medium-green hover:cursor-pointer hover:ease-linear duration-300'>
                         Sign up
                     </div>
                     </Link>
-                    <Link to={"/login"}>
+                    <Link to={"/login"} className="nav-link">
                     <div className='px-6 py-2.5 rounded-lg hover:bg-medium-green hover:cursor-pointer hover:ease-linear duration-300'>
                         Log in
                     </div>
@@ -89,13 +94,12 @@ class App extends Component {
             
             <div className="container mt-3">
             <Routes>
-                <Route exact path="/" element={currentUser?<Navigate replace to="/home" />:<Lading/>} />
-                <Route path="/home" element={<Home/>} />
                 <Route path="/login" element={<LoginScreen/>} />
-                <Route path="/edituser" element={<EditUser/>} />
-                <Route path="/profile" element={<Profile/>} />
                 <Route path="/signup" element={<Signup/>}/>
-             
+                <Route exact path="/" element={currentUser?<Navigate replace to="/home" />:<Lading/>} />
+                <Route path="/home" element={<Home/>}/>
+                <Route path="/edituser" element={<EditUser/>}/>
+                <Route path="/profile" element={<Profile/>}/>
             </Routes>
           </div>
           <SimpleFooter></SimpleFooter>

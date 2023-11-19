@@ -2,24 +2,26 @@
 import { PhotoIcon, UserCircleIcon } from '@heroicons/react/24/solid'
 import React, { Component } from "react";
 import UserService from "../services/user.service";
-import { Routes, Route, Link } from "react-router-dom";
+import {Navigate, Link } from "react-router-dom";
+import authService from '../services/auth.service';
 export default class EditUser extends Component {
-
   constructor(props) {
     super(props);
     this.handleEdituser = this.handleEdituser.bind(this);
     this.onChangeUsername = this.onChangeUsername.bind(this);
     this.onChangeEmail = this.onChangeEmail.bind(this);
     this.onChangePassword = this.onChangePassword.bind(this);
+    var user=authService.getCurrentUser();
     this.state = {
-      userId:1,
-      username: "",
-      email: "",
+      userId:user.id,
+      username: user.username,
+      email:"",
       password: "",
       successful: false,
       message: ""
     };
   }
+  
   onChangeUsername(e) {
     this.setState({
       username: e.target.value
@@ -51,9 +53,16 @@ export default class EditUser extends Component {
       this.state.password
     ).then(
       response => {
+        console.log(response.data.accesstoken)
+        var user={
+          id:this.state.userId,
+          username:this.state.username,
+          accesstoken:response.data.accesstoken
+        }
+        localStorage.setItem("user", user);
         this.setState({
           message: response.data.message,
-          successful: true
+          successful: true,
         });
       },
       error => {
@@ -73,6 +82,13 @@ export default class EditUser extends Component {
   }
   
   render(){
+    const user=authService.getCurrentUser();
+
+    if (user==null){
+      return(
+          <Navigate replace to="/" />
+      )
+    }
   return (
     <>
     <div className="flex flex-col  w-full">

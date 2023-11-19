@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Routes, Route, Link } from "react-router-dom";
+import { Routes, Route, Link, Navigate } from "react-router-dom";
 import UserService from "../services/user.service";
 import {
   Card,
@@ -73,14 +73,15 @@ export function SimpleSidebar() {
   );
 }
 export default class Home extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      content: ""
-    };
-  }
+  
   
   render() {
+    const user=localStorage.getItem("user");
+    if (user==null){
+      return(
+          <Navigate replace to="/" />
+      )
+    }
     return (
     <>
       <div className="flex ">
