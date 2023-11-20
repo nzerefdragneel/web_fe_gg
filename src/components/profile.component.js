@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Routes, Route, Link, Navigate } from "react-router-dom";
+import {Navigate, Link } from "react-router-dom";
 import UserService from "../services/user.service";
 import {
   Card,
@@ -12,6 +12,7 @@ import {
   ListItemPrefix,
   ListItemSuffix,
   Chip,
+  IconButton 
   
 } from "@material-tailwind/react";
 import {
@@ -44,7 +45,7 @@ export function SimpleSidebar() {
   return (
     <Card className="min-h-[calc(100vh-2rem)] w-full max-w-[20rem] p-4 shadow-xl shadow-blue-gray-900/5">
       <List>
-        <Link to={"/"} className=" text-gray-900  rounded-2xl bg-slate-200">
+        <Link to={"/"} className=" text-gray-900 ">
         <ListItem>
           <ListItemPrefix>
             <PresentationChartBarIcon className="h-5 w-5" />
@@ -52,7 +53,7 @@ export function SimpleSidebar() {
           Home
         </ListItem>
         </Link>
-        <Link to={"/profile"} className=" text-gray-900 hover:none">
+        <Link to={"/profile"} className=" text-gray-900 rounded-2xl bg-slate-200">
         <ListItem>
           <ListItemPrefix>
             <ShoppingBagIcon className="h-5 w-5" />
@@ -60,13 +61,20 @@ export function SimpleSidebar() {
           Profile
         </ListItem>
         </Link>
-       
+        <Link to={"/landing"} className=" text-gray-900 hover:none">
+        <ListItem>
+          <ListItemPrefix>
+            <ShoppingBagIcon className="h-5 w-5" />
+          </ListItemPrefix>
+          Logout
+        </ListItem>
+        </Link>
       </List>
     </Card>
   );
 }
-export default class Home extends Component {
-  
+export default class Profile extends Component {
+ 
   
   render() {
     const user=localStorage.getItem("user");
@@ -79,19 +87,15 @@ export default class Home extends Component {
     <>
       <div className="flex ">
           <SimpleSidebar></SimpleSidebar>
-          <div className="grid grid-flow-row-dense grid-cols-2  ">
-          <SimpleCard></SimpleCard>
-          <SimpleCard></SimpleCard> 
-          <SimpleCard></SimpleCard>
-          <SimpleCard></SimpleCard>
-          <SimpleCard></SimpleCard>
-          <SimpleCard></SimpleCard>
-          <SimpleCard></SimpleCard>
-          <SimpleCard></SimpleCard>
-          <SimpleCard></SimpleCard> 
-          <SimpleCard></SimpleCard>
-        
-          </div>
+       
+          <div className="grid place-items-center items-center place-content-centers content-center gap-4">
+          <Link to={"/edituser"} className=" text-gray-900 hover:none">
+        <button  className="rounded-md text-gray-900 px-3 py-2 text-sm font-semibold shadow-sm bg-green-600 hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+            Edit Profile
+        </button>
+        </Link>
+            </div>
+         
       </div>
     </>
     );
