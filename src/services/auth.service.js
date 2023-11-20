@@ -1,7 +1,7 @@
 import axios from "axios";
 const bcrypt = require("bcryptjs");
 
-const API_URL = "http://localhost:8080/api/auth/";
+const API_URL = "https://web-api-be.onrender.com/api/auth/";
 
 class AuthService {
   login(username, password) {
