@@ -10,11 +10,14 @@ class AuthService {
         username,
         password,
       },
+      
       {headers:{
         "Cache-Control": "no-cache",
         "Content-Type": "application/x-www-form-urlencoded",
         "Access-Control-Allow-Origin": "*",
-      },}
+      },
+       mode: 'no-cors',
+    }
       )
       .then((response) => {
         if (response.data.accessToken) {
@@ -38,7 +41,8 @@ class AuthService {
       "Cache-Control": "no-cache",
       "Content-Type": "application/x-www-form-urlencoded",
       "Access-Control-Allow-Origin": "*",
-    },}
+    },
+    mode: 'no-cors',}
     );
   }
 

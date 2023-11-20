@@ -14,7 +14,7 @@ class UserService {
         "Cache-Control": "no-cache",
         "Content-Type": "application/x-www-form-urlencoded",
         "Access-Control-Allow-Origin": "*",
-      },}
+      }, mode: 'no-cors',}
       );
       }
 }
