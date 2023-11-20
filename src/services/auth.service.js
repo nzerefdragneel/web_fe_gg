@@ -13,6 +13,7 @@ class AuthService {
       {headers:{
         "Cache-Control": "no-cache",
         "Content-Type": "application/x-www-form-urlencoded",
+        "Access-Control-Allow-Origin": "*",
       },}
       )
       .then((response) => {
@@ -36,6 +37,7 @@ class AuthService {
     {headers:{
       "Cache-Control": "no-cache",
       "Content-Type": "application/x-www-form-urlencoded",
+      "Access-Control-Allow-Origin": "*",
     },}
     );
   }

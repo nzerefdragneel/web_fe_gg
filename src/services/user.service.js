@@ -13,6 +13,7 @@ class UserService {
       {headers:{
         "Cache-Control": "no-cache",
         "Content-Type": "application/x-www-form-urlencoded",
+        "Access-Control-Allow-Origin": "*",
       },}
       );
       }
