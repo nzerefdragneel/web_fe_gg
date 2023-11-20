@@ -53,13 +53,9 @@ export default class EditUser extends Component {
       this.state.password
     ).then(
       response => {
-        console.log(response.data.accesstoken)
-        var user={
-          id:this.state.userId,
-          username:this.state.username,
-          accesstoken:response.data.accesstoken
-        }
-        localStorage.setItem("user", user);
+
+        localStorage.removeItem("user");
+        localStorage.setItem("user",  JSON.stringify(response.data));
         this.setState({
           message: response.data.message,
           successful: true,
@@ -90,7 +86,7 @@ export default class EditUser extends Component {
       )
     }
   return (
-    <>
+    <div className=' px-5 py-2 my-5 mx-16'>
     <div className="flex flex-col  w-full">
             <div className='pt-3 pb-4 px-32 flex flex-row justify-between'>
                 <div className='flex flex-row text-lg'>
@@ -104,33 +100,31 @@ export default class EditUser extends Component {
             }}> 
       {!this.state.successful && (
         <>
-      <div className="space-y-12">
-        <div className="border-b border-gray-900/10 pb-12">
+      <div className="flex flex-col  w-full ">
+        <div className="border-b border-gray-900/10">
           <h1 className="text-base font-semibold leading-7 text-gray-900">Edit your Profile</h1>
       
 
-          <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+          <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 ">
+           
             <div className="sm:col-span-4">
               <label htmlFor="username" className="block text-sm font-medium leading-6 text-gray-900">
                 Username
               </label>
               <div className="mt-2">
-                <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-                 
-                  <input 
-                    type="text"
-                    name="username"
-                    id="username"
-                    autoComplete="username"
-                    value={this.state.username}
-                    onChange={this.onChangeUsername}
-                    className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
-                    placeholder="username"
-                  />
-                </div>
+                <input
+                  id="username"
+                  name="username"
+                  type="username"
+                  readOnly="true"
+                  autoComplete="username"
+                  value={this.state.username}
+                  onChange={this.onChangeUsername}
+                  placeholder="username"
+                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                />
               </div>
             </div>
-
             <div className="sm:col-span-4">
               <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
                 Email address
@@ -239,7 +233,7 @@ export default class EditUser extends Component {
               </div>
             )}
     </form>
-    </>
+    </div>
   )
 };
 }

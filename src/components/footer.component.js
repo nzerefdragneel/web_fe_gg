@@ -1,7 +1,11 @@
-
+import React, { Component } from "react";
 import { EnvelopeIcon, PhoneIcon, MapPinIcon } from '@heroicons/react/24/solid'
-export function SimpleFooter() {
-    <div className='border-t mt-2 bottom-0 px-40 pb-8 pt-20 flex flex-row flex-wrap gap-2 justify-between'>
+export default class SimpleFooter extends Component {
+    render(){
+
+    return (
+
+        <div className='border-t mt-2 bottom-0 px-40 pb-8 pt-20 flex flex-row flex-wrap gap-2 justify-between'>
         <div className='flex flex-col mt-2 mr-5'>
             <img src='./assets/logo.png' className='w-14 h-14 mb-4' alt='logo' />
             <div className='mt-2 flex flex-row items-center'>
@@ -70,4 +74,4 @@ export function SimpleFooter() {
             </div>
         </div>
     </div>
-}
+)}}

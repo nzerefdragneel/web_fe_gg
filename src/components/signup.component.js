@@ -56,6 +56,7 @@ function Signup() {
     const fref = useRef(null)
     const [message, setMessage] = useState('')
     const [isSubmit, setIsSubmit] = useState(false)
+    const [isSuccess, setSuccess] = useState(false)
 
     const handleRegister = (e) => {
 
@@ -68,12 +69,19 @@ function Signup() {
             email,
             password,
         ).then(
-            response => {
+            (response) => {
+                setSuccess(true)
                 setMessage(response.data.message)
                 setIsSubmit(true)
             },
-            error => {
-                setMessage(error.data.message)
+            (error) => {
+                const resMessage =
+                (error.response &&
+                  error.response.data &&
+                  error.response.data.message) ||
+                error.message ||
+                error.toString();
+                setMessage(resMessage)
                 setIsSubmit(true)
             }
 
@@ -81,9 +89,9 @@ function Signup() {
     }
 
     return (
-        <div className="flex flex-col h-48 w-full">
-           
-            <div className='grid grid-cols-1 md:grid-cols-2 gap-6 justify-items-center content-around place-items-center px-5 py-2 my-5 mx-16'>
+        <div className="col-md-12">
+        <div className="">
+            <div className='grid grid-cols-1 md:grid-cols-2  justify-items-center content-around place-items-center '>
                 <div className='flex flex-col flex-wrap'>
                     <div className='mr-4 ml-4'>
                         <div className='text-4xl text-dark-green font-bold mt-3'>
@@ -155,15 +163,20 @@ function Signup() {
                             </div>
                         </div>
                     </Form>
-                    {isSubmit &&
+                    {isSubmit && !isSuccess &&
                         <div className="text-error-color text-base">
+                            {message}
+                        </div>
+                    }
+                    {isSubmit && isSuccess &&
+                        <div className="alert alert-success text-base">
                             {message}
                         </div>
                     }
                 </div>
             </div>
-            
-        </div>
+        
+            </div></div>
     )
 }
 
