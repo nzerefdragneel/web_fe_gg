@@ -9,7 +9,12 @@ class UserService {
           username,
           email,
           password
-        });
+        },
+      {headers:{
+        "Cache-Control": "no-cache",
+        "Content-Type": "application/x-www-form-urlencoded",
+      },}
+      );
       }
 }
 

@@ -9,7 +9,12 @@ class AuthService {
       .post(API_URL + "signin", {
         username,
         password,
-      })
+      },
+      {headers:{
+        "Cache-Control": "no-cache",
+        "Content-Type": "application/x-www-form-urlencoded",
+      },}
+      )
       .then((response) => {
         if (response.data.accessToken) {
           localStorage.setItem("user", JSON.stringify(response.data));
@@ -26,8 +31,13 @@ class AuthService {
     return axios.post(API_URL + "signup", {
       username,
       email,
-      password,
-    });
+      password
+    },
+    {headers:{
+      "Cache-Control": "no-cache",
+      "Content-Type": "application/x-www-form-urlencoded",
+    },}
+    );
   }
 
   getCurrentUser() {
