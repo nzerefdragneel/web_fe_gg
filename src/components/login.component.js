@@ -123,7 +123,7 @@ class LoginForm extends Component {
             </div>
 
             <div className="form-group">
-              <a href="#null" style={{ color: "black" }}>
+              <a href="/forgot-password" style={{ color: "black" }}>
                 Forgot password?
               </a>
             </div>
