@@ -112,7 +112,7 @@ function ResetPassword() {
                     htmlFor="confirm-password"
                     className="font-semibold mb-2 mt-2"
                   >
-                    Confirm your Password
+                    Confirm Password
                   </label>
                   <Input
                     type="password"
