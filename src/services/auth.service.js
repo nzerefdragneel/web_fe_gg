@@ -71,10 +71,12 @@ class AuthService {
     );
   }
 
-  resetPassword(password) {
+  resetPassword(email, token, password) {
     return axios.post(
       API_URL + "reset-password",
       {
+        email,
+        token,
         password,
       },
       {

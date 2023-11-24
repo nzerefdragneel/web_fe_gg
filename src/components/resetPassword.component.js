@@ -27,6 +27,9 @@ const vpassword = (value) => {
   }
 };
 
+const token = window.location.pathname.split("/")[2];
+const email = localStorage.getItem("forgetEmail");
+
 function ResetPassword() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -46,7 +49,7 @@ function ResetPassword() {
       return;
     }
 
-    AuthService.resetPassword(password).then(
+    AuthService.resetPassword(email, token, password).then(
       (response) => {
         setSuccess(true);
         setMessage(response.data.message);

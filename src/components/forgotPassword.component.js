@@ -41,6 +41,8 @@ function ForgotPassword() {
 
     if (!email) {
       return;
+    } else {
+      localStorage.setItem("forgetEmail", email);
     }
 
     AuthService.forgotPassword(email).then(
@@ -113,6 +115,9 @@ function ForgotPassword() {
             </Form>
             {isSubmit && !isSuccess && (
               <div className="text-error-color text-base">{message}</div>
+            )}
+            {isSubmit && isSuccess && (
+              <div className="alert alert-success text-base">{message}</div>
             )}
           </div>
         </div>
