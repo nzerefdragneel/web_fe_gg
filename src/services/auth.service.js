@@ -11,14 +11,15 @@ class AuthService {
         username,
         password,
       },
-      
-      {headers:{
-        "Cache-Control": "no-cache",
-        "Content-Type": "application/x-www-form-urlencoded",
-        "Access-Control-Allow-Origin": "*",
-      },
-       mode: 'no-cors',
-    }
+
+        {
+          headers: {
+            "Cache-Control": "no-cache",
+            "Content-Type": "application/x-www-form-urlencoded",
+            "Access-Control-Allow-Origin": "*",
+          },
+          mode: 'no-cors',
+        }
       )
       .then((response) => {
         if (response.data.accessToken) {
@@ -38,17 +39,43 @@ class AuthService {
       email,
       password
     },
-    {headers:{
-      "Cache-Control": "no-cache",
-      "Content-Type": "application/x-www-form-urlencoded",
-      "Access-Control-Allow-Origin": "*",
-    },
-    mode: 'no-cors',}
+      {
+        headers: {
+          "Cache-Control": "no-cache",
+          "Content-Type": "application/x-www-form-urlencoded",
+          "Access-Control-Allow-Origin": "*",
+        },
+        mode: 'no-cors',
+      }
     );
   }
 
   getCurrentUser() {
     return JSON.parse(localStorage.getItem("user"));
+  }
+
+  facebookLogin() {
+    return axios.get(API_URL + "facebook",
+      {
+        headers: {
+          "Cache-Control": "no-cache",
+          "Content-Type": "application/x-www-form-urlencoded",
+          "Access-Control-Allow-Origin": "*",
+        },
+        mode: 'no-cors',
+      }).then((res) => console.log(res))
+  }
+
+  googleLogin() {
+    return axios.get(API_URL + "google",
+      {
+        headers: {
+          "Cache-Control": "no-cache",
+          "Content-Type": "application/x-www-form-urlencoded",
+          "Access-Control-Allow-Origin": "*",
+        },
+        mode: 'no-cors',
+      }).then((res) => console.log(res))
   }
 }
 

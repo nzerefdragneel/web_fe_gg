@@ -6,7 +6,6 @@ import CheckButton from "react-validation/build/button";
 import AuthService from "../services/auth.service";
 
 import { withRouter } from "../common/with-router";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const required = (value) => {
     if (!value) {
@@ -85,8 +84,52 @@ class LoginForm extends Component {
         } else {
             this.setState({
                 loading: false,
-            });            
+            });
         }
+    }
+
+    handleLoginFacebook(e) {
+        e.preventDefault()
+        AuthService.facebookLogin().then(
+            (res) => {
+                if(res.status === 302)
+                {
+                    window.location.href = res.url;
+                }
+            },
+            (error) => {
+                const resMessage =
+                    (error.response &&
+                        error.response.data &&
+                        error.response.data.message) ||
+                    error.message ||
+                    error.toString();
+                
+                console.log(resMessage)
+            }
+        )
+    }
+
+    handleLoginGoogle(e) {
+        e.preventDefault()
+        AuthService.googleLogin().then(
+            (res) => {
+                if(res.status === 302)
+                {
+                    window.location.href = res.url;
+                }
+            },
+            (error) => {
+                const resMessage =
+                    (error.response &&
+                        error.response.data &&
+                        error.response.data.message) ||
+                    error.message ||
+                    error.toString();
+                
+                console.log(resMessage)
+            }
+        )
     }
 
     render() {
@@ -168,7 +211,18 @@ class LoginForm extends Component {
                     </Form>
                 </div>
                 <div className="flex flex-row justify-center gap-3 mb-3">
-                    
+                    <div
+                        className='rounded-lg bg-neutral-200 flex justify-center items-center p-2 mr-2 hover:cursor-pointer'
+                        onClick={this.handleLoginGoogle}
+                    >
+                        <img src='./assets/google.svg' className='w-10 h-10' alt='Google' />
+                    </div>
+                    <div
+                        className='rounded-lg bg-neutral-200 flex justify-center items-center p-2 hover:cursor-pointer'
+                        onClick={this.handleLoginFacebook}
+                    >
+                        <img src='./assets/facebook.svg' className='w-10 h-10' alt='Facebook' />
+                    </div>
                 </div>
             </div>
         );
