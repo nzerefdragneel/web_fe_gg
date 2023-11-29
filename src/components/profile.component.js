@@ -61,14 +61,7 @@ export function SimpleSidebar() {
           Profile
         </ListItem>
         </Link>
-        <Link to={"/landing"} className=" text-gray-900 hover:none">
-        <ListItem>
-          <ListItemPrefix>
-            <ShoppingBagIcon className="h-5 w-5" />
-          </ListItemPrefix>
-          Logout
-        </ListItem>
-        </Link>
+ 
       </List>
     </Card>
   );
