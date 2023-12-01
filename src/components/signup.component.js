@@ -81,8 +81,9 @@ function Signup() {
                   error.response.data.message) ||
                 error.message ||
                 error.toString();
-                setMessage(resMessage)
+                setMessage(resMessage.toString())
                 setIsSubmit(true)
+                setSuccess(false)
             }
 
         );
@@ -105,7 +106,7 @@ function Signup() {
                         </div>
                     </div>
                 </div>
-                <div className='bg-gray-50 m-3 p-5'>
+                <div className='bg-gray-50 m-3 p-5 shadow-lg'>
                     <div className='text-4xl font-bold text-center mb-3'>
                         Sign Up
                     </div>
