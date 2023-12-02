@@ -5,6 +5,7 @@ import AuthService from "./services/auth.service";
 import AuthVerify from "./common/authVerify";
 import { Routes, BrowserRouter, Navigate, Route, Link } from "react-router-dom";
 
+import {SidesMenu} from "./components/sidebar.component";
 import LoginScreen from "./screen/loginScreen";
 import Home from "./components/home.component";
 import Lading from "./components/lading.component";
@@ -27,8 +28,9 @@ class App extends Component {
 
   componentDidMount() {
     const user = AuthService.getCurrentUser();
-
-    if (user) {
+    console.log("home",user)
+    if (user!==null) {
+      
       this.setState({
         currentUser: user,
       });
@@ -52,6 +54,7 @@ class App extends Component {
 
   render() {
     const { currentUser } = this.state;
+    
     return (
       <div className="">
         <div className="pt-3 pb-4 px-32 flex flex-row flex-wrap justify-between border-b mb-2">
@@ -95,9 +98,14 @@ class App extends Component {
             </div>
           )}
         </div>
+        <div className="min-h-screen flex">
 
-        <div className="col-md-12 ">
-          <div>
+        <div className="flex-none w-64 h-14">
+        {currentUser && <SidesMenu />}
+        </div>
+
+        <div className="flex-1 flex flex-col">
+          <div className="flex-1 p-4">
             <Routes>
               <Route path="/login" element={<LoginScreen />} />
               <Route path="/signup" element={<Signup />} />
@@ -121,11 +129,13 @@ class App extends Component {
             </Routes>
           </div>
         </div>
+        </div>
         <div className="col-md-12 flex flex-col h-48 w-full">
           <SimpleFooter></SimpleFooter>
         </div>
         <AuthVerify logOut={this.logOut} />
       </div>
+      
     );
   }
 }
