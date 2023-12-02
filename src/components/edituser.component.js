@@ -15,7 +15,7 @@ export default class EditUser extends Component {
     this.state = {
       userId:user.id,
       username: user.username,
-      email:"",
+      email:user.email,
       password: "",
       successful: false,
       message: ""

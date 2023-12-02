@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Routes, Route, Link, Navigate } from "react-router-dom";
 import UserService from "../services/user.service";
+
 import {
   Card,
   CardBody,
@@ -67,7 +68,6 @@ export function SimpleSidebar() {
 }
 export default class Home extends Component {
   
-  
   render() {
     const user=localStorage.getItem("user");
     if (user==null){
@@ -77,9 +77,8 @@ export default class Home extends Component {
     }
     return (
     <>
-      <div className="flex ">
-          <SimpleSidebar></SimpleSidebar>
-          <div className="grid grid-flow-row-dense grid-cols-2  ">
+      <div className=" ">
+          <div className="grid grid-flow-row-dense grid-cols-2  m-4 ">
           <SimpleCard></SimpleCard>
           <SimpleCard></SimpleCard> 
           <SimpleCard></SimpleCard>

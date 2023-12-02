@@ -15,7 +15,10 @@ const AuthVerify = (props) => {
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
 
-    if (user) {
+    console.log(user);
+
+    if (user!=null && user.accessToken!==false) {
+      
       const decodedJwt = parseJwt(user.accessToken);
 
       if (decodedJwt.exp * 1000 < Date.now()) {

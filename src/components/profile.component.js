@@ -78,8 +78,8 @@ export default class Profile extends Component {
     }
     return (
     <>
-      <div className="flex ">
-          <SimpleSidebar></SimpleSidebar>
+      <div className=" ">
+          
        
           <div className="grid place-items-center items-center place-content-centers content-center gap-4">
           <Link to={"/edituser"} className=" text-gray-900 hover:none">

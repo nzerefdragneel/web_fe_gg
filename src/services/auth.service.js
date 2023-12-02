@@ -15,7 +15,7 @@ class AuthService {
           username,
           password,
         },
-  {
+        {
             
           headers:  {
                 "Cache-Control": "no-cache",
@@ -26,10 +26,13 @@ class AuthService {
             }
       )
       .then((response) => {
-        if (response.data.accessToken) {
+        console.log(response)
+        if (response.data.id) {
           localStorage.setItem("user", JSON.stringify(response.data));
         }
         return response.data;
+      }).catch(function (error) {
+        console.log(error);
       });
   }
 
