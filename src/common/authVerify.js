@@ -30,4 +30,5 @@ const AuthVerify = (props) => {
   return <div></div>;
 };
 
+
 export default withRouter(AuthVerify);

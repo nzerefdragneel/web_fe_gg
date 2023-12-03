@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Routes, Route, Link, Navigate } from "react-router-dom";
 import UserService from "../services/user.service";
-
+import authService from "../services/auth.service";
 import {
   Card,
   CardBody,
@@ -24,6 +24,7 @@ import {
   PowerIcon,
 } from "@heroicons/react/24/solid";
 import { SimpleNavbar } from "./simplenavbar.component";
+import { toHaveAccessibleDescription } from "@testing-library/jest-dom/matchers";
 export function SimpleCard() {
   return (
     <Card className="mt-6 w-96 h-auto">
@@ -67,14 +68,38 @@ export function SimpleSidebar() {
   );
 }
 export default class Home extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      haveAccount: undefined,
+      accessToken:null
+    };
+  }
+
+  componentDidMount() {
+    const queryParameters = new URLSearchParams(window.location.search)
+    const accessToken = queryParameters.get("accessToken")
+    const haveAccount = queryParameters.get('haveAccount') === 'true'
+    this.setState({
+      accessToken: accessToken,
+      haveAccount:haveAccount
+    });
+    console.log(accessToken)
+    console.log(haveAccount)    
+  }
   
   render() {
+    // if(this.state.haveAccount===false){
+    //   console.log("navi");
+    //     return <Navigate replace to={`/signup?accessToken=${this.state.accessToken}`} />
+    //   }
     const user=localStorage.getItem("user");
     if (user==null){
       return(
           <Navigate replace to="/" />
       )
     }
+   
     return (
     <>
       <div className=" ">

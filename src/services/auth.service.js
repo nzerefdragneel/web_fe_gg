@@ -5,7 +5,7 @@ const bcrypt = require("bcryptjs");
 
 const API_URL = `${process.env.REACT_APP_SERVICE_URL}/api/auth/`;
 
-//const API_URL = "http://localhost:8080/api/auth/";
+// const API_URL = "http://localhost:8080/api/auth/";
 class AuthService {
     login(username, password) {
         return axios
@@ -40,24 +40,27 @@ class AuthService {
         localStorage.removeItem("user");
     }
 
-    register(username, email, password) {
-        return axios.post(
-            API_URL + "signup",
-            {
-                username,
-                email,
-                password,
-            },
-            {
-                headers: {
-                    "Cache-Control": "no-cache",
-                    "Content-Type": "application/x-www-form-urlencoded",
-                    "Access-Control-Allow-Origin": "*",
-                },
-                mode: "no-cors",
-            }
-        );
-    }
+  register(username, email, password,isVerified) {
+    return axios.post(
+      API_URL + "signup",
+      {
+        username,
+        email,
+        password,
+        isVerified
+      },
+      {
+        headers: {
+          "Cache-Control": "no-cache",
+          "Content-Type": "application/x-www-form-urlencoded",
+          "Access-Control-Allow-Origin": "*",
+        },
+        mode: "no-cors",
+      }
+    );
+  }
+  
+  
 
     forgotPassword(email) {
         return axios.post(
@@ -95,17 +98,33 @@ class AuthService {
         );
     }
 
-    getCurrentUser() {
-        return JSON.parse(localStorage.getItem("user"));
-    }
+  getCurrentUser() {
+    return JSON.parse(localStorage.getItem("user"));
+  }
 
-    facebookLogin() {
+  facebookLogin() {
+    return axios.get(API_URL + "facebook",
+      {
+        headers: {
+          "Cache-Control": "no-cache",
+          "Content-Type": "application/x-www-form-urlencoded",
+          "Access-Control-Allow-Origin": "*",
+        },
+        mode: 'no-cors',
+      }).then((res) => console.log(res))
+  }
 
-    }
-
-    googleLogin() {
-
-    }
+  googleLogin() {
+    return axios.get(API_URL + "google",
+      {
+        headers: {
+          "Cache-Control": "no-cache",
+          "Content-Type": "application/x-www-form-urlencoded",
+          "Access-Control-Allow-Origin": "*",
+        },
+        mode: 'no-cors',
+      }).then((res) => console.log(res))
+  }
 }
 
 export default new AuthService();
