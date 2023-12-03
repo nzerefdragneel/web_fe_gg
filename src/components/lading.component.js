@@ -18,7 +18,6 @@ function Lading() {
     useEffect(() => {
         const queryParameters = new URLSearchParams(window.location.search)
         const accessToken = queryParameters.get("accessToken")
-        const haveAccount = queryParameters.get("haveAccount")
 
         if (accessToken != null) {
             const decodedJwt = parseJwt(accessToken);
@@ -28,7 +27,7 @@ function Lading() {
                 decodedJwt.user.iat = decodedJwt.iat;
                 decodedJwt.user.accessToken = accessToken;
                 localStorage.setItem("user", JSON.stringify(decodedJwt.user));
-                window.location.replace("http://localhost:8081/home"); ///home
+                window.location.replace(`${process.env.REACT_APP_URL}/home`); ///home
                 // // window.location.reload();
 
             }

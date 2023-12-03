@@ -29,7 +29,8 @@ class App extends Component {
 
   componentDidMount() {
     const user = AuthService.getCurrentUser();
-    if (user)   { const roles=userService.getRoles(user.userId);
+    if (user)   { 
+      const roles=userService.getRoles(user.id);
     console.log(roles)}
     console.log("home",user)
     if (user!==null) {

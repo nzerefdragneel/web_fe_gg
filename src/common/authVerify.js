@@ -1,14 +1,14 @@
 import React, { useEffect } from "react";
 import { withRouter } from "./with-router";
+function parseJwt(token) {
+  var base64Url = token.split('.')[1];
+  var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+  var jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function (c) {
+      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+  }).join(''));
 
-const parseJwt = (token) => {
-  try {
-    return JSON.parse(atob(token.split('.')[1]));
-  } catch (e) {
-    return null;
-  }
-};
-
+  return JSON.parse(jsonPayload);
+}
 const AuthVerify = (props) => {
   let location = props.router.location;
 
@@ -20,7 +20,6 @@ const AuthVerify = (props) => {
     if (user!=null && user.accessToken!==false) {
       
       const decodedJwt = parseJwt(user.accessToken);
-
       if (decodedJwt.exp * 1000 < Date.now()) {
         props.logOut();
       }
