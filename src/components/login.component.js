@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component} from "react";
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
@@ -32,7 +32,7 @@ class LoginForm extends Component {
             rememberMe: false,
         };
     }
-
+    
     onChangeUsername(e) {
         this.setState({
             username: e.target.value,
@@ -86,50 +86,6 @@ class LoginForm extends Component {
                 loading: false,
             });
         }
-    }
-
-    handleLoginFacebook(e) {
-        e.preventDefault()
-        AuthService.facebookLogin().then(
-            (res) => {
-                if(res.status === 302)
-                {
-                    window.location.href = res.url;
-                }
-            },
-            (error) => {
-                const resMessage =
-                    (error.response &&
-                        error.response.data &&
-                        error.response.data.message) ||
-                    error.message ||
-                    error.toString();
-                
-                console.log(resMessage)
-            }
-        )
-    }
-
-    handleLoginGoogle(e) {
-        e.preventDefault()
-        AuthService.googleLogin().then(
-            (res) => {
-                if(res.status === 302)
-                {
-                    window.location.href = res.url;
-                }
-            },
-            (error) => {
-                const resMessage =
-                    (error.response &&
-                        error.response.data &&
-                        error.response.data.message) ||
-                    error.message ||
-                    error.toString();
-                
-                console.log(resMessage)
-            }
-        )
     }
 
     render() {
