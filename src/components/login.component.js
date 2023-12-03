@@ -211,7 +211,7 @@ class LoginForm extends Component {
                     </Form>
                 </div>
                 <div className="flex flex-row justify-center gap-3 mb-3">
-                    <a href='https://web-api-be.onrender.com/api/auth/google/'>
+                    <a href={`${process.env.REACT_APP_SERVICE_URL}/api/auth/google`}>
                     <div
                         className='rounded-lg bg-neutral-200 flex justify-center items-center p-2 mr-2 hover:cursor-pointer'
                        
@@ -219,7 +219,7 @@ class LoginForm extends Component {
                         <img src='./assets/google.svg' className='w-10 h-10' alt='Google' />
                     </div>
                     </a>
-                    <a href="https://web-api-be.onrender.com/api/auth/facebook/">
+                    <a href={`${process.env.REACT_APP_SERVICE_URL}/api/auth/facebook`}>
                     <div
                         className='rounded-lg bg-neutral-200 flex justify-center items-center p-2 hover:cursor-pointer'
                        

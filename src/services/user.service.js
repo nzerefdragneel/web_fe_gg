@@ -2,7 +2,21 @@ import axios from 'axios';
 
 const API_URL = 'https://web-api-be.onrender.com/api/test/';
 
-class UserService {
+class UserService{
+  getRoles(id){
+    return axios.get(API_URL + "getroles",
+    {
+      id
+    },
+      {
+        headers: {
+          "Cache-Control": "no-cache",
+          "Content-Type": "application/x-www-form-urlencoded",
+          "Access-Control-Allow-Origin": "*",
+        },
+        mode: 'no-cors',
+      })
+  }
     EditUser(userId,username, email, password) {
         return axios.put(API_URL + "edituser", {
           userId,

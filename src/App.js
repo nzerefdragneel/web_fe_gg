@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 import AuthService from "./services/auth.service";
+import userService from "./services/user.service";
 import AuthVerify from "./common/authVerify";
 import { Routes, BrowserRouter, Navigate, Route, Link } from "react-router-dom";
 
@@ -28,6 +29,8 @@ class App extends Component {
 
   componentDidMount() {
     const user = AuthService.getCurrentUser();
+    if (user)   { const roles=userService.getRoles(user.userId);
+    console.log(roles)}
     console.log("home",user)
     if (user!==null) {
       

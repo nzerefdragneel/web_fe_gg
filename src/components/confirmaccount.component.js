@@ -5,7 +5,18 @@ import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import { isEmail } from "validator";
 
+  
+
 import AuthService from "../services/auth.service";
+
+
+const parseJwt = (token) => {
+    try {
+      return JSON.parse(atob(token.split('.')[1]));
+    } catch (e) {
+      return null;
+    }
+  };
 const required = value => {
     if (!value) {
         return (
@@ -16,15 +27,6 @@ const required = value => {
     }
 };
 
-const vemail = value => {
-    if (!isEmail(value)) {
-        return (
-            <div className="text-error-color text-base" role="alert">
-                This is not a valid email.
-            </div>
-        );
-    }
-};
 
 const vusername = value => {
     if (value.length < 3 || value.length > 20) {
@@ -47,16 +49,6 @@ const vpassword = value => {
 };
 
 
-
-  function parseJwt (token) {
-    var base64Url = token.split('.')[1];
-    var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-    var jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
-        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-    }).join(''));
-
-    return JSON.parse(jsonPayload);
-}
 function Signup() {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
@@ -65,35 +57,28 @@ function Signup() {
     const [message, setMessage] = useState('')
     const [isSubmit, setIsSubmit] = useState(false)
     const [isSuccess, setSuccess] = useState(false)
-    const [isVerified, setVerify] = useState('')
-   
-    const queryParameters = new URLSearchParams(window.location.search)
-    const accessToken = queryParameters.get("accessToken")
+
     const handleRegister = (e) => {
 
         e.preventDefault();
-        
-        if (accessToken!==null)
-        {
-        const decodedJwt = parseJwt(accessToken);;
-        setEmail(decodedJwt.json.email)
-        setVerify(decodedJwt.json.email_verified)
-        }
-        console.log("signup");
-        fref.current.validateAll();
 
-        AuthService.register(
+        fref.current.validateAll();
+        const queryParameters = new URLSearchParams(window.location.search)
+        const accessToken = queryParameters.get("accessToken")
+        const decodedJwt = parseJwt(accessToken);
+        const profile=decodedJwt.profile;
+        setEmail(profile.email.value)
+
+        AuthService.registerConfirm(
             username,
             email,
             password,
-            isVerified
+            profile.email.verified
         ).then(
             (response) => {
                 setSuccess(true)
                 setMessage(response.data.message)
                 setIsSubmit(true)
-                console.log(response.status)
-                
             },
             (error) => {
                 const resMessage =
@@ -114,22 +99,10 @@ function Signup() {
         <div className="col-md-12">
         <div className="">
             <div className='grid grid-cols-1 md:grid-cols-2  justify-items-center content-around place-items-center '>
-                <div className='flex flex-col flex-wrap'>
-                    <div className='mr-4 ml-4'>
-                        <div className='text-4xl text-dark-green font-bold mt-3'>
-                            Classroom
-                        </div>
-                        <div className='text-xl mt-3'>
-                            Where teaching and learning come together
-                        </div>
-                        <div className='text-base mt-3 text-neutral-600'>
-                            Classroom helps educators create engaging learning experiences they can personalize, manage, and measure. Classroom is a Workspace for Education, which empowers your institution with simple, safer, collaborative tools.
-                        </div>
-                    </div>
-                </div>
+             
                 <div className='bg-gray-50 m-3 p-5 shadow-lg'>
                     <div className='text-4xl font-bold text-center mb-3'>
-                        Sign Up
+                        Continute
                     </div>
                     <div className='text-base text-neutral-600 mb-6'>
                         Create an account to unlock exclusive features.
@@ -152,20 +125,6 @@ function Signup() {
                                     validations={[required, vusername]}
                                 />
                             </div>
-
-                           {!accessToken && <div className="form-group">
-                                <label htmlFor="email" className='font-semibold mb-2 mt-2'>Email</label>
-                                <Input
-                                    type="text"
-                                    className="form-control p-3 rounded"
-                                    name="email"
-                                    placeholder='Enter your Email'
-                                    onChange={(e) => {
-                                        setEmail(e.target.value)
-                                    }}
-                                    validations={[required, vemail]}
-                                />
-                            </div>}
 
                             <div className="form-group">
                                 <label htmlFor="password" className='font-semibold mb-2 mt-2'>Password</label>
