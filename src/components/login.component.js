@@ -90,46 +90,10 @@ class LoginForm extends Component {
 
     handleLoginFacebook(e) {
         e.preventDefault()
-        AuthService.facebookLogin().then(
-            (res) => {
-                if(res.status === 302)
-                {
-                    window.location.href = res.url;
-                }
-            },
-            (error) => {
-                const resMessage =
-                    (error.response &&
-                        error.response.data &&
-                        error.response.data.message) ||
-                    error.message ||
-                    error.toString();
-                
-                console.log(resMessage)
-            }
-        )
     }
 
     handleLoginGoogle(e) {
         e.preventDefault()
-        AuthService.googleLogin().then(
-            (res) => {
-                if(res.status === 302)
-                {
-                    window.location.href = res.url;
-                }
-            },
-            (error) => {
-                const resMessage =
-                    (error.response &&
-                        error.response.data &&
-                        error.response.data.message) ||
-                    error.message ||
-                    error.toString();
-                
-                console.log(resMessage)
-            }
-        )
     }
 
     render() {
