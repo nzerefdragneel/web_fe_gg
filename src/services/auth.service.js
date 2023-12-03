@@ -40,13 +40,14 @@ class AuthService {
     localStorage.removeItem("user");
   }
 
-  register(username, email, password) {
+  register(username, email, password,isVerified) {
     return axios.post(
       API_URL + "signup",
       {
         username,
         email,
         password,
+        isVerified
       },
       {
         headers: {
@@ -58,6 +59,8 @@ class AuthService {
       }
     );
   }
+  
+  
 
   forgotPassword(email) {
     return axios.post(
@@ -98,7 +101,7 @@ class AuthService {
   getCurrentUser() {
     return JSON.parse(localStorage.getItem("user"));
   }
-
+  
   facebookLogin() {
     return axios.get(API_URL + "facebook",
       {
@@ -122,6 +125,7 @@ class AuthService {
         mode: 'no-cors',
       }).then((res) => console.log(res))
   }
+
 }
 
 export default new AuthService();
