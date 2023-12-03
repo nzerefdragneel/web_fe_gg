@@ -69,7 +69,7 @@ function Signup() {
         const profile=decodedJwt.profile;
         setEmail(profile.email.value)
 
-        AuthService.registerConfirm(
+        AuthService.register(
             username,
             email,
             password,

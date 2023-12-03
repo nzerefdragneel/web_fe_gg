@@ -6,6 +6,8 @@ import Input from "react-validation/build/input";
 import { isEmail } from "validator";
 
 import AuthService from "../services/auth.service";
+
+
 const required = value => {
     if (!value) {
         return (
@@ -47,16 +49,6 @@ const vpassword = value => {
 };
 
 
-
-  function parseJwt (token) {
-    var base64Url = token.split('.')[1];
-    var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-    var jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
-        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-    }).join(''));
-
-    return JSON.parse(jsonPayload);
-}
 function Signup() {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
@@ -65,35 +57,22 @@ function Signup() {
     const [message, setMessage] = useState('')
     const [isSubmit, setIsSubmit] = useState(false)
     const [isSuccess, setSuccess] = useState(false)
-    const [isVerified, setVerify] = useState('')
-   
-    const queryParameters = new URLSearchParams(window.location.search)
-    const accessToken = queryParameters.get("accessToken")
+
     const handleRegister = (e) => {
 
         e.preventDefault();
-        
-        if (accessToken!==null)
-        {
-        const decodedJwt = parseJwt(accessToken);;
-        setEmail(decodedJwt.json.email)
-        setVerify(decodedJwt.json.email_verified)
-        }
-        console.log("signup");
+
         fref.current.validateAll();
 
         AuthService.register(
             username,
             email,
             password,
-            isVerified
         ).then(
             (response) => {
                 setSuccess(true)
                 setMessage(response.data.message)
                 setIsSubmit(true)
-                console.log(response.status)
-                
             },
             (error) => {
                 const resMessage =
@@ -153,7 +132,7 @@ function Signup() {
                                 />
                             </div>
 
-                           {!accessToken && <div className="form-group">
+                            <div className="form-group">
                                 <label htmlFor="email" className='font-semibold mb-2 mt-2'>Email</label>
                                 <Input
                                     type="text"
@@ -165,7 +144,7 @@ function Signup() {
                                     }}
                                     validations={[required, vemail]}
                                 />
-                            </div>}
+                            </div>
 
                             <div className="form-group">
                                 <label htmlFor="password" className='font-semibold mb-2 mt-2'>Password</label>

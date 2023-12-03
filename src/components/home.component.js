@@ -68,32 +68,11 @@ export function SimpleSidebar() {
   );
 }
 export default class Home extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      haveAccount: undefined,
-      accessToken:null
-    };
-  }
+ 
 
-  componentDidMount() {
-    const queryParameters = new URLSearchParams(window.location.search)
-    const accessToken = queryParameters.get("accessToken")
-    const haveAccount = queryParameters.get('haveAccount') === 'true'
-    this.setState({
-      accessToken: accessToken,
-      haveAccount:haveAccount
-    });
-    console.log(accessToken)
-    console.log(haveAccount)
-    
-  }
-  
+ 
   render() {
-    if(this.state.haveAccount===false){
-      console.log("navi");
-        return <Navigate replace to={`/signup?accessToken=${this.state.accessToken}`} />
-      }
+    
     const user=localStorage.getItem("user");
     if (user==null){
       return(
