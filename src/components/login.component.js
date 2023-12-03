@@ -99,11 +99,12 @@ class LoginForm extends Component {
                         }}
                     >
                         <div className="form-group">
-                            <label htmlFor="username">Username</label>
+                            <label htmlFor="username" className='font-semibold mb-2'>Username</label>
                             <Input
                                 type="text"
                                 className="form-control"
                                 name="username"
+                                placeholder='Enter your Username'
                                 value={this.state.username}
                                 onChange={this.onChangeUsername}
                                 validations={[required]}
@@ -111,11 +112,12 @@ class LoginForm extends Component {
                         </div>
 
                         <div className="form-group">
-                            <label htmlFor="password">Password</label>
+                            <label htmlFor="password" className='font-semibold mb-2'>Password</label>
                             <Input
                                 type={this.state.showPassword ? "text" : "password"}
                                 className="form-control"
                                 name="password"
+                                placeholder='Enter your Password'
                                 value={this.state.password}
                                 onChange={this.onChangePassword}
                                 validations={[required]}
@@ -123,7 +125,7 @@ class LoginForm extends Component {
                         </div>
 
                         <div className="form-group">
-                            <a href="/forgot-password" style={{ color: "black" }}>
+                            <a href="/forgot-password" style={{ color: "black", fontStyle:'italic' }}>
                                 Forgot password?
                             </a>
                         </div>
