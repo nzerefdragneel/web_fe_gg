@@ -9,7 +9,7 @@ import { faArrowUpRightFromSquare } from "@fortawesome/free-solid-svg-icons";
 class LoginScreen extends Component {
   render() {
     return (
-      <div className="grid grid-cols-12 gap-4 px-1 justify-items-center content-around place-items-center ">
+      <div className="grid grid-cols-12 gap-1 justify-items-center content-around place-items-center mt-3 -ml-2">
         <div className="col-span-6 flex items-center">
           <div className="mx-auto">
             <Typography variant="h1" className='text-4xl text-dark-green font-bold mt-3'>

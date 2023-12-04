@@ -102,7 +102,7 @@ function Signup() {
     return (
         <div className="col-md-12">
             <div className="">
-                <div className='grid grid-cols-1 md:grid-cols-2  justify-items-center content-around place-items-center '>
+                <div className='grid grid-cols-1 md:grid-cols-2  justify-items-center content-around place-items-center px-4 -ml-4'>
                     <div className='flex flex-col flex-wrap'>
                         <div className='mr-4 ml-4'>
                             <div className='text-4xl text-dark-green font-bold mt-3'>
