@@ -8,7 +8,7 @@ const API_TEST=`${process.env.REACT_APP_SERVICE_URL}/api/test/`;
 // const API_URL = "http://localhost:8080/api/auth/";
 
 class UserService{
- async getRoles(id){
+ getRoles(id){
      axios.get(
       `${API_TEST}getroles?id=${id}`,{
         headers: {
@@ -20,7 +20,7 @@ class UserService{
       }).then(res=>{
         console.log(res.data.roles)
         return res.data.roles
-      }, err=> {return null})
+      }, err=> {return ''})
   }
     EditUser(userId,username, email, password) {
         return axios.put(API_TEST + "edituser", {
