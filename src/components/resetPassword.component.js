@@ -131,7 +131,7 @@ function ResetPassword() {
 
                 <div className="form-group">
                   <button className="w-full py-2.5 text-white bg-dark-green rounded-lg text-sm mt-3">
-                    Sign Up
+                    Confirm
                   </button>
                 </div>
               </div>

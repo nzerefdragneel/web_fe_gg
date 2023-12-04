@@ -62,25 +62,31 @@ class LoginForm extends Component {
         this.form.validateAll();
 
         if (this.checkBtn.context._errors.length === 0) {
-            AuthService.login(this.state.username, this.state.password).then(
-                () => {
-                    this.props.router.navigate("/home");
-                    window.location.reload();
-                },
-                (error) => {
-                    const resMessage =
-                        (error.response &&
-                            error.response.data &&
-                            error.response.data.message) ||
-                        error.message ||
-                        error.toString();
+            AuthService.login(this.state.username, this.state.password)
+            .then(
+                (response) => {
+                console.log(response)
+                  if (response.data.id) {
+                      localStorage.setItem("user", JSON.stringify(response.data));
+                  }
+                  this.props.router.navigate("/home");
+                  window.location.reload();
+                  
+              },error=> 
+              {
+                const resMessage =
+                (error.response &&
+                    error.response.data &&
+                    error.response.data.message) ||
+                error.message ||
+                error.toString();
 
-                    this.setState({
-                        loading: false,
-                        message: resMessage,
-                    });
-                }
-            );
+                this.setState({
+                loading: false,
+                message: resMessage,
+            });
+        }
+        );
         } else {
             this.setState({
                 loading: false,

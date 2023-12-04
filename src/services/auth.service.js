@@ -25,15 +25,8 @@ class AuthService {
                     mode: "no-cors",
                 }
             )
-            .then((response) => {
-                if (response.data.id) {
-                    localStorage.setItem("user", JSON.stringify(response.data));
-                }
-                return response.data;
-            }).catch(function (error) {
-                console.log(error);
-            });
-    }
+           
+    };
 
     logout() {
         localStorage.removeItem("user");

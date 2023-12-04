@@ -24,19 +24,19 @@ class App extends Component {
 
     this.state = {
       currentUser: undefined,
+      roles:''
     };
   }
 
   componentDidMount() {
     const user = AuthService.getCurrentUser();
-    if (user)   { 
-      const roles=userService.getRoles(user.id);
-    console.log(roles)}
-    console.log("home",user)
+    console.log(user)
     if (user!==null) {
-      
+       const roles= userService.getRoles(user.id);
+      console.log(roles)
       this.setState({
         currentUser: user,
+        roles:roles
       });
     }
 
@@ -53,11 +53,15 @@ class App extends Component {
     AuthService.logout();
     this.setState({
       currentUser: undefined,
+      roles:''
     });
   }
 
   render() {
-    const { currentUser } = this.state;
+    const currentUser = this.state.currentUser;
+    const roles  = this.state.roles;
+    console.log(roles)
+
     
     return (
       <div className="">
@@ -102,12 +106,12 @@ class App extends Component {
             </div>
           )}
         </div>
+        {!roles ? (
         <div className="min-h-screen flex">
-
         <div className="flex-none w-64 h-14">
         {currentUser && <SidesMenu />}
         </div>
-
+       
         <div className="flex-1 flex flex-col">
           <div className="flex-1 p-4">
             <Routes>
@@ -134,6 +138,14 @@ class App extends Component {
           </div>
         </div>
         </div>
+        ):
+        (
+          <div className="flex-1 flex flex-col">
+          <div className="flex-1 p-4">
+            <h1>Admin</h1>
+          </div>
+        </div>
+        )}
         <div className="col-md-12 flex flex-col h-48 w-full">
           <SimpleFooter></SimpleFooter>
         </div>

@@ -8,9 +8,8 @@ const API_TEST=`${process.env.REACT_APP_SERVICE_URL}/api/test/`;
 // const API_URL = "http://localhost:8080/api/auth/";
 
 class UserService{
-  getRoles(id){
-    console.log(id)
-    return axios.get(
+ async getRoles(id){
+     axios.get(
       `${API_TEST}getroles?id=${id}`,{
         headers: {
           "Cache-Control": "no-cache",
@@ -18,7 +17,10 @@ class UserService{
           "Access-Control-Allow-Origin": "*",
         },
         mode: 'no-cors',
-      })
+      }).then(res=>{
+        console.log(res.data.roles)
+        return res.data.roles
+      }, err=> {return null})
   }
     EditUser(userId,username, email, password) {
         return axios.put(API_TEST + "edituser", {
