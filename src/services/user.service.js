@@ -17,10 +17,12 @@ class UserService{
           "Access-Control-Allow-Origin": "*",
         },
         mode: 'no-cors',
-      }).then(res=>{
+      })
+      .then(res=>{
         console.log(res.data.roles)
         return res.data.roles
-      }, err=> {return ''})
+      }).catch( err=> {return ''})
+     
   }
     EditUser(userId,username, email, password) {
         return axios.put(API_TEST + "edituser", {
