@@ -18,6 +18,7 @@ import ForgotPassword from "./components/forgotPassword.component";
 import ResetPassword from "./components/resetPassword.component";
 import Bus from "./common/bus";
 import { ClassDetail } from "./components/class/classdetail.component";
+import CreateClass, { ClassCreate } from "./components/class/createClass.component";
 class App extends Component {
   constructor(props) {
     super(props);
@@ -136,6 +137,7 @@ class App extends Component {
               <Route path="/forgot-password" element={<ForgotPassword />} />
               <Route path="/reset-password/:token" element={<ResetPassword />} />
               <Route path="/class/detail" element={<ClassDetail />} />
+              <Route path="/class/create-class" element={<CreateClass />} />
             </Routes>
           </div>
         </div>

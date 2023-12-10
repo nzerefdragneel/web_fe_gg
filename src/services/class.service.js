@@ -51,6 +51,26 @@ class ClassService {
              
         )
     };
+    createClass(className, description, teacherId){
+        return axios
+        .post(
+            API_URL + `create`,
+            {
+                className: className, 
+                description: description, 
+                teacherId: teacherId
+            },
+            {
+                headers: {
+                    "Cache-Control": "no-cache",
+                    "Content-Type": "application/x-www-form-urlencoded",
+                    "Access-Control-Allow-Origin": "*",
+                },
+                mode: "no-cors",
+            }
+             
+        )
+    }
   }
   
 
