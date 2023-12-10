@@ -17,6 +17,7 @@ import SimpleFooter from "./components/footer.component";
 import ForgotPassword from "./components/forgotPassword.component";
 import ResetPassword from "./components/resetPassword.component";
 import Bus from "./common/bus";
+import { ClassDetail } from "./components/class/classdetail.component";
 class App extends Component {
   constructor(props) {
     super(props);
@@ -134,6 +135,7 @@ class App extends Component {
               <Route path="/profile" element={<Profile />} />
               <Route path="/forgot-password" element={<ForgotPassword />} />
               <Route path="/reset-password/:token" element={<ResetPassword />} />
+              <Route path="/class/detail" element={<ClassDetail />} />
             </Routes>
           </div>
         </div>
