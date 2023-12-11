@@ -135,10 +135,7 @@ class App extends Component {
                 />
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/forgot-password" element={<ForgotPassword />} />
-                <Route
-                  path="/reset-password/:token"
-                  element={<ResetPassword />}
-                />
+                <Route path="/reset-password" element={<ResetPassword />} />
                 <Route path="/class/detail" element={<ClassDetail />} />
                 <Route path="/class/create-class" element={<CreateClass />} />
                 <Route path="/invitation" element={<Invitation />} />
