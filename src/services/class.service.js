@@ -56,6 +56,71 @@ class ClassService {
       }
     );
   }
+    createClass(className, description, teacherId){
+        return axios
+        .post(
+            API_URL + `create`,
+            {
+                className: className, 
+                description: description, 
+                teacherId: teacherId
+            },
+            {
+                headers: {
+                    "Cache-Control": "no-cache",
+                    "Content-Type": "application/x-www-form-urlencoded",
+                    "Access-Control-Allow-Origin": "*",
+                },
+                mode: "no-cors",
+            }
+             
+        )
+    };
+    getAllClasses(userId){
+        return axios
+        .get(
+            API_URL + `getall?id=${userId}`,
+            {
+                headers: {
+                    "Cache-Control": "no-cache",
+                    "Content-Type": "application/x-www-form-urlencoded",
+                    "Access-Control-Allow-Origin": "*",
+                },
+                mode: "no-cors",
+            }
+             
+        )
+    };
+    getClassByTeacherId(userId){
+        return axios
+        .get(
+            API_URL + `getbyteacherid?id=${userId}`,
+            {
+                headers: {
+                    "Cache-Control": "no-cache",
+                    "Content-Type": "application/x-www-form-urlencoded",
+                    "Access-Control-Allow-Origin": "*",
+                },
+                mode: "no-cors",
+            }
+             
+        )
+    };
+    getClassByStudentId(userId){
+        return axios
+        .get(
+            API_URL + `getbystudentid?id=${userId}`,
+            {
+                headers: {
+                    "Cache-Control": "no-cache",
+                    "Content-Type": "application/x-www-form-urlencoded",
+                    "Access-Control-Allow-Origin": "*",
+                },
+                mode: "no-cors",
+            }
+             
+        )
+    };
 }
 
 export default new ClassService();
