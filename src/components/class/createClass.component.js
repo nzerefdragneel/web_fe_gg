@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import {
 
 } from "@material-tailwind/react";
@@ -26,6 +26,9 @@ const CreateClass = () => {
     const [className, setClassName] = useState("")
     const [description, setDescription] = useState("")
     const [isLoading, setIsLoading] = useState(false)
+    const navigate = useNavigate();
+    const [message, setMessage] = useState("");
+    const [isSubmit, setIsSubmit] = useState(false);
 
     const user = JSON.parse(localStorage.getItem("user"));
     if (user == null) {
@@ -43,12 +46,14 @@ const CreateClass = () => {
                 if (res.status === 200) {
                     setIsLoading(false)
                     alert("Create Class Success")
-                    window.location.reload();
+                    navigate("/home");
                 }
             },
             (error) => {
                 setIsLoading(false)
+                setIsSubmit(true)
                 alert("Create Class Fail")
+                setMessage(error.response.data.message)
             }
         );
     }
@@ -96,6 +101,11 @@ const CreateClass = () => {
                                         validations={[required]}
                                     />
                                 </div>
+                                {isSubmit &&
+                                    <div className="text-error-color text-base italic">
+                                        {message}
+                                    </div>
+                                }
                                 <div className="form-group text-right">
                                     <button className="w-48 py-2.5 text-white bg-dark-green rounded-lg text-base mt-3"
                                         onClick={() => { setIsLoading(true) }}
@@ -107,6 +117,7 @@ const CreateClass = () => {
                                 </div>
                             </div>
                         </Form>
+
                     </div>
                 </div>
             </div>
