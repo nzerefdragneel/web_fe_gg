@@ -21,7 +21,6 @@ function Lading() {
 
         if (accessToken != null) {
             const decodedJwt = parseJwt(accessToken);
-            console.log(decodedJwt);
             if (decodedJwt != null) {
                 decodedJwt.user.exp = decodedJwt.exp;
                 decodedJwt.user.iat = decodedJwt.iat;
@@ -37,9 +36,9 @@ function Lading() {
 
     return (
         <div className="">
-            <div className='flex flex-col items-start gap-2 px-5 py-2 my-5 mx-16'>
+            <div className='flex flex-col items-start gap-2 px-2 py-2 my-5 mr-5 -ml-36'>
                 <div className='grid grid-cols-1 md:grid-cols-2 gap-6 items-center '>
-                    <div className='mr-4 ml-4'>
+                    <div className='mr-4 ml-2'>
                         <div className='text-4xl text-dark-green font-bold mt-3'>
                             Classroom
                         </div>

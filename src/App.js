@@ -6,7 +6,7 @@ import userService from "./services/user.service";
 import AuthVerify from "./common/authVerify";
 import { Routes, BrowserRouter, Navigate, Route, Link } from "react-router-dom";
 
-import {SidesMenu} from "./components/sidebar.component";
+import { SidesMenu } from "./components/sidebar.component";
 import LoginScreen from "./screen/loginScreen";
 import Home from "./components/home.component";
 import Lading from "./components/lading.component";
@@ -16,8 +16,11 @@ import Profile from "./components/profile.component";
 import SimpleFooter from "./components/footer.component";
 import ForgotPassword from "./components/forgotPassword.component";
 import ResetPassword from "./components/resetPassword.component";
+import Invitation from "./components/invitation.component";
 import Bus from "./common/bus";
 import { ClassDetail } from "./components/class/classdetail.component";
+import ImportCsv from "./components/csvfile/importcsv";
+import CreateClass, { ClassCreate } from "./components/class/createClass.component";
 class App extends Component {
   constructor(props) {
     super(props);
@@ -25,19 +28,17 @@ class App extends Component {
 
     this.state = {
       currentUser: undefined,
-      roles:''
+      roles: "",
     };
   }
 
   componentDidMount() {
     const user = AuthService.getCurrentUser();
-    console.log(user)
-    if (user!==null) {
-       const roles= userService.getRoles(user.id);
-      console.log(roles)
+    if (user !== null) {
+      const roles = userService.getRoles(user.id);
       this.setState({
         currentUser: user,
-        roles:roles
+        roles: roles,
       });
     }
 
@@ -54,16 +55,14 @@ class App extends Component {
     AuthService.logout();
     this.setState({
       currentUser: undefined,
-      roles:''
+      roles: "",
     });
   }
 
   render() {
     const currentUser = this.state.currentUser;
-    const roles  = this.state.roles;
-    console.log(roles)
+    const roles = this.state.roles;
 
-    
     return (
       <div className="">
         <div className="pt-3 pb-4 px-32 flex flex-row flex-wrap justify-between border-b mb-2">
@@ -109,36 +108,41 @@ class App extends Component {
         </div>
         {/* {!roles ? ( */}
         <div className="min-h-screen flex">
-        <div className="flex-none w-64 h-14">
-        {currentUser && <SidesMenu />}
-        </div>
-       
-        <div className="flex-1 flex flex-col">
-          <div className="flex-1 p-4">
-            <Routes>
-              <Route path="/login" element={<LoginScreen />} />
-              <Route path="/signup" element={<Signup />} />
-              <Route
-                exact
-                path="/"
-                element={
-                  currentUser ? <Navigate replace to="/home" /> : <Lading />
-                }
-              />
-              <Route path="/home" element={<Home />} />
-              <Route
-                path="/edituser"
-                element={
-                  currentUser ? <EditUser /> : <Navigate replace to="/" />
-                }
-              />
-              <Route path="/profile" element={<Profile />} />
-              <Route path="/forgot-password" element={<ForgotPassword />} />
-              <Route path="/reset-password/:token" element={<ResetPassword />} />
-              <Route path="/class/detail" element={<ClassDetail />} />
-            </Routes>
+          <div className="flex-none w-64 h-14">
+            {currentUser && <SidesMenu />}
           </div>
-        </div>
+
+          <div className="flex-1 flex flex-col">
+            <div className="flex-1 p-4">
+              <Routes>
+                <Route path="/login" element={<LoginScreen />} />
+                <Route path="/signup" element={<Signup />} />
+                <Route
+                  exact
+                  path="/"
+                  element={
+                    currentUser ? <Navigate replace to="/home" /> : <Lading />
+                  }
+                />
+                <Route path="/home" element={<Home />} />
+                <Route
+                  path="/edituser"
+                  element={
+                    currentUser ? <EditUser /> : <Navigate replace to="/" />
+                  }
+                />
+                <Route path="/profile" element={<Profile />} />
+                <Route path="/forgot-password" element={<ForgotPassword />} />
+                <Route
+                  path="/reset-password/:token"
+                  element={<ResetPassword />}
+                />
+                <Route path="/class/detail" element={<ClassDetail />} />
+              <Route path="/class/create-class" element={<CreateClass />} />
+                <Route path="/invitation" element={<Invitation />} />
+              </Routes>
+            </div>
+          </div>
         </div>
         {/* ):
         (
@@ -153,7 +157,6 @@ class App extends Component {
         </div>
         <AuthVerify logOut={this.logOut} />
       </div>
-      
     );
   }
 }

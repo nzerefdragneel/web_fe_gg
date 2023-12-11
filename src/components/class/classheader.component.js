@@ -5,9 +5,8 @@ import {
     Typography,
     Avatar,
   } from "@material-tailwind/react";
-   
+  
   export function Classheader(data) {
-    console.log(data)
     return (
       <div className="py-4 ">
       <Card
