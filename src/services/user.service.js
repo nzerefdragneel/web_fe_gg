@@ -19,7 +19,6 @@ class UserService{
         mode: 'no-cors',
       })
       .then(res=>{
-        console.log(res.data.roles)
         return res.data.roles
       }).catch( err=> {return ''})
      

@@ -34,10 +34,8 @@ class App extends Component {
 
   componentDidMount() {
     const user = AuthService.getCurrentUser();
-    console.log(user);
     if (user !== null) {
       const roles = userService.getRoles(user.id);
-      console.log(roles);
       this.setState({
         currentUser: user,
         roles: roles,
@@ -64,7 +62,6 @@ class App extends Component {
   render() {
     const currentUser = this.state.currentUser;
     const roles = this.state.roles;
-    console.log(roles);
 
     return (
       <div className="">

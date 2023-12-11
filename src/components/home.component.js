@@ -32,30 +32,7 @@ export function SimpleCard() {
     );
 }
 
-export function SimpleSidebar() {
-    return (
-        <Card className="min-h-[calc(100vh-2rem)] w-full max-w-[20rem] p-4 shadow-xl shadow-blue-gray-900/5">
-            <List>
-                <Link to={"/"} className=" text-gray-900  rounded-2xl bg-slate-200">
-                    <ListItem>
-                        <ListItemPrefix>
-                            <PresentationChartBarIcon className="h-5 w-5" />
-                        </ListItemPrefix>
-                        Home
-                    </ListItem>
-                </Link>
-                <Link to={"/profile"} className=" text-gray-900 hover:none">
-                    <ListItem>
-                        <ListItemPrefix>
-                            <ShoppingBagIcon className="h-5 w-5" />
-                        </ListItemPrefix>
-                        Profile
-                    </ListItem>
-                </Link>
-            </List>
-        </Card>
-    );
-}
+
 const Home = () => {
     const user = JSON.parse(localStorage.getItem("user"));
     const [classes, setClasses] = useState([]);
@@ -104,8 +81,6 @@ const Home = () => {
     if (user == null) {
         return <Navigate replace to="/" />;
     }
-
-    console.log('class: ', classes);
 
     return (
         <>

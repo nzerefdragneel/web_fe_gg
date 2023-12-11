@@ -64,7 +64,6 @@ const ImportCsv = () => {
             const res = rows.reduce((acc, e, i) => {
                 return [...acc, [[e], columns[i]]];
             }, []);
-            console.log(res);
             setData(res);
         };
         reader.readAsText(file);

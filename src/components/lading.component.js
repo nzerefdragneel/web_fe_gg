@@ -21,7 +21,6 @@ function Lading() {
 
         if (accessToken != null) {
             const decodedJwt = parseJwt(accessToken);
-            console.log(decodedJwt);
             if (decodedJwt != null) {
                 decodedJwt.user.exp = decodedJwt.exp;
                 decodedJwt.user.iat = decodedJwt.iat;

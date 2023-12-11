@@ -12,9 +12,19 @@ class ClassService {
       mode: "no-cors",
     });
   }
+  checkteacher(classid, userId) {
+    return axios.get(API_URL + `istecher?classId=${classid}&userId=${userId}`,
+     {
+      headers: {
+        "Cache-Control": "no-cache",
+        "Content-Type": "application/x-www-form-urlencoded",
+        "Access-Control-Allow-Origin": "*",
+      },
+      mode: "no-cors",
+    });
+  }
 
   getlistteachers(id) {
-    console.log(id);
     return axios.get(API_URL + `getteacherinclass?id=${id}`, {
       headers: {
         "Cache-Control": "no-cache",
@@ -26,7 +36,6 @@ class ClassService {
   }
 
   getliststudents(id) {
-    console.log(id);
     return axios.get(API_URL + `getstudentinclass?id=${id}`, {
       headers: {
         "Cache-Control": "no-cache",
@@ -121,6 +130,68 @@ class ClassService {
              
         )
     };
+    getivitelinkstudent(classId){
+      return axios
+      .get(
+          API_URL + `getlink?classId=${classId}&isTeacher=${false}`,
+          {
+              headers: {
+                  "Cache-Control": "no-cache",
+                  "Content-Type": "application/x-www-form-urlencoded",
+                  "Access-Control-Allow-Origin": "*",
+              },
+              mode: "no-cors",
+          }
+           
+      )
+  };
+  getivitelinkteacher(classId){
+    return axios
+    .get(
+        API_URL + `getlink?classId=${classId}&isTeacher=${true}`,
+        {
+            headers: {
+                "Cache-Control": "no-cache",
+                "Content-Type": "application/x-www-form-urlencoded",
+                "Access-Control-Allow-Origin": "*",
+            },
+            mode: "no-cors",
+        }
+         
+    )
+  }
+  getinvitestudent(id,email){
+    return axios
+    .get(
+        API_URL + `invitestudent?classId=${id}&studentEmail=${email}`,
+        {
+            headers: {
+                "Cache-Control": "no-cache",
+                "Content-Type": "application/x-www-form-urlencoded",
+                "Access-Control-Allow-Origin": "*",
+            },
+            mode: "no-cors",
+        }
+         
+    )
+
+  }
+  getinviteteacher(id,email){
+    return axios
+    .get(
+        API_URL + `invitestudent?classId=${id}&studentEmail=${email}`,
+        {
+            headers: {
+                "Cache-Control": "no-cache",
+                "Content-Type": "application/x-www-form-urlencoded",
+                "Access-Control-Allow-Origin": "*",
+            },
+            mode: "no-cors",
+        }
+         
+    )
+
+  }
 }
 
 export default new ClassService();

@@ -16,8 +16,7 @@ export function ClassDetail() {
     const [activeTab,setActiveTab]=useState('news');
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
-    const classId = queryParams.get("classId");
-    console.log(classId)
+    const classId = queryParams.get("id");
     return (
         <div className="">
         <Tabs value={activeTab} >

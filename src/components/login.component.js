@@ -64,15 +64,14 @@ class LoginForm extends Component {
     let params = new URL(window.location).searchParams;
     const classId = params.get("id");
     const isTeacher = params.get("isTeacher");
-
+    console.log(classId);
     if (this.checkBtn.context._errors.length === 0) {
       AuthService.login(this.state.username, this.state.password).then(
         (response) => {
-          console.log(response);
           if (response.data.id) {
             localStorage.setItem("user", JSON.stringify(response.data));
           }
-          if (classId !== "null") {
+          if (classId !== null && classId !== "null" ) {
             this.props.router.navigate(
               `/invitation?id=${classId}&isTeacher=${isTeacher}`
             );

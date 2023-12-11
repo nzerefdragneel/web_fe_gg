@@ -3,7 +3,6 @@ import { appRouters } from "../routes/route.config"
 
 export function SidesMenu(props) {
   const { collapsed } = props
-console.log(props)
   return (
     <div
       className={`h-screen  ${collapsed ? 'w-16' : 'w-64'} transition-all ease-in-out duration-300  w-full max-w-[20rem] shadow-xl shadow-blue-gray-900/5`}
