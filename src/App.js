@@ -20,7 +20,9 @@ import Invitation from "./components/invitation.component";
 import Bus from "./common/bus";
 import { ClassDetail } from "./components/class/classdetail.component";
 import ImportCsv from "./components/csvfile/importcsv";
-import CreateClass, { ClassCreate } from "./components/class/createClass.component";
+import CreateClass, {
+  ClassCreate,
+} from "./components/class/createClass.component";
 class App extends Component {
   constructor(props) {
     super(props);
@@ -138,7 +140,7 @@ class App extends Component {
                   element={<ResetPassword />}
                 />
                 <Route path="/class/detail" element={<ClassDetail />} />
-              <Route path="/class/create-class" element={<CreateClass />} />
+                <Route path="/class/create-class" element={<CreateClass />} />
                 <Route path="/invitation" element={<Invitation />} />
               </Routes>
             </div>
