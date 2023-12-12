@@ -62,7 +62,7 @@ class LoginForm extends Component {
     this.form.validateAll();
 
     let params = new URL(window.location).searchParams;
-    const classId = params.get("id");
+    const classId = params.get("invitationId");
     const isTeacher = params.get("isTeacher");
     console.log(classId);
     if (this.checkBtn.context._errors.length === 0) {
