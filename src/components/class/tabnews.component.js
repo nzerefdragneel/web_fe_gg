@@ -22,7 +22,7 @@ export function TabNews(id ) {
     const [isTeacher,setIsTeacher]=useState(false);
     const [invitestudent,setlinkstu]=useState('');
     const [inviteteacher,setinviteteacher]=useState('');
-    
+    const [status,setStatus]=useState(false);
     const [open, setOpen] = React.useState(false);
  
     const handleOpen = () => {
@@ -54,26 +54,29 @@ export function TabNews(id ) {
 
     }, [id]);
   const handleinvitestudent=()=>{
-    console.log("invite studnet");
     const dat1 = async () => {
       try {
         console.log(id.id);
        const invite=await classService.getinvitestudent(id.id,email);
-       setMessage("Success");
+       setMessage("Gửi lời mời thành viên thành công");
+       setStatus(true);
       } catch (error) {
-        setMessage("Error");
+        setMessage("Gửi lời mời thành viên thất bại");
+        setStatus(false);
         console.error('Error fetching data:', error.message);
       }
     };
-  dat1();
+   dat1();
   }
   const handleinviteteacher=()=>{ 
      const dat2 = async () => {
             try {
              const invite=await classService.getinviteteacher(id.id,email);
-             setMessage("Success");
+             setMessage("Gửi lời mời giáo viên thành công");
+             setStatus(true);
             } catch (error) {
-              setMessage("Error");
+              setMessage("Gửi lời mời giáo viên thất bại");
+              setStatus(false);
               console.error('Error fetching data:', error.message);
             }
           };
@@ -157,11 +160,11 @@ export function TabNews(id ) {
                       Invite teacher</button>
                 }
            </div>
-           {message==="Error" && (
-              <div className="text-error-color text-base">Gửi lời mời thất bại</div>
+           {status===false && (
+              <div className="text-error-color text-base">{message}</div>
             )}
-            {message==="Success" && (
-              <div className="alert alert-success text-base">Gửi lời mời thành công</div>
+            {status && (
+              <div className="alert alert-success text-base">{message}</div>
             )}
           </DialogBody>
           <DialogFooter>
@@ -172,9 +175,6 @@ export function TabNews(id ) {
               className="mr-1"
             >
               <span>Cancel</span>
-            </Button>
-            <Button variant="gradient" color="green" onClick={handleOpen}>
-              <span>Confirm</span>
             </Button>
           </DialogFooter>
         </Dialog>

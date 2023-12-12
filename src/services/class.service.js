@@ -179,7 +179,7 @@ class ClassService {
   getinviteteacher(id,email){
     return axios
     .get(
-        API_URL + `invitestudent?classId=${id}&studentEmail=${email}`,
+        API_URL + `inviteemailteacher?classId=${id}&teacherEmail=${email}`,
         {
             headers: {
                 "Cache-Control": "no-cache",
