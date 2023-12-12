@@ -130,7 +130,7 @@ export function TabNews(id ) {
               />
           </div>}
 
-           <div className="mb-1 flex flex-col gap-6">
+           <div className="mt-5 mb-1 flex flex-col gap-6">
               <Typography variant="h6" color="blue-gray" className="-mb-3">
                Invite people by email
               </Typography>
