@@ -21,6 +21,7 @@ export function TabEverybody(id ) {
             try {
               const res = await classService.getlistteachers(id.id);
               setclassTeachers(res.data.data)
+              setMessageTeacher('')
             } catch (error) {
               console.error('Error fetching data:', error.message);
               setMessageTeacher(error.message)
@@ -28,6 +29,7 @@ export function TabEverybody(id ) {
             try {
               const res = await classService.getliststudents(id.id);
               setclassStudent(res.data.data)
+              setMessageStudent('')
             } catch (error) {
               console.error('Error fetching data:', error.message);
               setMessageStudent(error.message)
