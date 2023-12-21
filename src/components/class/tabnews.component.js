@@ -67,7 +67,8 @@ export function TabNews(id ) {
       }
     };
    dat1();
-  }
+  };
+
   const handleinviteteacher=()=>{ 
      const dat2 = async () => {
             try {
@@ -138,20 +139,17 @@ export function TabNews(id ) {
                 size="lg"
                 placeholder="email"
                 className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-                labelProps={{
-                  className: "before:content-none after:content-none",
-                }}
                 value={email}
                 onChange={(e) => {setEmail(e.target.value)}}
               />
-              
           </div>
-          <div className="mb-1 flex flex-col gap-6">
+          <div className=" mt-5 mb-1 flex flex-col gap-6">
          
               <button  onClick={handleinvitestudent} className="m-2 py-2.5 text-white bg-dark-green rounded-lg text-base mt-3"
               >
                   Invite people
                   </button>
+
                   
           {isTeacher===true &&
     

@@ -66,8 +66,10 @@ class LoginForm extends Component {
     const isTeacher = params.get("isTeacher");
     console.log(classId);
     if (this.checkBtn.context._errors.length === 0) {
-      AuthService.login(this.state.username, this.state.password).then(
+      AuthService.login(this.state.username, this.state.password)
+      .then(
         (response) => {
+
           if (response.data.id) {
             localStorage.setItem("user", JSON.stringify(response.data));
           }

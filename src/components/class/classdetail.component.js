@@ -7,7 +7,7 @@ import {
     TabPanel,
 } from "@material-tailwind/react";
 import { TabNews } from "./tabnews.component";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate} from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import classService from "../../services/class.service";
 import { TabEverybody } from "./tabEverybody.component";
@@ -17,6 +17,42 @@ export function ClassDetail() {
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
     const classId = queryParams.get("id");
+    const navigate = useNavigate();
+    useEffect(() => {
+        const fetchData = async () => {
+            console.log("oke");
+            try {
+              const user = JSON.parse(localStorage.getItem("user"));
+              
+              // Assuming that checkteacher returns a promise
+              const isteacher = await classService.checkteacher(classId, user.id);
+              console.log(isteacher);
+          
+              if (isteacher.data.data === false) {
+                // Assuming that checkhavemssv returns a promise
+                try {
+                  const havsmssv = await classService.checkhavemssv(classId,user.id);
+                  console.log(havsmssv);
+                    
+                  // Assuming that response.status should be checked here
+                  if (havsmssv.status === 200) {
+                    // Reload only if necessary
+                    navigate(`/updateStudentId?classId=${classId}&userId=${user.id}`);
+                    window.location.reload();
+                  }
+                } catch (error) {
+                  console.error('Error checking havemssv:', error.message);
+                }
+              }
+            } catch (error) {
+              console.error('Error fetching data:', error.message);
+            }
+          };
+          
+          fetchData();
+          
+
+    }, [classId]);
     return (
         <div className="">
         <Tabs value={activeTab} >

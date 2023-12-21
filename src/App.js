@@ -15,14 +15,15 @@ import EditUser from "./components/edituser.component";
 import Profile from "./components/profile.component";
 import SimpleFooter from "./components/footer.component";
 import ForgotPassword from "./components/forgotPassword.component";
+import StudentJoinInClass from "./components/studentjoininclass.component"
 import ResetPassword from "./components/resetPassword.component";
 import Invitation from "./components/invitation.component";
 import Bus from "./common/bus";
 import { ClassDetail } from "./components/class/classdetail.component";
-import ImportCsv from "./components/csvfile/importcsv";
 import CreateClass, {
   ClassCreate,
 } from "./components/class/createClass.component";
+import StudentjoininclassComponent from "./components/studentjoininclass.component";
 class App extends Component {
   constructor(props) {
     super(props);
@@ -139,6 +140,7 @@ class App extends Component {
                 <Route path="/class/detail" element={<ClassDetail />} />
                 <Route path="/class/create-class" element={<CreateClass />} />
                 <Route path="/invitation" element={<Invitation />} />
+                <Route path="/updateStudentId" element={<StudentJoinInClass />} />
               </Routes>
             </div>
           </div>
