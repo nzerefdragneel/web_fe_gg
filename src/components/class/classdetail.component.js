@@ -97,6 +97,18 @@ export function ClassDetail() {
           >
             EveryBody
           </Tab>
+          <Tab
+            key="grade"
+            value="grade"
+            onClick={() => setActiveTab("grade")}
+            className={
+              activeTab === "grade"
+                ? "text-gray-900 rounded-tr-md rounded-tl-md border-slate-900 font-semibold border-b-4"
+                : ""
+            }
+          >
+            Grade
+          </Tab>
         </TabsHeader>
         <TabsBody>
           <TabPanel key="news" value="news">
@@ -107,6 +119,9 @@ export function ClassDetail() {
           </TabPanel>
           <TabPanel key="everybody" value="everybody">
             <TabEverybody id={classId}></TabEverybody>
+          </TabPanel>
+          <TabPanel key="grade" value="grade">
+            <TabGrade id={classId}></TabGrade>
           </TabPanel>
         </TabsBody>
       </Tabs>

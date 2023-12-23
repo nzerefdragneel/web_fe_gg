@@ -16,6 +16,7 @@ export function TabEverybody(id) {
   const [classStudents, setclassStudent] = useState({});
   const [messageTeacher, setMessageTeacher] = useState("");
   const [messageStudent, setMessageStudent] = useState("");
+  const [messageImport, setMessageImport] = useState("");
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -49,6 +50,29 @@ export function TabEverybody(id) {
 
         if (sheets.length) {
           const rows = utils.sheet_to_json(wb.Sheets[sheets[0]]);
+          const students = rows.map((row) => {
+            return {
+              studentId: row.ID,
+              fullname: row.Fullname,
+            };
+          });
+          console.log(id, students);
+          classService.addStudents(id, students).then(
+            (response) => {
+              const existsCount = response.data.data.existsCount;
+              const notFoundCount = response.data.data.notFoundCount;
+              if (existsCount === 0 && notFoundCount === 0) {
+                setMessageImport("Imported successfully");
+              } else {
+                setMessageImport(
+                  `Imported successfully. ${existsCount} students already existed and ${notFoundCount} students cannot be imported.`
+                );
+              }
+            },
+            (error) => {
+              console.log(error);
+            }
+          );
         }
       };
       reader.readAsArrayBuffer(file);
@@ -159,11 +183,28 @@ export function TabEverybody(id) {
           )}
         </Card>
       </div>
+      <div className="input-group">
+        <div className="custom-file">
+          <input
+            type="file"
+            name="file"
+            className="custom-file-input"
+            id="inputGroupFile"
+            required
+            onChange={handleImport}
+            accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+          />
+          <label className="custom-file-label" htmlFor="inputGroupFile">
+            Choose file
+          </label>
+        </div>
+      </div>
       <div className="col-md-6">
         <button onClick={handleExport} className="btn btn-primary float-right">
           Export <i className="fa fa-download"></i>
         </button>
       </div>
+      {messageImport && <h1>{messageImport}</h1>}
     </div>
   );
 }
