@@ -13,6 +13,7 @@ class ClassService {
     });
   }
   checkteacher(classid, userId) {
+    console.log(classid,userId)
     return axios.get(API_URL + `istecher?classId=${classid}&userId=${userId}`,
      {
       headers: {
@@ -191,6 +192,52 @@ class ClassService {
          
     )
 
+  }
+  checkmssv(classId,mssv){
+    return axios
+    .get(
+        API_URL + `checkmssv?classId=${classId}&mssv=${mssv}`,
+        {
+            headers: {
+                "Cache-Control": "no-cache",
+                "Content-Type": "application/x-www-form-urlencoded",
+                "Access-Control-Allow-Origin": "*",
+            },
+            mode: "no-cors",
+        } 
+    )
+  }
+  checkhavemssv(classId,userId){
+    return axios
+    .get(
+        API_URL + `checkhavemssv?classId=${classId}&userId=${userId}`,
+        {
+            headers: {
+                "Cache-Control": "no-cache",
+                "Content-Type": "application/x-www-form-urlencoded",
+                "Access-Control-Allow-Origin": "*",
+            },
+            mode: "no-cors",
+        } 
+    )
+  }
+  updatemssv(classId,studentId,mssv){
+    return axios.post(API_URL+'updatestudentid',{
+      data:{
+        classId:classId,
+        studentId:studentId,
+        mssv:mssv
+      }
+    },
+    {
+      headers: {
+          "Cache-Control": "no-cache",
+          "Content-Type": "application/x-www-form-urlencoded",
+          "Access-Control-Allow-Origin": "*",
+      },
+      mode: "no-cors",
+  } 
+)
   }
 }
 
