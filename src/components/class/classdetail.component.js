@@ -20,19 +20,18 @@ export function ClassDetail() {
     const navigate = useNavigate();
     useEffect(() => {
         const fetchData = async () => {
-            console.log("oke");
             try {
               const user = JSON.parse(localStorage.getItem("user"));
               
               // Assuming that checkteacher returns a promise
               const isteacher = await classService.checkteacher(classId, user.id);
-              console.log(isteacher);
+
           
               if (isteacher.data.data === false) {
                 // Assuming that checkhavemssv returns a promise
                 try {
                   const havsmssv = await classService.checkhavemssv(classId,user.id);
-                  console.log(havsmssv);
+         
                     
                   // Assuming that response.status should be checked here
                   if (havsmssv.status === 200) {

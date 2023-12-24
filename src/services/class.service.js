@@ -13,7 +13,6 @@ class ClassService {
     });
   }
   checkteacher(classid, userId) {
-    console.log(classid,userId)
     return axios.get(API_URL + `istecher?classId=${classid}&userId=${userId}`,
      {
       headers: {
@@ -101,6 +100,17 @@ class ClassService {
              
         )
     };
+    getAllClassesAdmin(){
+      return axios.get(API_URL + `getallclasses`, {
+        headers: {
+            "Cache-Control": "no-cache",
+            "Content-Type": "application/x-www-form-urlencoded",
+            "Access-Control-Allow-Origin": "*",
+        },
+        mode: "no-cors",
+    }
+      )};
+    
     getClassByTeacherId(userId){
         return axios
         .get(

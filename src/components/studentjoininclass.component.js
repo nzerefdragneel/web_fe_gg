@@ -35,7 +35,6 @@ function StudentJoinInClass() {
     const userid=queryParameters.get("userId");
     setuserId(userid);
    
-    console.log(userId,classId)
     }, [])
 
   const handleForm = (e) => {

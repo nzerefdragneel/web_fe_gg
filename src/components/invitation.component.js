@@ -23,7 +23,6 @@ export default function Invitation() {
       classService.acceptInvitation(classId, isTeacher, userId).then(
         (response) => {
           if (response.status === 200) {
-            console.log("success");
             navigate(`/home`);
           } else {
             navigate(

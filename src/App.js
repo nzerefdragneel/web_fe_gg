@@ -23,7 +23,10 @@ import { ClassDetail } from "./components/class/classdetail.component";
 import CreateClass, {
   ClassCreate,
 } from "./components/class/createClass.component";
-import StudentjoininclassComponent from "./components/studentjoininclass.component";
+import { SidesMenuAdmin } from "./components/adminside/sidemenuadmin.component";
+import AdminHome from "./components/adminside/adminhome.component";
+import ClassManager from "./components/adminside/classmanager.component";
+import ManagerUser from "./components/adminside/manageruser.component";
 class App extends Component {
   constructor(props) {
     super(props);
@@ -35,20 +38,25 @@ class App extends Component {
     };
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     const user = AuthService.getCurrentUser();
+    
     if (user !== null) {
-      const roles = userService.getRoles(user.id);
-      this.setState({
-        currentUser: user,
-        roles: roles,
-      });
+      userService.getRoles(user.id)
+      .then (response => {
+        console.log(response.data);
+        this.setState({
+          currentUser:user,
+          roles: response.data.roles,
+        });
+      }).catch(error => {console.log(error)});
     }
-
+  
     Bus.on("logout", () => {
       this.logOut();
     });
   }
+  
 
   componentWillUnmount() {
     Bus.remove("logout");
@@ -109,17 +117,38 @@ class App extends Component {
             </div>
           )}
         </div>
-        {/* {!roles ? ( */}
+       
         <div className="min-h-screen flex">
           <div className="flex-none w-64 h-14">
-            {currentUser && <SidesMenu />}
+            {roles!=='admin' && currentUser && <SidesMenu />}
+            {roles==='admin' && currentUser && <SidesMenuAdmin /> }
           </div>
-
           <div className="flex-1 flex flex-col">
             <div className="flex-1 p-4">
+              {/* admin routes */}
+              {roles==='admin'&& currentUser&&
               <Routes>
-                <Route path="/login" element={<LoginScreen />} />
-                <Route path="/signup" element={<Signup />} />
+                {/* <Route path="/home" element={<AdminHome />} /> */}
+                <Route path="/classmanager" element={<ClassManager />} />
+                <Route
+                  path="/edituser"
+                  element={
+                    currentUser ? <EditUser /> : <Navigate replace to="/" />
+                  }
+                />
+                <Route path="/manageuser" element={<ManagerUser />} />
+                <Route path="/profile" element={<Profile />} />
+                <Route path="/forgot-password" element={<ForgotPassword />} />
+                <Route path="/reset-password" element={<ResetPassword />} />
+                {/* <Route path="/class/detail" element={<ClassDetail />} />
+                <Route path="/class/create-class" element={<CreateClass />} />
+                <Route path="/invitation" element={<Invitation />} />
+                <Route path="/updateStudentId" element={<StudentJoinInClass />} /> */}
+              </Routes>
+              }
+              {roles!=='admin'&& currentUser&&
+              <Routes>
+           
                 <Route
                   exact
                   path="/"
@@ -141,18 +170,20 @@ class App extends Component {
                 <Route path="/class/create-class" element={<CreateClass />} />
                 <Route path="/invitation" element={<Invitation />} />
                 <Route path="/updateStudentId" element={<StudentJoinInClass />} />
+
               </Routes>
+              }
+
+              {/* student routes */}
+              <Routes>
+              <Route path="/login" element={<LoginScreen />} />
+                <Route path="/signup" element={<Signup />} />
+              </Routes>
+
             </div>
           </div>
         </div>
-        {/* ):
-        (
-          <div className="flex-1 flex flex-col">
-          <div className="flex-1 p-4">
-            <h1>Admin</h1>
-          </div>
-        </div>
-        )} */}
+     
         <div className="col-md-12 flex flex-col h-48 w-full">
           <SimpleFooter></SimpleFooter>
         </div>
