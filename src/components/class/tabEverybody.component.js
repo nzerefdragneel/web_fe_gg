@@ -57,22 +57,29 @@ export function TabEverybody(id) {
             };
           });
           console.log(id, students);
-          classService.addStudents(id, students).then(
-            (response) => {
-              const existsCount = response.data.data.existsCount;
-              const notFoundCount = response.data.data.notFoundCount;
-              if (existsCount === 0 && notFoundCount === 0) {
-                setMessageImport("Imported successfully");
-              } else {
-                setMessageImport(
-                  `Imported successfully. ${existsCount} students already existed and ${notFoundCount} students cannot be imported.`
-                );
+          classService
+            .addStudents(id, students)
+            .then(
+              (response) => {
+                const existsCount = response.data.data.existsCount;
+                const notFoundCount = response.data.data.notFoundCount;
+                if (existsCount === 0 && notFoundCount === 0) {
+                  setMessageImport("Imported successfully");
+                } else {
+                  setMessageImport(
+                    `Imported successfully. ${existsCount} students already existed and ${notFoundCount} students cannot be imported.`
+                  );
+                }
+              },
+              (error) => {
+                console.log(error);
               }
-            },
-            (error) => {
-              console.log(error);
-            }
-          );
+            )
+            .then(async () => {
+              await classService.getliststudents(id.id).then((res) => {
+                setclassStudent(res.data.data);
+              });
+            });
         }
       };
       reader.readAsArrayBuffer(file);
