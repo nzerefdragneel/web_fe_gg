@@ -39,7 +39,6 @@ export function TabNews(id ) {
           
               setClassdetail(res.data.data)
               const linkstudent=await classService.getivitelinkstudent(id.id);
-              console.log(linkstudent.data.data);
               setlinkstu(linkstudent.data.data);
 
               if(isTeacher===true){

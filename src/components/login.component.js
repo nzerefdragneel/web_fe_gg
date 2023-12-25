@@ -64,7 +64,6 @@ class LoginForm extends Component {
     let params = new URL(window.location).searchParams;
     const classId = params.get("invitationId");
     const isTeacher = params.get("isTeacher");
-    console.log(classId);
     if (this.checkBtn.context._errors.length === 0) {
       AuthService.login(this.state.username, this.state.password)
       .then(
