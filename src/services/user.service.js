@@ -35,6 +35,22 @@ class UserService{
       }, mode: 'no-cors',}
       );
       }
+    EditUserManager(userId,username, email, password,fullname,active) {
+      return axios.put(API_TEST + "edituser", {
+        userId,
+        username,
+        email,
+        password,
+        fullname,
+        active
+      },
+    {headers:{
+      "Cache-Control": "no-cache",
+      "Content-Type": "application/x-www-form-urlencoded",
+      "Access-Control-Allow-Origin": "*",
+    }, mode: 'no-cors',}
+    );
+    }
     GetAll(page,limit) {
         return axios.get(API_TEST + `getalluser?page=${page}&size=${limit}`,{
           headers: {
@@ -45,6 +61,26 @@ class UserService{
           mode: 'no-cors',
         });
       }
+    async GetbyId(id){
+      return await axios.get(API_TEST + `getbyid?userId=${id}`,{
+        headers: {
+          "Cache-Control": "no-cache",
+          "Content-Type": "application/x-www-form-urlencoded",
+          "Access-Control-Allow-Origin": "*",
+        },
+        mode: 'no-cors',
+      });
+    }
+    async GetStatus(id){
+      return await axios.get(API_TEST + `getstatus?userId=${id}`,{
+        headers: {
+          "Cache-Control": "no-cache",
+          "Content-Type": "application/x-www-form-urlencoded",
+          "Access-Control-Allow-Origin": "*",
+        },
+        mode: 'no-cors',
+      });
+    }
 }
 
 export default new UserService();

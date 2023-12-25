@@ -27,6 +27,7 @@ import { SidesMenuAdmin } from "./components/adminside/sidemenuadmin.component";
 import AdminHome from "./components/adminside/adminhome.component";
 import ClassManager from "./components/adminside/classmanager.component";
 import ManagerUser from "./components/adminside/manageruser.component";
+import EditUserManager from "./components/adminside/edituser.component";
 class App extends Component {
   constructor(props) {
     super(props);
@@ -35,12 +36,13 @@ class App extends Component {
     this.state = {
       currentUser: undefined,
       roles: "",
+      status:true
     };
   }
 
   async componentDidMount() {
     const user = AuthService.getCurrentUser();
-    
+   
     if (user !== null) {
       userService.getRoles(user.id)
       .then (response => {
@@ -48,6 +50,14 @@ class App extends Component {
         this.setState({
           currentUser:user,
           roles: response.data.roles,
+        });
+      }).catch(error => {console.log(error)});
+
+      userService.GetStatus(user.id)
+      .then (response => {
+        console.log(response.data);
+        this.setState({
+          status: response.data.status,
         });
       }).catch(error => {console.log(error)});
     }
@@ -73,6 +83,7 @@ class App extends Component {
   render() {
     const currentUser = this.state.currentUser;
     const roles = this.state.roles;
+    const status=this.state.status;
 
     return (
       <div className="">
@@ -117,7 +128,8 @@ class App extends Component {
             </div>
           )}
         </div>
-       
+        {status===false&&<div className="flex flex-row justify-center text-lg text-red-500">Your account is blocked</div>}
+        {status===true&&<div>
         <div className="min-h-screen flex">
           <div className="flex-none w-64 h-14">
             {roles!=='admin' && currentUser && <SidesMenu />}
@@ -137,6 +149,7 @@ class App extends Component {
                   }
                 />
                 <Route path="/manageuser" element={<ManagerUser />} />
+                <Route path="/user/detail" element={<EditUserManager/>}/>
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/forgot-password" element={<ForgotPassword />} />
                 <Route path="/reset-password" element={<ResetPassword />} />
@@ -183,6 +196,7 @@ class App extends Component {
             </div>
           </div>
         </div>
+        </div>}
      
         <div className="col-md-12 flex flex-col h-48 w-full">
           <SimpleFooter></SimpleFooter>

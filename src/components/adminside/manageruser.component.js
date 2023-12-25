@@ -8,7 +8,8 @@ const TABLE_HEAD = ["Id",
 "Fullname",
 "Type",
 "Created At",
-"Updated At",];
+"Updated At",
+"Status"];
 
 export default function ManagerUser() {
     const [users, setUsers] = useState([]);
@@ -45,12 +46,12 @@ export default function ManagerUser() {
           <div className=" flex-grow max-w-full flex-1 px-4">
             <div className="mt-3">
               <h4 className="mb-3 float-left mt-2">Manager User</h4>
-              <NavLink
+              {/* <NavLink
                 to="/staff/add"
                 className="inline-block align-middle text-center select-none border font-normal whitespace-no-wrap rounded py-1 px-3 leading-normal no-underline bg-blue-600 text-white hover:bg-blue-600 float-right veiwbutton"
               >
                 Add User
-              </NavLink>
+              </NavLink> */}
             </div>
           </div>
         </div>
@@ -79,20 +80,30 @@ export default function ManagerUser() {
                       <td>{user.username}</td>
                       <td>{user.email}</td>
                       <td>{user.fullname}</td>
-                      <td>{user.type}</td>
+                      <td>{user.type?user.type:'none'}</td>
                       <td>{user.createdAt}</td>
                       <td>{user.updatedAt}</td>
+                      <td><div className="actions">
+                          {' '}
+                          <div
+                            className={`inline-block align-middle text-center select-none border font-normal whitespace-no-wrap rounded  no-underline py-1 px-2 leading-tight text-xs  ${
+                                user.is_active  ? 'bg-success-light' : 'bg-danger-light'
+                            } mr-2`}
+                          >
+                           {user.active ? 'Active' : 'Inactive'}
+                          </div>{' '}
+                        </div></td>
                      
                       <td>
                         <div className="actions">
                           {' '}
                           <a
-                            href={`staff/detail/${user.id}`} 
+                            href={`user/detail?id=${user.id}`} 
                             className={`inline-block align-middle text-center select-none border font-normal whitespace-no-wrap rounded  no-underline py-1 px-2 leading-tight text-xs  ${
-                                user.is_active  ? 'bg-success-light' : 'bg-danger-light'
+                               'bg-success-light' 
                             } mr-2`}
                           >
-                           {user.is_active ? 'Active' : 'Inactive'}
+                          Edit
                           </a>{' '}
                         </div>
                       </td>

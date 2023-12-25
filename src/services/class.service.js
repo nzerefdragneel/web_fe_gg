@@ -100,8 +100,8 @@ class ClassService {
              
         )
     };
-    getAllClassesAdmin(){
-      return axios.get(API_URL + `getallclasses`, {
+    getAllClassesAdmin(page,limit){
+      return axios.get(API_URL + `getall?page=${page}&size=${limit}`, {
         headers: {
             "Cache-Control": "no-cache",
             "Content-Type": "application/x-www-form-urlencoded",
@@ -109,7 +109,7 @@ class ClassService {
         },
         mode: "no-cors",
     }
-      )};
+    )};
     
     getClassByTeacherId(userId){
         return axios
