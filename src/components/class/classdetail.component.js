@@ -10,12 +10,15 @@ import { useLocation, useNavigate } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import classService from "../../services/class.service";
 import { TabEverybody } from "./tabEverybody.component";
+import TabGradeStructure from "./tabGradeStructure.component";
+
 export function ClassDetail() {
     const [activeTab, setActiveTab] = useState("news");
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
     const classId = queryParams.get("id");
     const navigate = useNavigate();
+    console.log(classId);
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -92,6 +95,18 @@ export function ClassDetail() {
                         Assignment
                     </Tab>
                     <Tab
+                        key="gradeStructure"
+                        value="gradeStructure"
+                        onClick={() => setActiveTab("gradeStructure")}
+                        className={
+                            activeTab === "gradeStructure"
+                                ? "text-gray-900 rounded-tr-md rounded-tl-md border-slate-900 font-semibold border-b-4"
+                                : ""
+                        }
+                    >
+                        Grade Structure
+                    </Tab>
+                    <Tab
                         key="everybody"
                         value="everybody"
                         onClick={() => setActiveTab("everybody")}
@@ -110,6 +125,9 @@ export function ClassDetail() {
                     </TabPanel>
                     <TabPanel key="assignment" value="assignment">
                         <h1>Assignment</h1>
+                    </TabPanel>
+                    <TabPanel key="gradeStructure" value="gradeStructure">
+                        <TabGradeStructure id={classId}></TabGradeStructure>
                     </TabPanel>
                     <TabPanel key="everybody" value="everybody">
                         <TabEverybody id={classId}></TabEverybody>

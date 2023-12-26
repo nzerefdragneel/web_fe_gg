@@ -1,14 +1,11 @@
 import axios from "axios";
+import headers from "../common/header";
 
 const API_URL = `${process.env.REACT_APP_SERVICE_URL}/api/classes/`;
 class ClassService {
     getbyid(id) {
         return axios.get(API_URL + `getbyid?id=${id}`, {
-            headers: {
-                "Cache-Control": "no-cache",
-                "Content-Type": "application/x-www-form-urlencoded",
-                "Access-Control-Allow-Origin": "*",
-            },
+            headers: headers,
             mode: "no-cors",
         });
     }
@@ -16,11 +13,7 @@ class ClassService {
         return axios.get(
             API_URL + `istecher?classId=${classid}&userId=${userId}`,
             {
-                headers: {
-                    "Cache-Control": "no-cache",
-                    "Content-Type": "application/x-www-form-urlencoded",
-                    "Access-Control-Allow-Origin": "*",
-                },
+                headers: headers,
                 mode: "no-cors",
             }
         );
@@ -28,22 +21,14 @@ class ClassService {
 
     getlistteachers(id) {
         return axios.get(API_URL + `getteacherinclass?id=${id}`, {
-            headers: {
-                "Cache-Control": "no-cache",
-                "Content-Type": "application/x-www-form-urlencoded",
-                "Access-Control-Allow-Origin": "*",
-            },
+            headers: headers,
             mode: "no-cors",
         });
     }
 
     getliststudents(id) {
         return axios.get(API_URL + `getstudentinclass?id=${id}`, {
-            headers: {
-                "Cache-Control": "no-cache",
-                "Content-Type": "application/x-www-form-urlencoded",
-                "Access-Control-Allow-Origin": "*",
-            },
+            headers: headers,
             mode: "no-cors",
         });
     }
@@ -58,11 +43,7 @@ class ClassService {
                 isTeacher,
             },
             {
-                headers: {
-                    "Cache-Control": "no-cache",
-                    "Content-Type": "application/x-www-form-urlencoded",
-                    "Access-Control-Allow-Origin": "*",
-                },
+                headers: headers,
                 mode: "no-cors",
             }
         );
@@ -76,53 +57,33 @@ class ClassService {
                 teacherId: teacherId,
             },
             {
-                headers: {
-                    "Cache-Control": "no-cache",
-                    "Content-Type": "application/x-www-form-urlencoded",
-                    "Access-Control-Allow-Origin": "*",
-                },
+                headers: headers,
                 mode: "no-cors",
             }
         );
     }
     getAllClasses(userId) {
         return axios.get(API_URL + `getall?id=${userId}`, {
-            headers: {
-                "Cache-Control": "no-cache",
-                "Content-Type": "application/x-www-form-urlencoded",
-                "Access-Control-Allow-Origin": "*",
-            },
+            headers: headers,
             mode: "no-cors",
         });
     }
     getAllClassesAdmin(page, limit) {
         return axios.get(API_URL + `getall?page=${page}&size=${limit}`, {
-            headers: {
-                "Cache-Control": "no-cache",
-                "Content-Type": "application/x-www-form-urlencoded",
-                "Access-Control-Allow-Origin": "*",
-            },
+            headers: headers,
             mode: "no-cors",
         });
     }
 
     getClassByTeacherId(userId) {
         return axios.get(API_URL + `getbyteacherid?id=${userId}`, {
-            headers: {
-                "Cache-Control": "no-cache",
-                "Content-Type": "application/x-www-form-urlencoded",
-                "Access-Control-Allow-Origin": "*",
-            },
+            headers: headers,
             mode: "no-cors",
         });
     }
     getClassByStudentId(userId) {
         return axios.get(API_URL + `getbystudentid?id=${userId}`, {
-            headers: {
-                "Cache-Control": "no-cache",
-                "Content-Type": "application/x-www-form-urlencoded",
-                "Access-Control-Allow-Origin": "*",
-            },
+            headers: headers,
             mode: "no-cors",
         });
     }
@@ -130,11 +91,7 @@ class ClassService {
         return axios.get(
             API_URL + `getlink?classId=${classId}&isTeacher=${false}`,
             {
-                headers: {
-                    "Cache-Control": "no-cache",
-                    "Content-Type": "application/x-www-form-urlencoded",
-                    "Access-Control-Allow-Origin": "*",
-                },
+                headers: headers,
                 mode: "no-cors",
             }
         );
@@ -143,11 +100,7 @@ class ClassService {
         return axios.get(
             API_URL + `getlink?classId=${classId}&isTeacher=${true}`,
             {
-                headers: {
-                    "Cache-Control": "no-cache",
-                    "Content-Type": "application/x-www-form-urlencoded",
-                    "Access-Control-Allow-Origin": "*",
-                },
+                headers: headers,
                 mode: "no-cors",
             }
         );
@@ -156,11 +109,7 @@ class ClassService {
         return axios.get(
             API_URL + `invitestudent?classId=${id}&studentEmail=${email}`,
             {
-                headers: {
-                    "Cache-Control": "no-cache",
-                    "Content-Type": "application/x-www-form-urlencoded",
-                    "Access-Control-Allow-Origin": "*",
-                },
+                headers: headers,
                 mode: "no-cors",
             }
         );
@@ -169,11 +118,7 @@ class ClassService {
         return axios.get(
             API_URL + `inviteemailteacher?classId=${id}&teacherEmail=${email}`,
             {
-                headers: {
-                    "Cache-Control": "no-cache",
-                    "Content-Type": "application/x-www-form-urlencoded",
-                    "Access-Control-Allow-Origin": "*",
-                },
+                headers: headers,
                 mode: "no-cors",
             }
         );
@@ -182,11 +127,7 @@ class ClassService {
         return axios.get(
             API_URL + `checkmssv?classId=${classId}&mssv=${mssv}`,
             {
-                headers: {
-                    "Cache-Control": "no-cache",
-                    "Content-Type": "application/x-www-form-urlencoded",
-                    "Access-Control-Allow-Origin": "*",
-                },
+                headers: headers,
                 mode: "no-cors",
             }
         );
@@ -195,11 +136,7 @@ class ClassService {
         return axios.get(
             API_URL + `checkhavemssv?classId=${classId}&userId=${userId}`,
             {
-                headers: {
-                    "Cache-Control": "no-cache",
-                    "Content-Type": "application/x-www-form-urlencoded",
-                    "Access-Control-Allow-Origin": "*",
-                },
+                headers: headers,
                 mode: "no-cors",
             }
         );
@@ -215,11 +152,7 @@ class ClassService {
                 },
             },
             {
-                headers: {
-                    "Cache-Control": "no-cache",
-                    "Content-Type": "application/x-www-form-urlencoded",
-                    "Access-Control-Allow-Origin": "*",
-                },
+                headers: headers,
                 mode: "no-cors",
             }
         );
