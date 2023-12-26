@@ -11,6 +11,7 @@ import React, { useState, useEffect } from "react";
 import classService from "../../services/class.service";
 import { TabEverybody } from "./tabEverybody.component";
 import { TabGrade } from "./tabGrade.component";
+import { TabAssignment } from "./tabAssignment.component";
 
 export function ClassDetail() {
   const [activeTab, setActiveTab] = useState("news");
@@ -115,7 +116,7 @@ export function ClassDetail() {
             <TabNews id={classId}></TabNews>
           </TabPanel>
           <TabPanel key="assignment" value="assignment">
-            <h1>Assignment</h1>
+            <TabAssignment id={classId}></TabAssignment>
           </TabPanel>
           <TabPanel key="everybody" value="everybody">
             <TabEverybody id={classId}></TabEverybody>

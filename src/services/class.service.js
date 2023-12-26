@@ -154,6 +154,16 @@ class ClassService {
       }
     );
   }
+  getAllAssignment(classId) {
+    return axios.get(API_URL + `getassignments?id=${classId}`, {
+      headers: {
+        "Cache-Control": "no-cache",
+        "Content-Type": "application/x-www-form-urlencoded",
+        "Access-Control-Allow-Origin": "*",
+      },
+      mode: "no-cors",
+    });
+  }
   getivitelinkteacher(classId) {
     return axios.get(API_URL + `getlink?classId=${classId}&isTeacher=${true}`, {
       headers: {
@@ -232,6 +242,15 @@ class ClassService {
         mode: "no-cors",
       }
     );
+  }
+  getScorings(classId) {
+    return axios.get(API_URL + `getscorings?id=${classId}`, {
+      headers: {
+        "Cache-Control": "no-cache",
+        "Content-Type": "application/x-www-form-urlencoded",
+        "Access-Control-Allow-Origin": "*",
+      },
+    });
   }
 }
 
