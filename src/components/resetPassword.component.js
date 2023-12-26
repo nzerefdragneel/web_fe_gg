@@ -27,7 +27,7 @@ const vpassword = (value) => {
   }
 };
 
-const token = window.location.pathname.split("/")[2];
+const token = new URL(window.location).searchParams.get("token");
 const email = localStorage.getItem("forgetEmail");
 
 function ResetPassword() {

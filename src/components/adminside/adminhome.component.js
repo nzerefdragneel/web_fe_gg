@@ -4,38 +4,14 @@ import {
     Card,
     CardBody,
     Typography,
-    List,
-    ListItem,
-    ListItemPrefix,
 } from "@material-tailwind/react";
-import {
-    PresentationChartBarIcon,
-    ShoppingBagIcon,
-} from "@heroicons/react/24/solid";
 
-import classService from "../services/class.service";
+import classService from "../../services/class.service";
 
-export function SimpleCard() {
-    return (
-        <Card className="mt-6 w-96 h-auto">
-            <CardBody>
-                <Typography variant="h5" color="blue-gray" className="mb-2">
-                    UI/UX Review Check
-                </Typography>
-                <Typography>
-                    The place is close to Barceloneta Beach and bus stop just 2
-                    min by walk and near to &quot;Naviglio&quot; where you can
-                    enjoy the main night life in Barcelona.
-                </Typography>
-            </CardBody>
-        </Card>
-    );
-}
 
-const Home = () => {
+const AdminHome = () => {
     const user = JSON.parse(localStorage.getItem("user"));
     const [classes, setClasses] = useState([]);
-
     async function getClass() {
         let classTemp = [];
         //get list class by teacher id
@@ -62,7 +38,7 @@ const Home = () => {
     async function getClassesInfo(classesTemp) {
         let classInfo = [];
         for (let i = 0; i < classesTemp.length; i++) {
-            let info = await getClassById(classesTemp[i]?.classId);
+            let info = await getClassById(classesTemp[i]?.classId)
             classInfo.push(info);
         }
         return classInfo;
@@ -74,7 +50,7 @@ const Home = () => {
             const classesInfo = await getClassesInfo(classesTemp);
             setClasses(classesInfo);
         }
-        f();
+        f()
     }, []);
 
     if (user == null) {
@@ -97,10 +73,7 @@ const Home = () => {
                 <div className="grid grid-flow-row-dense grid-cols-2 gap-2 m-4 ">
                     {classes?.map((item) => {
                         return (
-                            <div
-                                key={item.id}
-                                className="flex flex-col justify-end py-2 px-4 shadow-md w-full bg-slate-50"
-                            >
+                            <div key={item.id} className="flex flex-col justify-end py-2 px-4 shadow-md w-full bg-slate-50">
                                 <Card className="h-auto shadow-none  bg-slate-50">
                                     <CardBody>
                                         <Link
@@ -127,4 +100,4 @@ const Home = () => {
         </>
     );
 };
-export default Home;
+export default AdminHome;
