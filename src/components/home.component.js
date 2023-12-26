@@ -23,9 +23,9 @@ export function SimpleCard() {
                     UI/UX Review Check
                 </Typography>
                 <Typography>
-                    The place is close to Barceloneta Beach and bus stop just 2 min by
-                    walk and near to &quot;Naviglio&quot; where you can enjoy the main
-                    night life in Barcelona.
+                    The place is close to Barceloneta Beach and bus stop just 2
+                    min by walk and near to &quot;Naviglio&quot; where you can
+                    enjoy the main night life in Barcelona.
                 </Typography>
             </CardBody>
         </Card>
@@ -36,7 +36,10 @@ export function SimpleSidebar() {
     return (
         <Card className="min-h-[calc(100vh-2rem)] w-full max-w-[20rem] p-4 shadow-xl shadow-blue-gray-900/5">
             <List>
-                <Link to={"/"} className=" text-gray-900  rounded-2xl bg-slate-200">
+                <Link
+                    to={"/"}
+                    className=" text-gray-900  rounded-2xl bg-slate-200"
+                >
                     <ListItem>
                         <ListItemPrefix>
                             <PresentationChartBarIcon className="h-5 w-5" />
@@ -56,6 +59,7 @@ export function SimpleSidebar() {
         </Card>
     );
 }
+
 const Home = () => {
     const user = JSON.parse(localStorage.getItem("user"));
     const [classes, setClasses] = useState([]);
@@ -86,7 +90,7 @@ const Home = () => {
     async function getClassesInfo(classesTemp) {
         let classInfo = [];
         for (let i = 0; i < classesTemp.length; i++) {
-            let info = await getClassById(classesTemp[i]?.classId)
+            let info = await getClassById(classesTemp[i]?.classId);
             classInfo.push(info);
         }
         return classInfo;
@@ -98,14 +102,14 @@ const Home = () => {
             const classesInfo = await getClassesInfo(classesTemp);
             setClasses(classesInfo);
         }
-        f()
+        f();
     }, []);
 
     if (user == null) {
         return <Navigate replace to="/" />;
     }
 
-    console.log('class: ', classes);
+    console.log("class: ", classes);
 
     return (
         <>
@@ -123,7 +127,10 @@ const Home = () => {
                 <div className="grid grid-flow-row-dense grid-cols-2 gap-2 m-4 ">
                     {classes?.map((item) => {
                         return (
-                            <div key={item.id} className="flex flex-col justify-end py-2 px-4 shadow-md w-full bg-slate-50">
+                            <div
+                                key={item.id}
+                                className="flex flex-col justify-end py-2 px-4 shadow-md w-full bg-slate-50"
+                            >
                                 <Card className="h-auto shadow-none  bg-slate-50">
                                     <CardBody>
                                         <Link
