@@ -52,12 +52,12 @@ export function TabGrade(id) {
   //               {
   //                   "assignmentId": 2,
   //                   "score": 6,
-  //                   "multiplier": 0.2
+  //                   "scale": 0.2
   //               },
   //               {
   //                   "assignmentId": 3,
   //                   "score": 6,
-  //                   "multiplier": 0.8
+  //                   "scale": 0.8
   //               }
   //           ]
   //       },
@@ -67,12 +67,12 @@ export function TabGrade(id) {
   //               {
   //                   "assignmentId": 2,
   //                   "score": 7,
-  //                   "multiplier": 0.2
+  //                   "scale": 0.2
   //               },
   //               {
   //                   "assignmentId": 3,
   //                   "score": 8,
-  //                   "multiplier": 0.8
+  //                   "scale": 0.8
   //               }
   //           ]
   //       },
@@ -82,12 +82,12 @@ export function TabGrade(id) {
   //               {
   //                   "assignmentId": 2,
   //                   "score": 8,
-  //                   "multiplier": 0.2
+  //                   "scale": 0.2
   //               },
   //               {
   //                   "assignmentId": 3,
   //                   "score": 10,
-  //                   "multiplier": 0.8
+  //                   "scale": 0.8
   //               }
   //           ]
   //       },
@@ -97,12 +97,12 @@ export function TabGrade(id) {
   //               {
   //                   "assignmentId": 2,
   //                   "score": 9,
-  //                   "multiplier": 0.2
+  //                   "scale": 0.2
   //               },
   //               {
   //                   "assignmentId": 3,
   //                   "score": 9,
-  //                   "multiplier": 0.8
+  //                   "scale": 0.8
   //               }
   //           ]
   //       },
@@ -112,12 +112,12 @@ export function TabGrade(id) {
   //               {
   //                   "assignmentId": 2,
   //                   "score": 10,
-  //                   "multiplier": 0.2
+  //                   "scale": 0.2
   //               },
   //               {
   //                   "assignmentId": 3,
   //                   "score": 7,
-  //                   "multiplier": 0.8
+  //                   "scale": 0.8
   //               }
   //           ]
   //       }
@@ -138,38 +138,41 @@ export function TabGrade(id) {
       studentId: scoring.studentId,
       assignments: [],
     };
+    let total = 0;
     scoring.assignments.forEach((assignment) => {
-      studentGrade.assignments.push({
-        assignmentId: assignment.assignmentId,
-        score: assignment.score,
-        multiplier: assignment.multiplier,
-      });
+      studentGrade.assignments.push(assignment.score ? assignment.score : 0);
+      total += (assignment.score * assignment.scale) / 100;
     });
+    studentGrade.total = total;
 
     studentsGrade.push(studentGrade);
   });
-  console.log(studentsGrade);
 
-  // const templatesForClass = () =>
-  //   classStudents.map((user) => {
-  //     return {
-  //       ID: user.studentId,
-  //       Fullname: user.studentenrollment.fullname,
-  //     };
-  //   });
+  const templatesForGrade = () =>
+    studentsGrade.map((user) => {
+      const userGrade = {};
+      userGrade["ID"] = user.studentId;
+      user.assignments.forEach((assignment, index) => {
+        userGrade[" " + assignmentsList[index]] = assignment ? assignment : 0;
+      });
+      userGrade["Total"] = user.total;
+      return userGrade;
+    });
+
+  console.log(templatesForGrade());
 
   const handleExport = () => {
-    const headings = [["ID", "Fullname"]];
-    // const data = templatesForClass();
+    const headings = [["ID", ...assignmentsList, "Total"]];
+    const data = templatesForGrade();
     const wb = utils.book_new();
     const ws = utils.json_to_sheet([]);
     utils.sheet_add_aoa(ws, headings);
-    utils.sheet_add_json(ws, {
+    utils.sheet_add_json(ws, data, {
       origin: "A2",
       skipHeader: true,
     });
     utils.book_append_sheet(wb, ws, "Report");
-    writeFile(wb, "StudentList.xlsx");
+    writeFile(wb, "GradeReport.xlsx");
   };
 
   return (
@@ -219,18 +222,18 @@ export function TabGrade(id) {
           </tr>
         </thead>
         <tbody>
-          {/* {scorings.length ? (
-            scorings.map((student, index) => (
-              <tr key={index}>
+          {studentsGrade.length ? (
+            studentsGrade.map((student) => (
+              <tr key={student.studentId}>
                 <th scope="row">{student.studentId}</th>
-                <td>{student.}</td>
-                <td>{student.Category}</td>
-                <td>{student.Director}</td>
-                <td>
-                  <span className="badge bg-warning text-dark">
-                    {student.Rating}
-                  </span>
-                </td>
+                {student.assignments.length ? (
+                  student.assignments.map((score) => (
+                    <td>{score ? score : 0}</td>
+                  ))
+                ) : (
+                  <td></td>
+                )}
+                <td>{student.total}</td>
               </tr>
             ))
           ) : (
@@ -239,7 +242,7 @@ export function TabGrade(id) {
                 No Student Found.
               </td>
             </tr>
-          )} */}
+          )}
         </tbody>
       </table>
     </div>
