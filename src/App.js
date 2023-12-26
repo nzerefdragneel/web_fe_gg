@@ -28,6 +28,7 @@ import AdminHome from "./components/adminside/adminhome.component";
 import ClassManager from "./components/adminside/classmanager.component";
 import ManagerUser from "./components/adminside/manageruser.component";
 import EditUserManager from "./components/adminside/edituser.component";
+import {ClassDetailManager} from "./components/adminside/classdetail.component";
 class App extends Component {
   constructor(props) {
     super(props);
@@ -131,7 +132,7 @@ class App extends Component {
         {status===false&&<div className="flex flex-row justify-center text-lg text-red-500">Your account is blocked</div>}
         {status===true&&<div>
         <div className="min-h-screen flex">
-          <div className="flex-none w-64 h-14">
+          <div className="flex-none w-64">
             {roles!=='admin' && currentUser && <SidesMenu />}
             {roles==='admin' && currentUser && <SidesMenuAdmin /> }
           </div>
@@ -153,8 +154,9 @@ class App extends Component {
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/forgot-password" element={<ForgotPassword />} />
                 <Route path="/reset-password" element={<ResetPassword />} />
-                {/* <Route path="/class/detail" element={<ClassDetail />} />
-                <Route path="/class/create-class" element={<CreateClass />} />
+                <Route path="/classes/detail" element={<ClassDetailManager />} />
+
+                {/* <Route path="/class/create-class" element={<CreateClass />} />
                 <Route path="/invitation" element={<Invitation />} />
                 <Route path="/updateStudentId" element={<StudentJoinInClass />} /> */}
               </Routes>

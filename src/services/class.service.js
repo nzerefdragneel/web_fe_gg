@@ -100,8 +100,19 @@ class ClassService {
              
         )
     };
-    getAllClassesAdmin(page,limit){
-      return axios.get(API_URL + `getall?page=${page}&size=${limit}`, {
+    getAllClassesAdmin(page,limit,asc){
+      return axios.get(API_URL + `getall?page=${page}&size=${limit}&asc=${asc}`, {
+        headers: {
+            "Cache-Control": "no-cache",
+            "Content-Type": "application/x-www-form-urlencoded",
+            "Access-Control-Allow-Origin": "*",
+        },
+        mode: "no-cors",
+    }
+    )};
+
+    getAllClassesSearch(page,limit,asc,search){
+      return axios.get(API_URL + `filterclass?page=${page}&size=${limit}&asc=${asc}&className=${search}`, {
         headers: {
             "Cache-Control": "no-cache",
             "Content-Type": "application/x-www-form-urlencoded",
@@ -248,6 +259,35 @@ class ClassService {
       mode: "no-cors",
   } 
 )
+  }
+  async updateactive(classId,active){
+      return await axios.post(API_URL+'updateactive',{
+        data:{
+          id:classId,
+          active:active
+        }
+      },
+      {
+        headers: {
+            "Cache-Control": "no-cache",
+            "Content-Type": "application/x-www-form-urlencoded",
+            "Access-Control-Allow-Origin": "*",
+        },
+        mode: "no-cors",
+      }
+      )
+  }
+  async getclassactive(id){
+    return await axios.get(API_URL+`getactive?id=${id}`,
+    {
+      headers: {
+          "Cache-Control": "no-cache",
+          "Content-Type": "application/x-www-form-urlencoded",
+          "Access-Control-Allow-Origin": "*",
+      },
+      mode: "no-cors",
+    }
+    )
   }
 }
 
