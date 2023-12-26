@@ -9,11 +9,14 @@ import {
     Card,
     Typography,
 } from "@material-tailwind/react";
+import { read, utils, writeFile } from "xlsx";
+
 export function TabEverybody(id) {
     const [classTeachers, setclassTeachers] = useState({});
     const [classStudents, setclassStudent] = useState({});
     const [messageTeacher, setMessageTeacher] = useState("");
     const [messageStudent, setMessageStudent] = useState("");
+    const [messageImport, setMessageImport] = useState("");
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -35,6 +38,80 @@ export function TabEverybody(id) {
         };
         fetchData();
     }, [id]);
+
+    const handleImport = ($event) => {
+        const files = $event.target.files;
+        if (files.length) {
+            const file = files[0];
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                const wb = read(event.target.result);
+                const sheets = wb.SheetNames;
+
+                if (sheets.length) {
+                    const rows = utils.sheet_to_json(wb.Sheets[sheets[0]]);
+                    const students = rows.map((row) => {
+                        return {
+                            studentId: row.ID,
+                            fullname: row.Fullname,
+                        };
+                    });
+                    console.log(id, students);
+                    classService
+                        .addStudents(id, students)
+                        .then(
+                            (response) => {
+                                const existsCount =
+                                    response.data.data.existsCount;
+                                const notFoundCount =
+                                    response.data.data.notFoundCount;
+                                if (existsCount === 0 && notFoundCount === 0) {
+                                    setMessageImport("Imported successfully");
+                                } else {
+                                    setMessageImport(
+                                        `Imported successfully. ${existsCount} students already existed and ${notFoundCount} students cannot be imported.`
+                                    );
+                                }
+                            },
+                            (error) => {
+                                console.log(error);
+                            }
+                        )
+                        .then(async () => {
+                            await classService
+                                .getliststudents(id.id)
+                                .then((res) => {
+                                    setclassStudent(res.data.data);
+                                });
+                        });
+                }
+            };
+            reader.readAsArrayBuffer(file);
+        }
+    };
+
+    const templatesForClass = () =>
+        classStudents.map((user) => {
+            return {
+                ID: user.studentId,
+                Fullname: user.studentenrollment.fullname,
+            };
+        });
+
+    const handleExport = () => {
+        const headings = [["ID", "Fullname"]];
+        const data = templatesForClass();
+        const wb = utils.book_new();
+        const ws = utils.json_to_sheet([]);
+        utils.sheet_add_aoa(ws, headings);
+        utils.sheet_add_json(ws, data, {
+            origin: "A2",
+            skipHeader: true,
+        });
+        utils.book_append_sheet(wb, ws, "Report");
+        writeFile(wb, "StudentList.xlsx");
+    };
+
     return (
         <div className=" ">
             {messageTeacher && <h1>{messageTeacher}</h1>}
@@ -52,8 +129,8 @@ export function TabEverybody(id) {
                 <Card className="w-96">
                     {classTeachers.length !== 0 && (
                         <List>
-                            {Object.values(classTeachers).map((user, index) => (
-                                <ListItem key={index} className="w-full">
+                            {Object.values(classTeachers).map((user) => (
+                                <ListItem className="w-full">
                                     <ListItemPrefix>
                                         <Avatar
                                             variant="circular"
@@ -105,8 +182,8 @@ export function TabEverybody(id) {
                     {classStudents.length === 0 && <h1>No student</h1>}
                     {classStudents.length !== 0 && (
                         <List>
-                            {Object.values(classStudents).map((user, index) => (
-                                <ListItem key={index} className="w-full">
+                            {Object.values(classStudents).map((user) => (
+                                <ListItem className="w-full">
                                     <ListItemPrefix>
                                         <Avatar
                                             variant="circular"
@@ -136,6 +213,34 @@ export function TabEverybody(id) {
                     )}
                 </Card>
             </div>
+            <div className="input-group">
+                <div className="custom-file">
+                    <input
+                        type="file"
+                        name="file"
+                        className="custom-file-input"
+                        id="inputGroupFile"
+                        required
+                        onChange={handleImport}
+                        accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+                    />
+                    <label
+                        className="custom-file-label"
+                        htmlFor="inputGroupFile"
+                    >
+                        Choose file
+                    </label>
+                </div>
+            </div>
+            <div className="col-md-6">
+                <button
+                    onClick={handleExport}
+                    className="btn btn-primary float-right"
+                >
+                    Export <i className="fa fa-download"></i>
+                </button>
+            </div>
+            {messageImport && <h1>{messageImport}</h1>}
         </div>
     );
 }
