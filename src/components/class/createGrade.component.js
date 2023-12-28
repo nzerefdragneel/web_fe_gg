@@ -74,7 +74,13 @@ const CreateGrade = () => {
                 const position = listGrade.length + 1;
                 if (Number.isInteger(parseInt(scale))) {
                     gradeService
-                        .create(classId, scale, position, gradeName, user.id)
+                        .createGrade(
+                            classId,
+                            scale,
+                            position,
+                            gradeName,
+                            user.id
+                        )
                         .then(
                             (res) => {
                                 if (res.status === 201) {
