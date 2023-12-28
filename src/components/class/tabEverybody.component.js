@@ -1,4 +1,3 @@
-import { Classheader } from "./classheader.component";
 import React, { useState, useEffect } from "react";
 import classService from "../../services/class.service";
 import {

@@ -1,17 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, Navigate } from "react-router-dom";
-import {
-    Card,
-    CardBody,
-    Typography,
-    List,
-    ListItem,
-    ListItemPrefix,
-} from "@material-tailwind/react";
-import {
-    PresentationChartBarIcon,
-    ShoppingBagIcon,
-} from "@heroicons/react/24/solid";
+import { Card, CardBody, Typography } from "@material-tailwind/react";
+import { PlusIcon } from "@heroicons/react/24/solid";
 
 import classService from "../services/class.service";
 
@@ -87,10 +77,11 @@ const Home = () => {
                 <div className="flex flex-row justify-end pr-8">
                     <Link
                         to={"/class/create-class"}
-                        className=" text-gray-900 hover:none"
+                        className=" text-gray-900 hover:no-underline "
                     >
-                        <button className="bg-dark-green hover:bg-medium-green text-white font-bold py-2 px-4 rounded-full">
-                            Tạo lớp
+                        <button className="bg-dark-green hover:bg-medium-green hover:text-black text-white font-bold py-2 px-4 rounded-full flex items-center">
+                            <PlusIcon className="w-5 h-5 mr-2" />
+                            Create a class
                         </button>
                     </Link>
                 </div>

@@ -21,7 +21,6 @@ export function ClassDetail() {
     const navigate = useNavigate();
     useEffect(() => {
         const fetchData = async () => {
-            console.log("oke");
             try {
                 const user = JSON.parse(localStorage.getItem("user"));
 
@@ -60,9 +59,9 @@ export function ClassDetail() {
                 console.error("Error fetching data:", error.message);
             }
         };
-
         fetchData();
     }, [classId]);
+
     return (
         <div className="">
             <Tabs value={activeTab}>

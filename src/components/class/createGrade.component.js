@@ -1,11 +1,11 @@
-import React, { useRef } from "react";
+import React, { useRef, useEffect } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import {} from "@material-tailwind/react";
 import {} from "@heroicons/react/24/solid";
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import { useState } from "react";
-import classService from "../../services/class.service";
+import gradeService from "../../services/grade.service";
 
 const required = (value) => {
     if (!value) {
@@ -17,44 +17,89 @@ const required = (value) => {
     }
 };
 
-const CreateClass = () => {
+const checkScale = (value) => {
+    if (value < 0) {
+        return (
+            <div className="text-error-color text-base" role="alert">
+                Scale must be greater than 0!
+            </div>
+        );
+    }
+    if (value > 100) {
+        return (
+            <div className="text-error-color text-base" role="alert">
+                Scale must be less than 100!
+            </div>
+        );
+    }
+    if (Number.isInteger(parseInt(value)) === false) {
+        return (
+            <div className="text-error-color text-base" role="alert">
+                Scale must be integer!
+            </div>
+        );
+    }
+};
+
+const CreateGrade = () => {
     const fref = useRef(null);
-    const [className, setClassName] = useState("");
-    const [description, setDescription] = useState("");
+    const [gradeName, setGradeName] = useState("");
+    const [scale, setScale] = useState(0);
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
     const [message, setMessage] = useState("");
     const [isSubmit, setIsSubmit] = useState(false);
+    const [classId, setClassId] = useState("");
+
+    useEffect(() => {
+        const params = new URLSearchParams(window.location.search);
+        setClassId(params.get("id"));
+    }, []);
 
     const user = JSON.parse(localStorage.getItem("user"));
     if (user == null) {
         return <Navigate replace to="/" />;
     }
+
     function handleSubmit(e) {
         e.preventDefault();
         if (fref.current) {
             fref.current.validateAll();
         }
-        if (className === "") {
-            setIsLoading(false);
-            setIsSubmit(true);
-            return;
-        }
-        classService.createClass(className, description, user.id).then(
-            (res) => {
-                if (res.status === 200) {
+        async function addGrade() {
+            try {
+                const res = await gradeService.getGradeByClassId(classId);
+                const listGrade = res.data.data;
+                console.log(listGrade);
+                const position = listGrade.length + 1;
+                if (Number.isInteger(parseInt(scale))) {
+                    gradeService
+                        .create(classId, scale, position, gradeName, user.id)
+                        .then(
+                            (res) => {
+                                if (res.status === 201) {
+                                    alert("Create Grade Success");
+                                    navigate(`/class/detail?id=${classId}`);
+                                    setIsLoading(false);
+                                }
+                            },
+                            (error) => {
+                                setIsSubmit(true);
+                                alert("Create Grade Fail");
+                                console.log(error);
+                                setIsLoading(false);
+                                setMessage("Create Grade Fail");
+                            }
+                        );
+                } else {
+                    console.log("scale must be integer");
                     setIsLoading(false);
-                    alert("Create Class Success");
-                    navigate("/home");
                 }
-            },
-            (error) => {
-                setIsLoading(false);
-                setIsSubmit(true);
-                alert("Create Class Fail");
-                setMessage(error.response.data.message);
+            } catch (error) {
+                console.error("Error fetching data:", error.message);
             }
-        );
+        }
+        addGrade();
     }
 
     return (
@@ -72,15 +117,15 @@ const CreateClass = () => {
                                         htmlFor="classname"
                                         className="font-semibold mb-2"
                                     >
-                                        Class Name
+                                        Grade Name
                                     </label>
                                     <Input
                                         type="text"
                                         className="form-control p-3 rounded required"
                                         name="classname"
-                                        placeholder="Enter your Class Name"
+                                        placeholder="Enter your Grade Composition Name"
                                         onChange={(e) => {
-                                            setClassName(e.target.value);
+                                            setGradeName(e.target.value);
                                         }}
                                         validations={[required]}
                                     />
@@ -91,17 +136,17 @@ const CreateClass = () => {
                                         htmlFor="email"
                                         className="font-semibold mb-2 mt-2"
                                     >
-                                        Class Description
+                                        Grade Scale(%)
                                     </label>
                                     <Input
-                                        type="text"
+                                        type="number"
                                         className="form-control p-3 rounded"
                                         name="email"
-                                        placeholder="Enter your Class Description"
+                                        placeholder="Enter your Grade Composition Scale"
                                         onChange={(e) => {
-                                            setDescription(e.target.value);
+                                            setScale(e.target.value);
                                         }}
-                                        validations={[required]}
+                                        validations={[required, checkScale]}
                                     />
                                 </div>
                                 {isSubmit && (
@@ -131,4 +176,4 @@ const CreateClass = () => {
     );
 };
 
-export default CreateClass;
+export default CreateGrade;

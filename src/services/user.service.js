@@ -25,11 +25,7 @@ class UserService {
                 password,
             },
             {
-                headers: {
-                    "Cache-Control": "no-cache",
-                    "Content-Type": "application/x-www-form-urlencoded",
-                    "Access-Control-Allow-Origin": "*",
-                },
+                headers: headers,
                 mode: "no-cors",
             }
         );
@@ -46,11 +42,7 @@ class UserService {
                 active,
             },
             {
-                headers: {
-                    "Cache-Control": "no-cache",
-                    "Content-Type": "application/x-www-form-urlencoded",
-                    "Access-Control-Allow-Origin": "*",
-                },
+                headers: headers,
                 mode: "no-cors",
             }
         );
