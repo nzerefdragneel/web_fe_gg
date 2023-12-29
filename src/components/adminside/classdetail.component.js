@@ -9,7 +9,7 @@ import {
 import { useLocation, useNavigate} from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import classService from "../../services/class.service";
-import  {TabEverybodyManager} from "./tabeverybody.component";
+import { TabEverybodyManager } from "./tabeverybody.component";
 import {TabNewsManager} from "./tabnew.component";
 export function ClassDetailManager() {
     const [activeTab,setActiveTab]=useState('news');
@@ -66,7 +66,7 @@ export function ClassDetailManager() {
                         <h1>Assignment</h1>
                 </TabPanel>
                 <TabPanel key="everybody" value="everybody">
-                        <TabEverybodyManager id={classId} ></TabEverybodyManager>
+                        <TabEverybodyManager ></TabEverybodyManager>
                 </TabPanel>
             </TabsBody>
         </Tabs>

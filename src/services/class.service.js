@@ -289,6 +289,9 @@ class ClassService {
     }
     )
   }
+  async getAllStudentAdmin(classId,page,limit,asc){
+    return await axios.get(API_URL + `getallstudentinclass?classId=${classId}&page=${page}&size=${limit}&asc=${asc}`
+  )}
 }
 
 export default new ClassService();
