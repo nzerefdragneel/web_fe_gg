@@ -32,6 +32,13 @@ const checkScale = (value) => {
             </div>
         );
     }
+    if (value.includes(".")) {
+        return (
+            <div className="text-error-color text-base" role="alert">
+                Scale must be integer!
+            </div>
+        );
+    }
     if (Number.isInteger(parseInt(value)) === false) {
         return (
             <div className="text-error-color text-base" role="alert">
@@ -72,11 +79,11 @@ const CreateGrade = () => {
                 const listGrade = res.data.data;
                 console.log(listGrade);
                 const position = listGrade.length + 1;
-                if (Number.isInteger(parseInt(scale))) {
+                if (Number.isInteger(parseInt(scale)) && !scale.includes(".")) {
                     gradeService
                         .createGrade(
                             classId,
-                            scale,
+                            parseInt(scale),
                             position,
                             gradeName,
                             user.id
