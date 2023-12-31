@@ -1,17 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, Navigate } from "react-router-dom";
-import {
-    Card,
-    CardBody,
-    Typography,
-    List,
-    ListItem,
-    ListItemPrefix,
-} from "@material-tailwind/react";
-import {
-    PresentationChartBarIcon,
-    ShoppingBagIcon,
-} from "@heroicons/react/24/solid";
+import { Card, CardBody, Typography } from "@material-tailwind/react";
+import { PlusIcon } from "@heroicons/react/24/solid";
 
 import classService from "../services/class.service";
 
@@ -23,15 +13,14 @@ export function SimpleCard() {
                     UI/UX Review Check
                 </Typography>
                 <Typography>
-                    The place is close to Barceloneta Beach and bus stop just 2 min by
-                    walk and near to &quot;Naviglio&quot; where you can enjoy the main
-                    night life in Barcelona.
+                    The place is close to Barceloneta Beach and bus stop just 2
+                    min by walk and near to &quot;Naviglio&quot; where you can
+                    enjoy the main night life in Barcelona.
                 </Typography>
             </CardBody>
         </Card>
     );
 }
-
 
 const Home = () => {
     const user = JSON.parse(localStorage.getItem("user"));
@@ -63,7 +52,7 @@ const Home = () => {
     async function getClassesInfo(classesTemp) {
         let classInfo = [];
         for (let i = 0; i < classesTemp.length; i++) {
-            let info = await getClassById(classesTemp[i]?.classId)
+            let info = await getClassById(classesTemp[i]?.classId);
             classInfo.push(info);
         }
         return classInfo;
@@ -75,7 +64,7 @@ const Home = () => {
             const classesInfo = await getClassesInfo(classesTemp);
             setClasses(classesInfo);
         }
-        f()
+        f();
     }, []);
 
     if (user == null) {
@@ -88,17 +77,21 @@ const Home = () => {
                 <div className="flex flex-row justify-end pr-8">
                     <Link
                         to={"/class/create-class"}
-                        className=" text-gray-900 hover:none"
+                        className=" text-gray-900 hover:no-underline "
                     >
-                        <button className="bg-dark-green hover:bg-medium-green text-white font-bold py-2 px-4 rounded-full">
-                            Tạo lớp
+                        <button className="bg-dark-green hover:bg-medium-green hover:text-black text-white font-bold py-2 px-4 rounded-full flex items-center">
+                            <PlusIcon className="w-5 h-5 mr-2" />
+                            Create a class
                         </button>
                     </Link>
                 </div>
                 <div className="grid grid-flow-row-dense grid-cols-2 gap-2 m-4 ">
                     {classes?.map((item) => {
                         return (
-                            <div key={item.id} className="flex flex-col justify-end py-2 px-4 shadow-md w-full bg-slate-50">
+                            <div
+                                key={item.id}
+                                className="flex flex-col justify-end py-2 px-4 shadow-md w-full bg-slate-50"
+                            >
                                 <Card className="h-auto shadow-none  bg-slate-50">
                                     <CardBody>
                                         <Link
