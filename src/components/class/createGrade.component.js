@@ -79,7 +79,10 @@ const CreateGrade = () => {
                 const listGrade = res.data.data;
                 console.log(listGrade);
                 const position = listGrade.length + 1;
-                if (Number.isInteger(parseInt(scale)) && !scale.includes(".")) {
+                if (
+                    Number.isInteger(parseInt(scale)) &&
+                    !scale?.includes(".")
+                ) {
                     gradeService
                         .createGrade(
                             classId,
@@ -127,7 +130,7 @@ const CreateGrade = () => {
                             <div>
                                 <div className="form-group">
                                     <label
-                                        htmlFor="classname"
+                                        htmlFor="gradename"
                                         className="font-semibold mb-2"
                                     >
                                         Grade Name
@@ -135,7 +138,7 @@ const CreateGrade = () => {
                                     <Input
                                         type="text"
                                         className="form-control p-3 rounded required"
-                                        name="classname"
+                                        name="gradename"
                                         placeholder="Enter your Grade Composition Name"
                                         onChange={(e) => {
                                             setGradeName(e.target.value);
@@ -146,7 +149,7 @@ const CreateGrade = () => {
 
                                 <div className="form-group">
                                     <label
-                                        htmlFor="email"
+                                        htmlFor="scale"
                                         className="font-semibold mb-2 mt-2"
                                     >
                                         Grade Scale(%)
@@ -154,7 +157,7 @@ const CreateGrade = () => {
                                     <Input
                                         type="number"
                                         className="form-control p-3 rounded"
-                                        name="email"
+                                        name="sc"
                                         placeholder="Enter your Grade Composition Scale"
                                         onChange={(e) => {
                                             setScale(e.target.value);

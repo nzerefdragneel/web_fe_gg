@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Fragment, useRef } from "react";
 import { Link } from "react-router-dom";
 import { Card, CardBody, Typography } from "@material-tailwind/react";
 import { SortableContainer, SortableElement } from "react-sortable-hoc";
@@ -8,6 +8,9 @@ import {
     PencilSquareIcon,
     XMarkIcon,
 } from "@heroicons/react/24/solid";
+import { Dialog, Transition } from "@headlessui/react";
+import Form from "react-validation/build/form";
+import Input from "react-validation/build/input";
 import gradeService from "../../services/grade.service";
 
 const SortableItem = SortableElement(
@@ -74,9 +77,59 @@ const SortableList = SortableContainer(
     }
 );
 
+const required = (value) => {
+    if (!value) {
+        return (
+            <div className="text-error-color text-base" role="alert">
+                This field is required!
+            </div>
+        );
+    }
+};
+
+const checkScale = (value) => {
+    if (value < 0) {
+        return (
+            <div className="text-error-color text-base" role="alert">
+                Scale must be greater than 0!
+            </div>
+        );
+    }
+    if (value > 100) {
+        return (
+            <div className="text-error-color text-base" role="alert">
+                Scale must be less than 100!
+            </div>
+        );
+    }
+    if (value.includes(".")) {
+        return (
+            <div className="text-error-color text-base" role="alert">
+                Scale must be integer!
+            </div>
+        );
+    }
+    if (Number.isInteger(parseInt(value)) === false) {
+        return (
+            <div className="text-error-color text-base" role="alert">
+                Scale must be integer!
+            </div>
+        );
+    }
+};
+
 export function TabAssignment({ id }) {
     const [listGrade, setListGrade] = useState([]);
     const [message, setMessage] = useState("");
+    const [openUpdate, setOpenUpdate] = useState(false);
+    const [gradeName, setGradeName] = useState("");
+    const [scale, setScale] = useState(0);
+    const [isSubmit, setIsSubmit] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const [gradeUpdate, setGradeUpdate] = useState({});
+
+    const cancelButtonRef = useRef(null);
+    const fref = useRef(null);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -155,7 +208,34 @@ export function TabAssignment({ id }) {
 
     function handleUpdate(e, value) {
         e.preventDefault();
-        console.log(value);
+        setGradeUpdate(value);
+        setOpenUpdate(true);
+    }
+
+    function handleSubmit(e) {
+        e.preventDefault();
+        if (fref.current) {
+            fref.current.validateAll();
+        }
+        async function updateGrade() {
+            try {
+                if (
+                    Number.isInteger(parseInt(scale)) &&
+                    !scale?.includes(".")
+                ) {
+                    alert("Update Grade Success");
+                    setIsLoading(false);
+                    setOpenUpdate(false);
+                } else {
+                    console.log("scale must be integer");
+                    setIsLoading(false);
+                }
+            } catch (error) {
+                console.error("Error fetching data:", error.message);
+            }
+        }
+        console.log(gradeName, scale, gradeUpdate.assignmentId);
+        updateGrade();
     }
 
     return (
@@ -190,6 +270,124 @@ export function TabAssignment({ id }) {
                     <div className="text-red-500 text-center">{message}</div>
                 )}
             </div>
+            <Transition.Root show={openUpdate} as={Fragment}>
+                <Dialog
+                    as="div"
+                    className="relative z-10"
+                    initialFocus={cancelButtonRef}
+                    onClose={setOpenUpdate}
+                >
+                    <Transition.Child
+                        as={Fragment}
+                        enter="ease-out duration-300"
+                        enterFrom="opacity-0"
+                        enterTo="opacity-100"
+                        leave="ease-in duration-200"
+                        leaveFrom="opacity-100"
+                        leaveTo="opacity-0"
+                    >
+                        <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+                    </Transition.Child>
+
+                    <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
+                        <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+                            <Transition.Child
+                                as={Fragment}
+                                enter="ease-out duration-300"
+                                enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                                enterTo="opacity-100 translate-y-0 sm:scale-100"
+                                leave="ease-in duration-200"
+                                leaveFrom="opacity-100 translate-y-0 sm:scale-100"
+                                leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                            >
+                                <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
+                                    <div className="bg-white px-4 pb-2 pt-6 sm:p-6 sm:pb-4">
+                                        <div className="sm:flex sm:items-start flex justify-center mx-4">
+                                            <Form
+                                                onSubmit={handleSubmit}
+                                                ref={fref}
+                                                className="w-full"
+                                            >
+                                                <div>
+                                                    <div className="form-group">
+                                                        <label
+                                                            htmlFor="gradename"
+                                                            className="font-semibold mb-2"
+                                                        >
+                                                            Grade Name
+                                                        </label>
+                                                        <Input
+                                                            type="text"
+                                                            className="form-control p-3 rounded required"
+                                                            name="gradename"
+                                                            placeholder="Enter your Grade Composition Name"
+                                                            onChange={(e) => {
+                                                                setGradeName(
+                                                                    e.target
+                                                                        .value
+                                                                );
+                                                            }}
+                                                            validations={[
+                                                                required,
+                                                            ]}
+                                                        />
+                                                    </div>
+                                                    <div className="form-group">
+                                                        <label
+                                                            htmlFor="scale"
+                                                            className="font-semibold mb-2 mt-2"
+                                                        >
+                                                            Grade Scale(%)
+                                                        </label>
+                                                        <Input
+                                                            type="number"
+                                                            className="form-control p-3 rounded"
+                                                            name="scale"
+                                                            placeholder="Enter your Grade Composition Scale"
+                                                            onChange={(e) => {
+                                                                setScale(
+                                                                    e.target
+                                                                        .value
+                                                                );
+                                                            }}
+                                                            validations={[
+                                                                required,
+                                                                checkScale,
+                                                            ]}
+                                                        />
+                                                    </div>
+                                                    {isSubmit && (
+                                                        <div className="text-error-color text-base italic">
+                                                            {message}
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            </Form>
+                                        </div>
+                                    </div>
+                                    <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+                                        <button
+                                            type="button"
+                                            className="inline-flex w-full justify-center rounded-md bg-dark-green px-3 py-2 text-sm font-semibold text-white hover:text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-medium-green sm:ml-3 sm:w-auto"
+                                            onClick={handleSubmit}
+                                        >
+                                            Confirm
+                                        </button>
+                                        <button
+                                            type="button"
+                                            className="inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
+                                            onClick={() => setOpenUpdate(false)}
+                                            ref={cancelButtonRef}
+                                        >
+                                            Cancel
+                                        </button>
+                                    </div>
+                                </Dialog.Panel>
+                            </Transition.Child>
+                        </div>
+                    </div>
+                </Dialog>
+            </Transition.Root>
         </div>
     );
 }
