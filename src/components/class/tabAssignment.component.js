@@ -11,6 +11,8 @@ import {
 import { Dialog, Transition } from "@headlessui/react";
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import gradeService from "../../services/grade.service";
 
 const SortableItem = SortableElement(
@@ -131,6 +133,11 @@ export function TabAssignment({ id }) {
     const cancelButtonRef = useRef(null);
     const fref = useRef(null);
 
+    const notifyUpdateSusscess = () => toast.success("Update Grade Success!");
+    const notifyUpdateFail = () => toast.error("Update Grade Fail!");
+    const notifyDeleteSusscess = () => toast.success("Delete Grade Success!");
+    const notifyDeleteFail = () => toast.error("Delete Grade Fail!");
+
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -145,7 +152,7 @@ export function TabAssignment({ id }) {
             }
         };
         fetchData();
-    }, [id]);
+    }, [id, isSubmit]);
 
     useEffect(() => {
         async function updatePosition(gradeId, position) {
@@ -181,7 +188,7 @@ export function TabAssignment({ id }) {
             try {
                 const res = await gradeService.deleteGrade(value.assignmentId);
                 if (res.status === 201) {
-                    alert("Delete Grade Success");
+                    notifyDeleteSusscess();
                     setListGrade(
                         listGrade.filter(
                             (item) => item.assignmentId !== value.assignmentId
@@ -189,7 +196,7 @@ export function TabAssignment({ id }) {
                     );
                 }
             } catch (error) {
-                alert("Delete Grade Fail");
+                notifyDeleteFail();
                 console.error("Error fetching data");
                 console.log(error);
             }
@@ -197,7 +204,7 @@ export function TabAssignment({ id }) {
 
         if (
             window.confirm(
-                "Are you sure you want to delete this grade composition?"
+                `Are you sure you want to delete grade composition ${value?.name}?`
             )
         ) {
             deleteGrade();
@@ -213,6 +220,7 @@ export function TabAssignment({ id }) {
     }
 
     function handleSubmit(e) {
+        setIsSubmit(false);
         e.preventDefault();
         if (fref.current) {
             fref.current.validateAll();
@@ -223,18 +231,40 @@ export function TabAssignment({ id }) {
                     Number.isInteger(parseInt(scale)) &&
                     !scale?.includes(".")
                 ) {
-                    alert("Update Grade Success");
-                    setIsLoading(false);
-                    setOpenUpdate(false);
+                    gradeService
+                        .updateNameScale(
+                            gradeName,
+                            scale,
+                            gradeUpdate.assignmentId
+                        )
+                        .then(
+                            (res) => {
+                                if (res.status === 201) {
+                                    notifyUpdateSusscess();
+                                    setIsLoading(false);
+                                    setOpenUpdate(false);
+                                    setGradeName("");
+                                    setGradeUpdate({});
+                                    setIsSubmit(true);
+                                }
+                            },
+                            (error) => {
+                                notifyUpdateFail();
+                                setIsSubmit(true);
+                                console.log(error);
+                                setIsLoading(false);
+                                setMessage("Update Grade Fail");
+                            }
+                        );
                 } else {
                     console.log("scale must be integer");
                     setIsLoading(false);
                 }
             } catch (error) {
                 console.error("Error fetching data:", error.message);
+                setIsLoading(false);
             }
         }
-        console.log(gradeName, scale, gradeUpdate.assignmentId);
         updateGrade();
     }
 
@@ -257,7 +287,7 @@ export function TabAssignment({ id }) {
                         No assignment found.
                     </div>
                 )}
-                {listGrade.length !== 0 && (
+                {listGrade?.length !== 0 && (
                     <SortableList
                         items={listGrade}
                         onSortEnd={onSortEnd}
@@ -320,7 +350,11 @@ export function TabAssignment({ id }) {
                                                             type="text"
                                                             className="form-control p-3 rounded required"
                                                             name="gradename"
-                                                            placeholder="Enter your Grade Composition Name"
+                                                            placeholder={
+                                                                gradeUpdate?.name
+                                                                    ? gradeUpdate.name
+                                                                    : "Enter your Grade Composition Name"
+                                                            }
                                                             onChange={(e) => {
                                                                 setGradeName(
                                                                     e.target
@@ -343,7 +377,11 @@ export function TabAssignment({ id }) {
                                                             type="number"
                                                             className="form-control p-3 rounded"
                                                             name="scale"
-                                                            placeholder="Enter your Grade Composition Scale"
+                                                            placeholder={
+                                                                gradeUpdate?.scale
+                                                                    ? gradeUpdate.scale
+                                                                    : "Enter your Grade Composition Scale"
+                                                            }
                                                             onChange={(e) => {
                                                                 setScale(
                                                                     e.target
@@ -356,11 +394,6 @@ export function TabAssignment({ id }) {
                                                             ]}
                                                         />
                                                     </div>
-                                                    {isSubmit && (
-                                                        <div className="text-error-color text-base italic">
-                                                            {message}
-                                                        </div>
-                                                    )}
                                                 </div>
                                             </Form>
                                         </div>
@@ -369,8 +402,14 @@ export function TabAssignment({ id }) {
                                         <button
                                             type="button"
                                             className="inline-flex w-full justify-center rounded-md bg-dark-green px-3 py-2 text-sm font-semibold text-white hover:text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-medium-green sm:ml-3 sm:w-auto"
-                                            onClick={handleSubmit}
+                                            onClick={(e) => {
+                                                setIsLoading(true);
+                                                handleSubmit(e);
+                                            }}
                                         >
+                                            {isLoading && (
+                                                <span className="spinner-border spinner-border-sm mr-1"></span>
+                                            )}
                                             Confirm
                                         </button>
                                         <button
@@ -388,6 +427,7 @@ export function TabAssignment({ id }) {
                     </div>
                 </Dialog>
             </Transition.Root>
+            <ToastContainer />
         </div>
     );
 }

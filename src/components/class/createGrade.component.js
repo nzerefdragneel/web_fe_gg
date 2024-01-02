@@ -5,6 +5,8 @@ import {} from "@heroicons/react/24/solid";
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import { useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import gradeService from "../../services/grade.service";
 
 const required = (value) => {
@@ -58,6 +60,9 @@ const CreateGrade = () => {
     const [isSubmit, setIsSubmit] = useState(false);
     const [classId, setClassId] = useState("");
 
+    const notifyCreateSusscess = () => toast.success("Create Grade Success!");
+    const notifyCreateFail = () => toast.error("Create Grade Fail!");
+
     useEffect(() => {
         const params = new URLSearchParams(window.location.search);
         setClassId(params.get("id"));
@@ -77,7 +82,6 @@ const CreateGrade = () => {
             try {
                 const res = await gradeService.getGradeByClassId(classId);
                 const listGrade = res.data.data;
-                console.log(listGrade);
                 const position = listGrade.length + 1;
                 if (
                     Number.isInteger(parseInt(scale)) &&
@@ -94,14 +98,16 @@ const CreateGrade = () => {
                         .then(
                             (res) => {
                                 if (res.status === 201) {
-                                    alert("Create Grade Success");
-                                    navigate(`/class/detail?id=${classId}`);
+                                    notifyCreateSusscess();
+                                    setTimeout(() => {
+                                        navigate(`/class/detail?id=${classId}`);
+                                    }, 800);
                                     setIsLoading(false);
                                 }
                             },
                             (error) => {
+                                notifyCreateFail();
                                 setIsSubmit(true);
-                                alert("Create Grade Fail");
                                 console.log(error);
                                 setIsLoading(false);
                                 setMessage("Create Grade Fail");
@@ -123,7 +129,7 @@ const CreateGrade = () => {
             <div className=" ">
                 <div className="flex flex-col justify-end px-4">
                     <div className="text-2xl text-dark-green font-bold mt-3">
-                        Create Class
+                        Create Grade
                     </div>
                     <div className="my-3">
                         <Form onSubmit={handleSubmit} ref={fref}>
@@ -187,6 +193,7 @@ const CreateGrade = () => {
                         </Form>
                     </div>
                 </div>
+                <ToastContainer />
             </div>
         </>
     );
