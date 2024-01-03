@@ -46,114 +46,194 @@ export function TabGrade(id) {
   };
 
   // "data": [
-  //       {
-  //           "studentId": 48,
-  //           "assignments": [
-  //               {
-  //                   "assignmentId": 2,
-  //                   "score": 6,
-  //                   "scale": 0.2
-  //               },
-  //               {
-  //                   "assignmentId": 3,
-  //                   "score": 6,
-  //                   "scale": 0.8
-  //               }
-  //           ]
-  //       },
-  //       {
-  //           "studentId": 53,
-  //           "assignments": [
-  //               {
-  //                   "assignmentId": 2,
-  //                   "score": 7,
-  //                   "scale": 0.2
-  //               },
-  //               {
-  //                   "assignmentId": 3,
-  //                   "score": 8,
-  //                   "scale": 0.8
-  //               }
-  //           ]
-  //       },
-  //       {
-  //           "studentId": 54,
-  //           "assignments": [
-  //               {
-  //                   "assignmentId": 2,
-  //                   "score": 8,
-  //                   "scale": 0.2
-  //               },
-  //               {
-  //                   "assignmentId": 3,
-  //                   "score": 10,
-  //                   "scale": 0.8
-  //               }
-  //           ]
-  //       },
-  //       {
-  //           "studentId": 66,
-  //           "assignments": [
-  //               {
-  //                   "assignmentId": 2,
-  //                   "score": 9,
-  //                   "scale": 0.2
-  //               },
-  //               {
-  //                   "assignmentId": 3,
-  //                   "score": 9,
-  //                   "scale": 0.8
-  //               }
-  //           ]
-  //       },
-  //       {
-  //           "studentId": 85,
-  //           "assignments": [
-  //               {
-  //                   "assignmentId": 2,
-  //                   "score": 10,
-  //                   "scale": 0.2
-  //               },
-  //               {
-  //                   "assignmentId": 3,
-  //                   "score": 7,
-  //                   "scale": 0.8
-  //               }
-  //           ]
-  //       }
-  //   ]
+  //     {
+  //         "studentMssv": "10048",
+  //         "studentId": 48,
+  //         "studentName": "",
+  //         "studentScore": [
+  //             {
+  //                 "assignmentId": 2,
+  //                 "assignmentScale": 20,
+  //                 "assignmentIsFinalized": false,
+  //                 "assignmentName": "BTCN1",
+  //                 "assignmentScore": 6
+  //             },
+  //             {
+  //                 "assignmentId": 3,
+  //                 "assignmentScale": 80,
+  //                 "assignmentIsFinalized": true,
+  //                 "assignmentName": "BTCN2",
+  //                 "assignmentScore": 6
+  //             },
+  //             {
+  //                 "assignmentId": 4,
+  //                 "assignmentScale": 10,
+  //                 "assignmentIsFinalized": false,
+  //                 "assignmentName": "BTCN3",
+  //                 "assignmentScore": null
+  //             }
+  //         ]
+  //     },
+  //     {
+  //         "studentMssv": "10085",
+  //         "studentId": 85,
+  //         "studentName": "",
+  //         "studentScore": [
+  //             {
+  //                 "assignmentId": 2,
+  //                 "assignmentScale": 20,
+  //                 "assignmentIsFinalized": false,
+  //                 "assignmentName": "BTCN1",
+  //                 "assignmentScore": 10
+  //             },
+  //             {
+  //                 "assignmentId": 3,
+  //                 "assignmentScale": 80,
+  //                 "assignmentIsFinalized": true,
+  //                 "assignmentName": "BTCN2",
+  //                 "assignmentScore": 7
+  //             },
+  //             {
+  //                 "assignmentId": 4,
+  //                 "assignmentScale": 10,
+  //                 "assignmentIsFinalized": false,
+  //                 "assignmentName": "BTCN3",
+  //                 "assignmentScore": null
+  //             }
+  //         ]
+  //     },
+  //     {
+  //         "studentMssv": "10053",
+  //         "studentId": 53,
+  //         "studentName": "",
+  //         "studentScore": [
+  //             {
+  //                 "assignmentId": 2,
+  //                 "assignmentScale": 20,
+  //                 "assignmentIsFinalized": false,
+  //                 "assignmentName": "BTCN1",
+  //                 "assignmentScore": 7
+  //             },
+  //             {
+  //                 "assignmentId": 3,
+  //                 "assignmentScale": 80,
+  //                 "assignmentIsFinalized": true,
+  //                 "assignmentName": "BTCN2",
+  //                 "assignmentScore": 8
+  //             },
+  //             {
+  //                 "assignmentId": 4,
+  //                 "assignmentScale": 10,
+  //                 "assignmentIsFinalized": false,
+  //                 "assignmentName": "BTCN3",
+  //                 "assignmentScore": null
+  //             }
+  //         ]
+  //     },
+  //     {
+  //         "studentMssv": "10054",
+  //         "studentId": 54,
+  //         "studentName": "",
+  //         "studentScore": [
+  //             {
+  //                 "assignmentId": 2,
+  //                 "assignmentScale": 20,
+  //                 "assignmentIsFinalized": false,
+  //                 "assignmentName": "BTCN1",
+  //                 "assignmentScore": 8
+  //             },
+  //             {
+  //                 "assignmentId": 3,
+  //                 "assignmentScale": 80,
+  //                 "assignmentIsFinalized": true,
+  //                 "assignmentName": "BTCN2",
+  //                 "assignmentScore": 10
+  //             },
+  //             {
+  //                 "assignmentId": 4,
+  //                 "assignmentScale": 10,
+  //                 "assignmentIsFinalized": false,
+  //                 "assignmentName": "BTCN3",
+  //                 "assignmentScore": null
+  //             }
+  //         ]
+  //     },
+  //     {
+  //         "studentMssv": "10066",
+  //         "studentId": 66,
+  //         "studentName": "",
+  //         "studentScore": [
+  //             {
+  //                 "assignmentId": 2,
+  //                 "assignmentScale": 20,
+  //                 "assignmentIsFinalized": false,
+  //                 "assignmentName": "BTCN1",
+  //                 "assignmentScore": 9
+  //             },
+  //             {
+  //                 "assignmentId": 3,
+  //                 "assignmentScale": 80,
+  //                 "assignmentIsFinalized": true,
+  //                 "assignmentName": "BTCN2",
+  //                 "assignmentScore": 9
+  //             },
+  //             {
+  //                 "assignmentId": 4,
+  //                 "assignmentScale": 10,
+  //                 "assignmentIsFinalized": false,
+  //                 "assignmentName": "BTCN3",
+  //                 "assignmentScore": null
+  //             }
+  //         ]
+  //     }
+  // ]
 
   const assignmentsList = [];
   scorings.forEach((scoring) => {
-    scoring.assignments.forEach((assignment) => {
-      if (!assignmentsList.includes(assignment.assignmentId)) {
-        assignmentsList.push(assignment.assignmentId);
+    scoring.studentScore.forEach((assignment) => {
+      if (
+        !assignmentsList.includes(
+          assignment.assignmentName + ` (${assignment.assignmentScale}%)`
+        )
+      ) {
+        assignmentsList.push(
+          assignment.assignmentName + ` (${assignment.assignmentScale}%)`
+        );
       }
     });
   });
 
+  console.log("assignmentsList: ", assignmentsList);
+
   const studentsGrade = [];
   scorings.forEach((scoring) => {
     const studentGrade = {
-      studentId: scoring.studentId,
+      studentId: scoring.studentMssv,
       assignments: [],
     };
     let total = 0;
-    scoring.assignments.forEach((assignment) => {
-      studentGrade.assignments.push(assignment.score ? assignment.score : 0);
-      total += (assignment.score * assignment.scale) / 100;
+    scoring.studentScore.forEach((assignment) => {
+      if (assignment.assignmentIsFinalized) {
+        studentGrade.assignments.push(assignment.assignmentScore);
+        total +=
+          assignment.assignmentScore * (assignment.assignmentScale / 100);
+      } else {
+        studentGrade.assignments.push(null);
+      }
     });
-    studentGrade.total = total;
+    studentGrade.total = Math.round((total + Number.EPSILON) * 100) / 100;
 
     studentsGrade.push(studentGrade);
   });
+
+  console.log("studentGrade", studentsGrade);
 
   const templatesForGrade = () =>
     studentsGrade.map((user) => {
       const userGrade = {};
       userGrade["ID"] = user.studentId;
       user.assignments.forEach((assignment, index) => {
-        userGrade[" " + assignmentsList[index]] = assignment ? assignment : 0;
+        userGrade[assignmentsList[index]] = assignment ? assignment : "N/A";
       });
       userGrade["Total"] = user.total;
       return userGrade;
@@ -178,24 +258,6 @@ export function TabGrade(id) {
   return (
     <div className=" ">
       <div className="row">
-        <div className="col-md-6">
-          <div className="input-group">
-            <div className="custom-file">
-              <input
-                type="file"
-                name="file"
-                className="custom-file-input"
-                id="inputGroupFile"
-                required
-                onChange={handleImport}
-                accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
-              />
-              <label className="custom-file-label" htmlFor="inputGroupFile">
-                Choose file
-              </label>
-            </div>
-          </div>
-        </div>
         <div className="col-md-6">
           <button
             onClick={handleExport}
@@ -228,7 +290,7 @@ export function TabGrade(id) {
                 <th scope="row">{student.studentId}</th>
                 {student.assignments.length ? (
                   student.assignments.map((score) => (
-                    <td>{score ? score : 0}</td>
+                    <td>{score ? score : "N/A"}</td>
                   ))
                 ) : (
                   <td></td>
