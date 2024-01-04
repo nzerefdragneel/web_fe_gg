@@ -10,20 +10,34 @@ import {
   Input,
   Card,
   Typography,
+  Button,
+  Dialog,
+  DialogHeader,
+  DialogBody,
+  DialogFooter,
 } from "@material-tailwind/react";
 import { read, utils, writeFile } from "xlsx";
+import UpdateGrade from "./updateGrade.component";
 
 export function DetailAssignment(id) {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const classId = queryParams.get("id");
   const assignmentId = queryParams.get("assignmentId");
-
+  const [open, setOpen] = useState(false);
   const [assignment, setAssignment] = useState({});
+  const [chosenStudent, setChosenStudent] = useState({});
+  const [chosenScore, setChosenScore] = useState(0);
   const [classData, setClassData] = useState({});
   const [students, setStudents] = useState([]);
   const [grades, setGrades] = useState([]);
   const [message, setMessage] = useState("");
+
+  const handleOpen = (student, grade) => {
+    setChosenStudent(student);
+    setChosenScore(grade);
+    setOpen(!open);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -187,6 +201,13 @@ export function DetailAssignment(id) {
         <List>
           {students.map((student) => (
             <ListItem
+              onClick={() => {
+                handleOpen(
+                  student,
+                  grades.find((grade) => grade.studentId === student.studentId)
+                    ?.score
+                );
+              }}
               color="lightBlue"
               ripple="light"
               key={student.studentId}
@@ -215,24 +236,33 @@ export function DetailAssignment(id) {
                   </div>
                 </div>
                 <div className="flex flex-row flex-wrap justify-between">
-                  <Input
-                    type="text"
-                    className="form-control p-3 rounded required"
-                    name="points"
-                    placeholder={
-                      grades.find(
-                        (grade) => grade.studentId === student.studentId
-                      )?.score
-                    }
-                    onChange={(e) => {
-                      // setUsername(e.target.value);
-                    }}
-                  />
+                  {
+                    grades.find(
+                      (grade) => grade.studentId === student.studentId
+                    )?.score
+                  }
                 </div>
               </div>
             </ListItem>
           ))}
         </List>
+        <div className="flex justify-center">
+          <Dialog
+            open={open}
+            handler={handleOpen}
+            className="max-w-xl bg-white m-5 rounded-lg shadow-lg mt-20"
+          >
+            <DialogBody>
+              <UpdateGrade
+                student={chosenStudent}
+                prevGrade={chosenScore}
+                handleOpen={() => setOpen(!open)}
+                assignmentId={assignmentId}
+                classId={classId}
+              />
+            </DialogBody>
+          </Dialog>
+        </div>
       </div>
     </div>
   );

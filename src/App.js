@@ -30,6 +30,7 @@ import ManagerUser from "./components/adminside/manageruser.component";
 import EditUserManager from "./components/adminside/edituser.component";
 import CreateGrade from "./components/class/createGrade.component";
 import { DetailAssignment } from "./components/class/detailAssignments.component";
+import UpdateGrade from "./components/class/updateGrade.component";
 class App extends Component {
   constructor(props) {
     super(props);
@@ -233,7 +234,10 @@ class App extends Component {
                         path="/class/assignments"
                         element={<DetailAssignment />}
                       />
-
+                      <Route
+                        path="/class/grade/update"
+                        element={<UpdateGrade />}
+                      />
                       <Route
                         path="/class/grade/create"
                         element={<CreateGrade />}

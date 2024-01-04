@@ -70,6 +70,21 @@ class GradeService {
       mode: "no-cors",
     });
   }
+  updateGradeOfStudent(assignmentId, mssv, grade, classId) {
+    return axios.post(
+      API_URL + `updateScore`,
+      {
+        assignmentId: assignmentId,
+        mssv: mssv,
+        grade: grade,
+        classId: classId,
+      },
+      {
+        headers: headers,
+        mode: "no-cors",
+      }
+    );
+  }
 }
 
 export default new GradeService();

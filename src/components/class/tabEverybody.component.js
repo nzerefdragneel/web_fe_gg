@@ -14,6 +14,7 @@ export function TabEverybody(id) {
   const [classTeachers, setclassTeachers] = useState({});
   const [classStudents, setclassStudent] = useState({});
   const [isTeacher, setIsTeacher] = useState(false);
+  const [hasImported, setHasImported] = useState();
   const [messageTeacher, setMessageTeacher] = useState("");
   const [messageStudent, setMessageStudent] = useState("");
   const [messageImport, setMessageImport] = useState("");
@@ -30,6 +31,7 @@ export function TabEverybody(id) {
       try {
         const res = await classService.getliststudents(id.id);
         setclassStudent(res.data.data);
+        console.log(classStudents);
         setMessageStudent("");
       } catch (error) {
         console.error("Error fetching data:", error.message);
@@ -46,63 +48,71 @@ export function TabEverybody(id) {
     fetchData();
   }, [id]);
 
-  const handleImport = ($event) => {
+  let students;
+
+  const handleUpload = ($event) => {
     const files = $event.target.files;
     if (files.length) {
       const file = files[0];
+      setHasImported(file);
       const reader = new FileReader();
       reader.onload = (event) => {
         const wb = read(event.target.result);
         const sheets = wb.SheetNames;
-
         if (sheets.length) {
           const rows = utils.sheet_to_json(wb.Sheets[sheets[0]]);
-          const students = rows.map((row) => {
+          students = rows.map((row) => {
             return {
-              studentId: row.ID,
-              fullname: row.Fullname,
+              mssv: row.MSSV,
+              studentenrollment: {
+                fullname: row.Fullname,
+              },
             };
           });
           console.log(id, students);
-          classService
-            .addStudents(id, students)
-            .then(
-              (response) => {
-                const existsCount = response.data.data.existsCount;
-                const notFoundCount = response.data.data.notFoundCount;
-                if (existsCount === 0 && notFoundCount === 0) {
-                  setMessageImport("Imported successfully");
-                } else {
-                  setMessageImport(
-                    `Imported successfully. ${existsCount} students already existed and ${notFoundCount} students cannot be imported.`
-                  );
-                }
-              },
-              (error) => {
-                console.log(error);
-              }
-            )
-            .then(async () => {
-              await classService.getliststudents(id.id).then((res) => {
-                setclassStudent(res.data.data);
-              });
-            });
         }
+        setclassStudent(students);
       };
       reader.readAsArrayBuffer(file);
     }
   };
 
+  const handleImport = () => {
+    classService
+      .addStudents(id, students)
+      .then(
+        (response) => {
+          const existsCount = response.data.data.existsCount;
+          const notFoundCount = response.data.data.notFoundCount;
+          if (existsCount === 0 && notFoundCount === 0) {
+            setMessageImport("Imported successfully");
+          } else {
+            setMessageImport(
+              `Imported successfully. ${existsCount} students already existed and ${notFoundCount} students cannot be imported.`
+            );
+          }
+        },
+        (error) => {
+          console.log(error);
+        }
+      )
+      .then(async () => {
+        await classService.getliststudents(id.id).then((res) => {
+          setclassStudent(res.data.data);
+        });
+      });
+  };
+
   const templatesForClass = () =>
     classStudents.map((user) => {
       return {
-        ID: user.studentId,
+        MSSV: user.mssv,
         Fullname: user.studentenrollment.fullname,
       };
     });
 
   const handleExport = () => {
-    const headings = [["ID", "Fullname"]];
+    const headings = [["MSSV", "Fullname"]];
     const data = templatesForClass();
     const wb = utils.book_new();
     const ws = utils.json_to_sheet([]);
@@ -117,6 +127,34 @@ export function TabEverybody(id) {
 
   return (
     <div className=" ">
+      {isTeacher && (
+        <div className="row">
+          <div className="input-group col-md-6">
+            <div className="custom-file">
+              <input
+                type="file"
+                name="file"
+                className="custom-file-input"
+                id="inputGroupFile"
+                required
+                onChange={handleUpload}
+                accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+              />
+              <label className="custom-file-label" htmlFor="inputGroupFile">
+                Choose file
+              </label>
+            </div>
+          </div>
+          <div className="col-md-6">
+            <button
+              onClick={handleExport}
+              className="btn btn-primary float-right"
+            >
+              Export <i className="fa fa-download"></i>
+            </button>
+          </div>
+        </div>
+      )}
       {messageTeacher && <h1>{messageTeacher}</h1>}
       <div>
         {classTeachers.length === 0 && <h1>No teacher</h1>}
@@ -190,6 +228,13 @@ export function TabEverybody(id) {
                     >
                       Student
                     </Typography>
+                    <Typography
+                      variant="small"
+                      color="gray"
+                      className="font-normal"
+                    >
+                      MSSV: {user.mssv}
+                    </Typography>
                   </div>
                 </ListItem>
               ))}
@@ -197,35 +242,17 @@ export function TabEverybody(id) {
           )}
         </Card>
       </div>
-      {isTeacher && (
-        <div>
-          <div className="input-group">
-            <div className="custom-file">
-              <input
-                type="file"
-                name="file"
-                className="custom-file-input"
-                id="inputGroupFile"
-                required
-                onChange={handleImport}
-                accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
-              />
-              <label className="custom-file-label" htmlFor="inputGroupFile">
-                Choose file
-              </label>
-            </div>
-          </div>
-          <div className="col-md-6">
-            <button
-              onClick={handleExport}
-              className="btn btn-primary float-right"
-            >
-              Export <i className="fa fa-download"></i>
-            </button>
-          </div>
-          {messageImport && <h1>{messageImport}</h1>}
+      {hasImported && (
+        <div className="col-md-6">
+          <button
+            onClick={handleImport}
+            className="btn btn-primary float-right"
+          >
+            Import <i className="fa fa-download"></i>
+          </button>
         </div>
       )}
+      {messageImport && <h1>{messageImport}</h1>}
     </div>
   );
 }
