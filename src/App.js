@@ -169,8 +169,8 @@ class App extends Component {
                 {/* <Route path="/class/create-class" element={<CreateClass />} />
                 <Route path="/invitation" element={<Invitation />} />
                 <Route path="/updateStudentId" element={<StudentJoinInClass />} /> */}
-                    </Routes>
-                  )}
+            </Routes>
+              }
                   {roles !== "admin" && currentUser && (
                     <Routes>
                       <Route
@@ -238,7 +238,7 @@ class App extends Component {
               </div>
             </div>
           </div>
-        )}
+        }
 
         <div className="col-md-12 flex flex-col h-48 w-full">
           <SimpleFooter></SimpleFooter>
