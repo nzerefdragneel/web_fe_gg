@@ -64,7 +64,9 @@ const Home = () => {
             const classesInfo = await getClassesInfo(classesTemp);
             setClasses(classesInfo);
         }
-        f();
+        if (user != null) {
+            f();
+        }
     }, []);
 
     if (user == null) {
