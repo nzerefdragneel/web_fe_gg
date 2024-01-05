@@ -15,7 +15,7 @@ import EditUser from "./components/edituser.component";
 import Profile from "./components/profile.component";
 import SimpleFooter from "./components/footer.component";
 import ForgotPassword from "./components/forgotPassword.component";
-import StudentJoinInClass from "./components/studentjoininclass.component"
+import StudentJoinInClass from "./components/studentjoininclass.component";
 import ResetPassword from "./components/resetPassword.component";
 import Invitation from "./components/invitation.component";
 import Bus from "./common/bus";
@@ -28,6 +28,9 @@ import AdminHome from "./components/adminside/adminhome.component";
 import ClassManager from "./components/adminside/classmanager.component";
 import ManagerUser from "./components/adminside/manageruser.component";
 import EditUserManager from "./components/adminside/edituser.component";
+import CreateGrade from "./components/class/createGrade.component";
+import { DetailAssignment } from "./components/class/detailAssignments.component";
+import UpdateGrade from "./components/class/updateGrade.component";
 import {ClassDetailManager} from "./components/adminside/classdetail.component";
 class App extends Component {
   constructor(props) {
@@ -37,37 +40,44 @@ class App extends Component {
     this.state = {
       currentUser: undefined,
       roles: "",
-      status:true
+      status: true,
     };
   }
 
   async componentDidMount() {
     const user = AuthService.getCurrentUser();
-   
-    if (user !== null) {
-      userService.getRoles(user.id)
-      .then (response => {
-        console.log(response.data);
-        this.setState({
-          currentUser:user,
-          roles: response.data.roles,
-        });
-      }).catch(error => {console.log(error)});
 
-      userService.GetStatus(user.id)
-      .then (response => {
-        console.log(response.data);
-        this.setState({
-          status: response.data.status,
+    if (user !== null) {
+      userService
+        .getRoles(user.id)
+        .then((response) => {
+          console.log(response.data);
+          this.setState({
+            currentUser: user,
+            roles: response.data.roles,
+          });
+        })
+        .catch((error) => {
+          console.log(error);
         });
-      }).catch(error => {console.log(error)});
+
+      userService
+        .GetStatus(user.id)
+        .then((response) => {
+          console.log(response.data);
+          this.setState({
+            status: response.data.status,
+          });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     }
-  
+
     Bus.on("logout", () => {
       this.logOut();
     });
   }
-  
 
   componentWillUnmount() {
     Bus.remove("logout");
@@ -84,7 +94,7 @@ class App extends Component {
   render() {
     const currentUser = this.state.currentUser;
     const roles = this.state.roles;
-    const status=this.state.status;
+    const status = this.state.status;
 
     return (
       <div className="">
@@ -159,47 +169,77 @@ class App extends Component {
                 {/* <Route path="/class/create-class" element={<CreateClass />} />
                 <Route path="/invitation" element={<Invitation />} />
                 <Route path="/updateStudentId" element={<StudentJoinInClass />} /> */}
-              </Routes>
-              }
-              {roles!=='admin'&& currentUser&&
-              <Routes>
-           
-                <Route
-                  exact
-                  path="/"
-                  element={
-                    currentUser ? <Navigate replace to="/home" /> : <Lading />
-                  }
-                />
-                <Route path="/home" element={<Home />} />
-                <Route
-                  path="/edituser"
-                  element={
-                    currentUser ? <EditUser /> : <Navigate replace to="/" />
-                  }
-                />
-                <Route path="/profile" element={<Profile />} />
-                <Route path="/forgot-password" element={<ForgotPassword />} />
-                <Route path="/reset-password" element={<ResetPassword />} />
-                <Route path="/class/detail" element={<ClassDetail />} />
-                <Route path="/class/create-class" element={<CreateClass />} />
-                <Route path="/invitation" element={<Invitation />} />
-                <Route path="/updateStudentId" element={<StudentJoinInClass />} />
+                    </Routes>
+                  )}
+                  {roles !== "admin" && currentUser && (
+                    <Routes>
+                      <Route
+                        exact
+                        path="/"
+                        element={
+                          currentUser ? (
+                            <Navigate replace to="/home" />
+                          ) : (
+                            <Lading />
+                          )
+                        }
+                      />
+                      <Route path="/home" element={<Home />} />
+                      <Route
+                        path="/edituser"
+                        element={
+                          currentUser ? (
+                            <EditUser />
+                          ) : (
+                            <Navigate replace to="/" />
+                          )
+                        }
+                      />
+                      <Route path="/profile" element={<Profile />} />
+                      <Route
+                        path="/forgot-password"
+                        element={<ForgotPassword />}
+                      />
+                      <Route
+                        path="/reset-password"
+                        element={<ResetPassword />}
+                      />
+                      <Route path="/class/detail" element={<ClassDetail />} />
+                      <Route
+                        path="/class/create-class"
+                        element={<CreateClass />}
+                      />
+                      <Route path="/invitation" element={<Invitation />} />
+                      <Route
+                        path="/updateStudentId"
+                        element={<StudentJoinInClass />}
+                      />
+                      <Route
+                        path="/class/assignments"
+                        element={<DetailAssignment />}
+                      />
+                      <Route
+                        path="/class/grade/update"
+                        element={<UpdateGrade />}
+                      />
+                      <Route
+                        path="/class/grade/create"
+                        element={<CreateGrade />}
+                      />
+                    </Routes>
+                  )}
 
-              </Routes>
-              }
-
-              {/* student routes */}
-              <Routes>
-              <Route path="/login" element={<LoginScreen />} />
-                <Route path="/signup" element={<Signup />} />
-              </Routes>
-
+                  {/* student routes */}
+                  <Routes>
+                    <Route path="/login" element={<LoginScreen />} />
+                    <Route path="/signup" element={<Signup />} />
+                  </Routes>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-        </div>}
-     
+        )}
+
         <div className="col-md-12 flex flex-col h-48 w-full">
           <SimpleFooter></SimpleFooter>
         </div>
