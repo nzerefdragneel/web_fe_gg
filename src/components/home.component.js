@@ -25,6 +25,7 @@ export function SimpleCard() {
 const Home = () => {
     const user = JSON.parse(localStorage.getItem("user"));
     const [classes, setClasses] = useState([]);
+    const [loading, setLoading] = useState(false);
 
     async function getClass() {
         let classTemp = [];
@@ -60,9 +61,11 @@ const Home = () => {
 
     useEffect(() => {
         async function f() {
+            setLoading(true);
             const classesTemp = await getClass();
             const classesInfo = await getClassesInfo(classesTemp);
             setClasses(classesInfo);
+            setLoading(false);
         }
         if (user != null) {
             f();
@@ -87,12 +90,17 @@ const Home = () => {
                         </button>
                     </Link>
                 </div>
-                <div className="grid grid-flow-row-dense grid-cols-2 gap-2 m-4 ">
+                <div className="grid grid-flow-row-dense grid-cols-2 gap-4 m-4 ">
+                    <div className="place-items-center mx-auto col-span-2">
+                        {loading && (
+                            <span className="spinner-border spinner-border-lg text-dark-green"></span>
+                        )}
+                    </div>
                     {classes?.map((item) => {
                         return (
                             <div
                                 key={item.id}
-                                className="flex flex-col justify-end py-2 px-4 shadow-md w-full bg-slate-50"
+                                className="flex flex-col justify-end py-2 px-4 shadow-md w-full bg-slate-50 mt-1"
                             >
                                 <Card className="h-auto shadow-none  bg-slate-50">
                                     <CardBody>

@@ -5,6 +5,7 @@ import {} from "@heroicons/react/24/solid";
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import { useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
 import classService from "../../services/class.service";
 
 const required = (value) => {
@@ -30,6 +31,10 @@ const CreateClass = () => {
     if (user == null) {
         return <Navigate replace to="/" />;
     }
+
+    const notifyCreateSusscess = () => toast.success("Create Class Success!");
+    const notifyCreateFail = () => toast.error("Create Class Fail!");
+
     function handleSubmit(e) {
         e.preventDefault();
         if (fref.current) {
@@ -43,15 +48,17 @@ const CreateClass = () => {
         classService.createClass(className, description, user.id).then(
             (res) => {
                 if (res.status === 200) {
+                    notifyCreateSusscess();
+                    setTimeout(() => {
+                        navigate("/home");
+                    }, 800);
                     setIsLoading(false);
-                    alert("Create Class Success");
-                    navigate("/home");
                 }
             },
             (error) => {
+                notifyCreateFail();
                 setIsLoading(false);
                 setIsSubmit(true);
-                alert("Create Class Fail");
                 setMessage(error.response.data.message);
             }
         );
@@ -81,6 +88,7 @@ const CreateClass = () => {
                                         placeholder="Enter your Class Name"
                                         onChange={(e) => {
                                             setClassName(e.target.value);
+                                            setMessage("");
                                         }}
                                         validations={[required]}
                                     />
@@ -100,6 +108,7 @@ const CreateClass = () => {
                                         placeholder="Enter your Class Description"
                                         onChange={(e) => {
                                             setDescription(e.target.value);
+                                            setMessage("");
                                         }}
                                         validations={[required]}
                                     />
@@ -127,6 +136,7 @@ const CreateClass = () => {
                     </div>
                 </div>
             </div>
+            <ToastContainer />
         </>
     );
 };

@@ -101,26 +101,6 @@ function Lading() {
                         </div>
                     </div>
                 </div>
-                <div className="flex flex-col gap-4 mt-20 items-start">
-                    <div className="text-3xl text-dark-green font-bold mb-5">
-                        How Classroom can make a difference for you
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
-                        <div className="p-5 rounded-lg bg-slate-50 w-full">
-                            <div className="text-base text-neutral-600">
-                                Classroom can be learned in minutes and serves
-                                all types of learners and educators, regardless
-                                of their tech savviness. Empower educators, and
-                                encourage adoption and proficiency with new
-                                tools and techniques, with a broad range of
-                                resources.
-                            </div>
-                            <div className="text-base border-t">
-                                Personalize learning
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     );
