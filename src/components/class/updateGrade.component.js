@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
-import {} from "@material-tailwind/react";
+import { tab } from "@material-tailwind/react";
 import {} from "@heroicons/react/24/solid";
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
@@ -41,6 +41,7 @@ const UpdateGrade = (student, prevGrade, handleOpen, assignmentId, classId) => {
   const navigate = useNavigate();
   const [message, setMessage] = useState("");
   const [isSubmit, setIsSubmit] = useState(false);
+  const teacherId = JSON.parse(localStorage.getItem("user")).id;
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -54,7 +55,8 @@ const UpdateGrade = (student, prevGrade, handleOpen, assignmentId, classId) => {
             student.assignmentId,
             student.student.mssv,
             grade,
-            student.classId
+            student.classId,
+            teacherId
           )
           .then(
             (res) => {
