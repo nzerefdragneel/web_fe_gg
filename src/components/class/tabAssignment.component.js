@@ -268,6 +268,18 @@ export function TabAssignment({ id }) {
                 setIsLoading(false);
             }
         }
+        if (
+            scale === "" ||
+            gradeName === "" ||
+            !Number.isInteger(parseInt(scale)) ||
+            scale?.includes(".") ||
+            scale < 0 ||
+            scale > 100
+        ) {
+            notifyUpdateFail();
+            setIsLoading(false);
+            return;
+        }
         updateGrade();
     }
 

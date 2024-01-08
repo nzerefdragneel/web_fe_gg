@@ -121,6 +121,18 @@ const CreateGrade = () => {
                 console.error("Error fetching data:", error.message);
             }
         }
+        if (
+            scale === "" ||
+            gradeName === "" ||
+            !Number.isInteger(parseInt(scale)) ||
+            scale?.includes(".") ||
+            scale < 0 ||
+            scale > 100
+        ) {
+            notifyCreateFail();
+            setIsLoading(false);
+            return;
+        }
         addGrade();
     }
 
