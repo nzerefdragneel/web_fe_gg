@@ -4,9 +4,9 @@ import { Card, CardBody, Typography } from "@material-tailwind/react";
 import { SortableContainer, SortableElement } from "react-sortable-hoc";
 import { arrayMove } from "react-sortable-hoc";
 import {
-  PlusIcon,
-  PencilSquareIcon,
-  XMarkIcon,
+    PlusIcon,
+    PencilSquareIcon,
+    XMarkIcon,
 } from "@heroicons/react/24/solid";
 import { Dialog, Transition } from "@headlessui/react";
 import Form from "react-validation/build/form";
@@ -16,67 +16,67 @@ import "react-toastify/dist/ReactToastify.css";
 import gradeService from "../../services/grade.service";
 
 const SortableItem = SortableElement(
-  ({ value, handleDelete, handleUpdate }) => (
-    <div className="flex flex-col  p-2 justify-end shadow-md w-full bg-slate-50  rounded my-2">
-      <Card className="h-auto shadow-none  bg-slate-50">
-        <div className="flex justify-end pt-2 z-10 items-center">
-          <PencilSquareIcon
-            className="w-5 h-5 text-neutral-700 font-bold hover:text-dark-green cursor-pointer mr-1"
-            onClick={(e) => {
-              handleUpdate(e, value);
-            }}
-          />
-          <XMarkIcon
-            className="w-6 h-6 text-neutral-700 hover:text-error-color cursor-pointer mr-1"
-            onClick={(e) => {
-              handleDelete(e, value);
-            }}
-          />
-        </div>
-        <CardBody className="grid grid-cols-2 place-items-center -mt-5 p-3">
-          <Typography variant="paragraph" className="italic my-0">
-            Grade composition name:
-            <Link
-              to={`/class/assignments?id=${value.classId}&assignmentId=${value.assignmentId}`}
-              className=" text-gray-900  hover:text-dark-green"
-            >
-              <div className="text-2xl text-dark-green font-bold mt-1 not-italic ml-2">
-                {value?.name}
-              </div>
-            </Link>
-          </Typography>
+    ({ value, handleDelete, handleUpdate }) => (
+        <div className="flex flex-col  p-2 justify-end shadow-md w-full bg-slate-50  rounded my-2">
+            <Card className="h-auto shadow-none  bg-slate-50">
+                <div className="flex justify-end pt-2 z-10 items-center">
+                    <PencilSquareIcon
+                        className="w-5 h-5 text-neutral-700 font-bold hover:text-dark-green cursor-pointer mr-1"
+                        onClick={(e) => {
+                            handleUpdate(e, value);
+                        }}
+                    />
+                    <XMarkIcon
+                        className="w-6 h-6 text-neutral-700 hover:text-error-color cursor-pointer mr-1"
+                        onClick={(e) => {
+                            handleDelete(e, value);
+                        }}
+                    />
+                </div>
+                <CardBody className="grid grid-cols-2 place-items-center -mt-5 p-3">
+                    <Typography variant="paragraph" className="italic my-0">
+                        Grade composition name:
+                        <Link
+                            to={`/class/assignments?id=${value.classId}&assignmentId=${value.assignmentId}`}
+                            className=" text-gray-900  hover:text-dark-green"
+                        >
+                            <div className="text-2xl text-dark-green font-bold mt-1 not-italic ml-2">
+                                {value?.name}
+                            </div>
+                        </Link>
+                    </Typography>
 
-          <Typography
-            variant="paragraph"
-            className="italic text-gray-900 my-0 mr-0"
-          >
-            Scale:
-            <div className="text-2xl text-dark-green font-bold mt-1 not-italic ml-2">
-              {value?.scale}%
-            </div>
-          </Typography>
-        </CardBody>
-      </Card>
-    </div>
-  )
+                    <Typography
+                        variant="paragraph"
+                        className="italic text-gray-900 my-0 mr-0"
+                    >
+                        Scale:
+                        <div className="text-2xl text-dark-green font-bold mt-1 not-italic ml-2">
+                            {value?.scale}%
+                        </div>
+                    </Typography>
+                </CardBody>
+            </Card>
+        </div>
+    )
 );
 
 const SortableList = SortableContainer(
-  ({ items, handleDelete, handleUpdate }) => {
-    return (
-      <ul>
-        {items?.map((value, index) => (
-          <SortableItem
-            key={value.assignmentId}
-            index={index}
-            value={value}
-            handleDelete={handleDelete}
-            handleUpdate={handleUpdate}
-          />
-        ))}
-      </ul>
-    );
-  }
+    ({ items, handleDelete, handleUpdate }) => {
+        return (
+            <ul>
+                {items?.map((value, index) => (
+                    <SortableItem
+                        key={value.assignmentId}
+                        index={index}
+                        value={value}
+                        handleDelete={handleDelete}
+                        handleUpdate={handleUpdate}
+                    />
+                ))}
+            </ul>
+        );
+    }
 );
 
 const required = (value) => {
@@ -129,6 +129,7 @@ export function TabAssignment({ id }) {
     const [isSubmit, setIsSubmit] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [gradeUpdate, setGradeUpdate] = useState({});
+    const [loading, setLoading] = useState(false);
 
     const cancelButtonRef = useRef(null);
     const fref = useRef(null);
@@ -139,6 +140,7 @@ export function TabAssignment({ id }) {
     const notifyDeleteFail = () => toast.error("Delete Grade Fail!");
 
     useEffect(() => {
+        setLoading(true);
         const fetchData = async () => {
             try {
                 const res = await gradeService.getGradeByClassId(id);
@@ -150,34 +152,38 @@ export function TabAssignment({ id }) {
                 console.error("Error fetching data");
                 setMessage("Error fetching data");
             }
+            setLoading(false);
         };
         fetchData();
     }, [id, isSubmit]);
 
-  useEffect(() => {
-    async function updatePosition(gradeId, position) {
-      try {
-        const res = await gradeService.updatedPostion(gradeId, position);
-        if (res.status === 201) {
-          console.log("update success");
+    useEffect(() => {
+        async function updatePosition(gradeId, position) {
+            try {
+                const res = await gradeService.updatedPostion(
+                    gradeId,
+                    position
+                );
+                if (res.status === 201) {
+                    console.log("update success");
+                }
+            } catch (error) {
+                console.error("Error fetching data");
+                console.log(error);
+            }
         }
-      } catch (error) {
-        console.error("Error fetching data");
-        console.log(error);
-      }
-    }
-    listGrade?.forEach((item, index) => {
-      updatePosition(item.assignmentId, index + 1);
-    });
-  }, [listGrade]);
+        listGrade?.forEach((item, index) => {
+            updatePosition(item.assignmentId, index + 1);
+        });
+    }, [listGrade]);
 
-  const onSortEnd = ({ oldIndex, newIndex }) => {
-    if (listGrade.length === 0) return;
-    if (oldIndex === newIndex) {
-      return;
-    }
-    setListGrade(arrayMove(listGrade, oldIndex, newIndex));
-  };
+    const onSortEnd = ({ oldIndex, newIndex }) => {
+        if (listGrade.length === 0) return;
+        if (oldIndex === newIndex) {
+            return;
+        }
+        setListGrade(arrayMove(listGrade, oldIndex, newIndex));
+    };
 
     function handleDelete(e, value) {
         e.preventDefault();
@@ -279,12 +285,17 @@ export function TabAssignment({ id }) {
                 </Link>
             </div>
             <div className="grid grid-flow-row-dense gap-2 mx-40 my-4">
-                {listGrade.length === 0 && (
+                {loading && (
+                    <div className="place-items-center mx-auto col-span-2">
+                        <span className="spinner-border spinner-border-lg text-dark-green"></span>
+                    </div>
+                )}
+                {!loading && listGrade.length === 0 && (
                     <div className="text-gray-900 text-center">
                         No assignment found.
                     </div>
                 )}
-                {listGrade?.length !== 0 && (
+                {!loading && listGrade?.length !== 0 && (
                     <SortableList
                         items={listGrade}
                         onSortEnd={onSortEnd}
