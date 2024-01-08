@@ -110,34 +110,12 @@ class ClassService {
             }
         );
     }
-
     getAllAssignment(classId) {
         return axios.get(API_URL + `getassignments?id=${classId}`, {
             headers: headers,
             mode: "no-cors",
         });
     }
-    getAllClassesAdmin(page,limit,asc){
-        return axios.get(API_URL + `getall?page=${page}&size=${limit}&asc=${asc}`, {
-          headers: {
-              "Cache-Control": "no-cache",
-              "Content-Type": "application/x-www-form-urlencoded",
-              "Access-Control-Allow-Origin": "*",
-          },
-          mode: "no-cors",
-      }
-      )};
-  
-      getAllClassesSearch(page,limit,asc,search){
-        return axios.get(API_URL + `filterclass?page=${page}&size=${limit}&asc=${asc}&className=${search}`, {
-          headers: {
-              "Cache-Control": "no-cache",
-              "Content-Type": "application/x-www-form-urlencoded",
-              "Access-Control-Allow-Origin": "*",
-          },
-          mode: "no-cors",
-      }
-      )};
     getivitelinkteacher(classId) {
         return axios.get(
             API_URL + `getlink?classId=${classId}&isTeacher=${true}`,
@@ -154,149 +132,88 @@ class ClassService {
                 headers: headers,
                 mode: "no-cors",
             }
-             
-        )
-    };
-    getivitelinkstudent(classId){
-      return axios
-      .get(
-          API_URL + `getlink?classId=${classId}&isTeacher=${false}`,
-          {
-              headers: {
-                  "Cache-Control": "no-cache",
-                  "Content-Type": "application/x-www-form-urlencoded",
-                  "Access-Control-Allow-Origin": "*",
-              },
-              mode: "no-cors",
-          }
-           
-      )
-  };
-  getivitelinkteacher(classId){
-    return axios
-    .get(
-        API_URL + `getlink?classId=${classId}&isTeacher=${true}`,
-        {
-            headers: {
-                "Cache-Control": "no-cache",
-                "Content-Type": "application/x-www-form-urlencoded",
-                "Access-Control-Allow-Origin": "*",
-            },
-            mode: "no-cors",
-        }
-         
-    )
-  }
-  getinvitestudent(id,email){
-    return axios
-    .get(
-        API_URL + `invitestudent?classId=${id}&studentEmail=${email}`,
-        {
-            headers: {
-                "Cache-Control": "no-cache",
-                "Content-Type": "application/x-www-form-urlencoded",
-                "Access-Control-Allow-Origin": "*",
-            },
-            mode: "no-cors",
-        }
-         
-    )
-
-  }
-  getinviteteacher(id,email){
-    return axios
-    .get(
-        API_URL + `inviteemailteacher?classId=${id}&teacherEmail=${email}`,
-        {
-            headers: {
-                "Cache-Control": "no-cache",
-                "Content-Type": "application/x-www-form-urlencoded",
-                "Access-Control-Allow-Origin": "*",
-            },
-            mode: "no-cors",
-        }
-         
-    )
-
-  }
-  checkmssv(classId,mssv){
-    return axios
-    .get(
-        API_URL + `checkmssv?classId=${classId}&mssv=${mssv}`,
-        {
-            headers: {
-                "Cache-Control": "no-cache",
-                "Content-Type": "application/x-www-form-urlencoded",
-                "Access-Control-Allow-Origin": "*",
-            },
-            mode: "no-cors",
-        } 
-    )
-  }
-  checkhavemssv(classId,userId){
-    return axios
-    .get(
-        API_URL + `checkhavemssv?classId=${classId}&userId=${userId}`,
-        {
-            headers: {
-                "Cache-Control": "no-cache",
-                "Content-Type": "application/x-www-form-urlencoded",
-                "Access-Control-Allow-Origin": "*",
-            },
-            mode: "no-cors",
-        } 
-    )
-  }
-  updatemssv(classId,studentId,mssv){
-    return axios.post(API_URL+'updatestudentid',{
-      data:{
-        classId:classId,
-        studentId:studentId,
-        mssv:mssv
-      }
-    },
-    {
-      headers: {
-          "Cache-Control": "no-cache",
-          "Content-Type": "application/x-www-form-urlencoded",
-          "Access-Control-Allow-Origin": "*",
-      },
-      mode: "no-cors",
-  } 
-)
-  }
-  async updateactive(classId,active){
-    return await axios.post(API_URL+'updateactive',{
-      data:{
-        id:classId,
-        active:active
-      }
-    },
-    {
-      headers: {
-          "Cache-Control": "no-cache",
-          "Content-Type": "application/x-www-form-urlencoded",
-          "Access-Control-Allow-Origin": "*",
-      },
-      mode: "no-cors",
+        );
     }
-    )
-}
-async getclassactive(id){
-  return await axios.get(API_URL+`getactive?id=${id}`,
-  {
-    headers: {
-        "Cache-Control": "no-cache",
-        "Content-Type": "application/x-www-form-urlencoded",
-        "Access-Control-Allow-Origin": "*",
-    },
-    mode: "no-cors",
-  }
-  )
-}
-async getAllStudentAdmin(classId,page,limit,asc){
-  return await axios.get(API_URL + `getallstudentinclass?classId=${classId}&page=${page}&size=${limit}&asc=${asc}`
-)}
+    getinviteteacher(id, email) {
+        return axios.get(
+            API_URL + `inviteemailteacher?classId=${id}&teacherEmail=${email}`,
+            {
+                headers: headers,
+                mode: "no-cors",
+            }
+        );
+    }
+    checkmssv(classId, mssv) {
+        return axios.get(
+            API_URL + `checkmssv?classId=${classId}&mssv=${mssv}`,
+            {
+                headers: headers,
+                mode: "no-cors",
+            }
+        );
+    }
+    checkhavemssv(classId, userId) {
+        return axios.get(
+            API_URL + `checkhavemssv?classId=${classId}&userId=${userId}`,
+            {
+                headers: headers,
+                mode: "no-cors",
+            }
+        );
+    }
+    updatemssv(classId, studentId, mssv) {
+        return axios.post(
+            API_URL + "updatestudentid",
+            {
+                data: {
+                    classId: classId,
+                    studentId: studentId,
+                    mssv: mssv,
+                },
+            },
+            {
+                headers: headers,
+                mode: "no-cors",
+            }
+        );
+    }
+    getScorings(classId) {
+        return axios.get(API_URL + `getscorings?id=${classId}`, {
+            headers: headers,
+        });
+    }
+    async updateactive(classId,active){
+        return await axios.post(API_URL+'updateactive',{
+          data:{
+            id:classId,
+            active:active
+          }
+        },
+        {
+          headers: {
+              "Cache-Control": "no-cache",
+              "Content-Type": "application/x-www-form-urlencoded",
+              "Access-Control-Allow-Origin": "*",
+          },
+          mode: "no-cors",
+        }
+        )
+    }
+    async getclassactive(id){
+      return await axios.get(API_URL+`getactive?id=${id}`,
+      {
+        headers: {
+            "Cache-Control": "no-cache",
+            "Content-Type": "application/x-www-form-urlencoded",
+            "Access-Control-Allow-Origin": "*",
+        },
+        mode: "no-cors",
+      }
+      )
+    }
+    async getAllStudentAdmin(classId,page,limit,asc){
+      return await axios.get(API_URL + `getallstudentinclass?classId=${classId}&page=${page}&size=${limit}&asc=${asc}`
+    )}
 }
 
 export default new ClassService();
