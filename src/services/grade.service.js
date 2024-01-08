@@ -70,13 +70,42 @@ class GradeService {
       mode: "no-cors",
     });
   }
-  updateGradeOfStudent(assignmentId, mssv, grade, classId) {
+  updateGradeOfStudent(assignmentId, mssv, grade, classId, teacherId) {
     return axios.post(
       API_URL + `updateScore`,
       {
         assignmentId: assignmentId,
         mssv: mssv,
         grade: grade,
+        classId: classId,
+        teacherId: teacherId,
+      },
+      {
+        headers: headers,
+        mode: "no-cors",
+      }
+    );
+  }
+  updateBatchScore(assignmentId, classId, data, teacherId) {
+    return axios.post(
+      API_URL + `updateBatchScore`,
+      {
+        assignmentId: assignmentId,
+        classId: classId,
+        data: data,
+        teacherId: teacherId,
+      },
+      {
+        headers: headers,
+        mode: "no-cors",
+      }
+    );
+  }
+  finalizeGrade(assignmentId, classId) {
+    return axios.post(
+      API_URL + `finalize`,
+      {
+        assignmentId: assignmentId,
         classId: classId,
       },
       {
