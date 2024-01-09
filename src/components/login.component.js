@@ -29,7 +29,6 @@ class LoginForm extends Component {
             password: "",
             loading: false,
             message: "",
-            rememberMe: false,
         };
     }
 
@@ -39,12 +38,6 @@ class LoginForm extends Component {
         });
         this.setState({ message: "" });
     }
-
-    onChangeRememberMe = () => {
-        this.setState({
-            rememberMe: !this.state.rememberMe,
-        });
-    };
 
     onChangePassword(e) {
         this.setState({
@@ -158,16 +151,6 @@ class LoginForm extends Component {
                         >
                             Forgot password?
                         </a>
-                    </div>
-
-                    <div className="form-group">
-                        <input
-                            type="checkbox"
-                            value={this.state.rememberMe}
-                            onChange={this.onChangeRememberMe}
-                            id="rememberMe"
-                        />{" "}
-                        <label for="rememberMe">Remember me</label>
                     </div>
 
                     <div className="form-group">

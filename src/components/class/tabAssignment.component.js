@@ -304,7 +304,7 @@ export function TabAssignment({ id }) {
                 )}
                 {!loading && listGrade.length === 0 && (
                     <div className="text-gray-900 text-center">
-                        No assignment found.
+                        No grade structure found.
                     </div>
                 )}
                 {!loading && listGrade?.length !== 0 && (
