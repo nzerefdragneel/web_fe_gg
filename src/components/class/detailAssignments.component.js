@@ -148,15 +148,17 @@ export function DetailAssignment(id) {
       });
   };
 
-  const templatesForClass = () => {};
-  students.map((user) => {
-    return {
-      MSSV: user.mssv,
-      Grade: grades.find((grade) => grade.studentId === user.studentId)?.score
-        ? grades.find((grade) => grade.studentId === user.studentId)?.score
-        : "N/A",
-    };
-  });
+  const templatesForClass = () =>
+    students.map((user) => {
+      return {
+        MSSV: user.mssv,
+        Grade: grades.find((grade) => grade.studentId === user.studentId)?.score
+          ? grades.find((grade) => grade.studentId === user.studentId)?.score
+          : "N/A",
+      };
+    });
+
+  console.log(templatesForClass());
 
   const handleExport = () => {
     const headings = [["MSSV", "Grade"]];
