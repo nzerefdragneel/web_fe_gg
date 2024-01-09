@@ -292,7 +292,9 @@ export function TabAssignment({ id }) {
                 >
                     <button className="bg-dark-green hover:bg-medium-green  hover:text-black text-white font-bold py-2 px-4 rounded-full flex items-center">
                         <PlusIcon className="w-5 h-5 mr-2" />
-                        Create a grade composition
+                        <span className="hover:text-black">
+                            Create a grade composition
+                        </span>
                     </button>
                 </Link>
             </div>
@@ -421,6 +423,14 @@ export function TabAssignment({ id }) {
                                     <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
                                         <button
                                             type="button"
+                                            className="inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
+                                            onClick={() => setOpenUpdate(false)}
+                                            ref={cancelButtonRef}
+                                        >
+                                            Cancel
+                                        </button>
+                                        <button
+                                            type="button"
                                             className="inline-flex w-full justify-center rounded-md bg-dark-green px-3 py-2 text-sm font-semibold text-white hover:text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-medium-green sm:ml-3 sm:w-auto"
                                             onClick={(e) => {
                                                 setIsLoading(true);
@@ -431,14 +441,6 @@ export function TabAssignment({ id }) {
                                                 <span className="spinner-border spinner-border-sm mr-1"></span>
                                             )}
                                             Confirm
-                                        </button>
-                                        <button
-                                            type="button"
-                                            className="inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
-                                            onClick={() => setOpenUpdate(false)}
-                                            ref={cancelButtonRef}
-                                        >
-                                            Cancel
                                         </button>
                                     </div>
                                 </Dialog.Panel>

@@ -58,6 +58,7 @@ export function SimpleSidebar() {
         </Card>
     );
 }
+
 const Profile = () => {
     const user = JSON.parse(localStorage.getItem("user"));
     const [isloading, setIsloading] = useState(false);
@@ -95,49 +96,55 @@ const Profile = () => {
                         to={"/edituser"}
                         className=" text-gray-900 hover:no-underline "
                     >
-                        <button className="bg-dark-green hover:bg-medium-green hover:text-black text-white font-bold py-2 px-4 rounded-full flex items-center">
-                            <PencilSquareIcon className="w-5 h-5 font-bold hover:text-dark-green cursor-pointer mr-1" />
-                            Edit Profile
+                        <button className="bg-dark-green hover:bg-medium-green text-white font-bold py-2 px-4 rounded-full flex items-center">
+                            <PencilSquareIcon className="w-5 h-5 font-bold  cursor-pointer mr-1" />
+                            <span className="hover:text-black">
+                                Edit Profile
+                            </span>
                         </button>
                     </Link>
                 </div>
 
                 <div className="flex flex-col m-4 ">
-                    <div className="text-6xl text-dark-green lg:ml-32 sm:ml-24 tracking-widest font-bold mt-3 z-10">
-                        Profile
-                    </div>
                     <div className=" mx-auto mt-2">
                         {isloading && (
                             <span className="spinner-border spinner-border-lg text-dark-green"></span>
                         )}
                     </div>
                     {!isloading && (
-                        <div className="bg-slate-50 rounded-sm shadow-md -mt-8 px-8 pb-4 pt-12 grid grid-flow-row-dense lg:grid-cols-2 grid-cols-1 gap-x-0 gap-y-4 w-auto mx-20">
-                            <div className=" lg:ml-12 uppercase text-dark-green">
-                                Full Name:
+                        <>
+                            <div className="text-6xl text-dark-green lg:ml-32 sm:ml-24 xl:ml-44 tracking-widest font-bold mt-3 z-10">
+                                <span className="bg-gradient-to-t from-slate-50 to-white py-0 px-2 m-0">
+                                    Profile
+                                </span>
                             </div>
-                            <div className="break-words lg:text-left sm:text-right">
-                                {profile?.fullname || (
-                                    <span className="italic text-neutral-500">
-                                        Not provided yet
-                                    </span>
-                                )}
+                            <div className="bg-slate-50 shadow-md -mt-6 px-8 pb-4 pt-12 grid grid-flow-row-dense lg:grid-cols-2 grid-cols-1 gap-x-0 gap-y-4 w-auto mx-20  border-dark-green border-2">
+                                <div className=" lg:ml-12 xl:ml-44 uppercase text-dark-green">
+                                    Full Name:
+                                </div>
+                                <div className="break-words lg:text-left sm:text-right">
+                                    {profile?.fullname || (
+                                        <span className="italic text-neutral-500">
+                                            Not provided yet
+                                        </span>
+                                    )}
+                                </div>
+                                <hr className="lg:col-span-2 text-light-green mx-auto w-11/12 xl:w-8/12" />
+                                <div className=" text-dark-green lg:ml-12 xl:ml-44 uppercase">
+                                    Username:
+                                </div>
+                                <div className="break-words lg:text-left sm:text-right">
+                                    {profile?.username || "Not provided yet"}
+                                </div>
+                                <hr className="lg:col-span-2 text-light-green mx-auto w-11/12 xl:w-8/12" />
+                                <div className=" text-dark-green lg:ml-12 xl:ml-44 uppercase">
+                                    Email:
+                                </div>
+                                <div className="break-words lg:text-left sm:text-right">
+                                    {profile?.email || "Not provided yet"}
+                                </div>
                             </div>
-                            <hr className="lg:col-span-2 text-light-green mx-auto w-11/12" />
-                            <div className=" text-dark-green lg:ml-12 uppercase">
-                                Username:
-                            </div>
-                            <div className="break-words lg:text-left sm:text-right">
-                                {profile?.username || "Not provided yet"}
-                            </div>
-                            <hr className="lg:col-span-2 text-light-green mx-auto w-11/12" />
-                            <div className=" text-dark-green lg:ml-12 uppercase">
-                                Email:
-                            </div>
-                            <div className="break-words lg:text-left sm:text-right">
-                                {profile?.email || "Not provided yet"}
-                            </div>
-                        </div>
+                        </>
                     )}
                 </div>
             </div>

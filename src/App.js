@@ -98,7 +98,7 @@ class App extends Component {
 
         return (
             <div className="">
-                <div className="pt-3 pb-4 px-32 flex flex-row flex-wrap justify-between border-b mb-2">
+                <div className="pt-3 pb-4 px-32 flex flex-row flex-wrap justify-between border-b">
                     <div className="flex flex-row flex-wrap text-lg items-center">
                         <img
                             src="./assets/logo.png"
@@ -151,7 +151,7 @@ class App extends Component {
                 {status === true && (
                     <div>
                         <div className="min-h-screen flex">
-                            <div className="flex-none w-64">
+                            <div className="flex-none w-64 h-screen">
                                 {roles !== "admin" && currentUser && (
                                     <SidesMenu />
                                 )}

@@ -46,7 +46,7 @@ const UpdateGrade = (student, prevGrade, handleOpen, assignmentId, classId) => {
 
     const notifyUpdateSusscess = () => toast.success("Update Grade Success!");
     const notifyUpdateFail = () => toast.error("Update Grade Fail!");
-  const teacherId = JSON.parse(localStorage.getItem("user")).id;
+    const teacherId = JSON.parse(localStorage.getItem("user")).id;
 
     function handleSubmit(e) {
         e.preventDefault();
@@ -61,13 +61,19 @@ const UpdateGrade = (student, prevGrade, handleOpen, assignmentId, classId) => {
                     setIsLoading(false);
                     return;
                 }
+                if (grade > 10 || grade < 0) {
+                    notifyUpdateFail();
+                    setMessage("Grade must be between 0 and 10");
+                    setIsLoading(false);
+                    return;
+                }
                 gradeService
                     .updateGradeOfStudent(
                         student.assignmentId,
                         student.student.mssv,
                         grade,
                         student.classId,
-            teacherId
+                        teacherId
                     )
                     .then(
                         (res) => {
@@ -76,7 +82,7 @@ const UpdateGrade = (student, prevGrade, handleOpen, assignmentId, classId) => {
                                 setIsLoading(false);
                                 setTimeout(() => {
                                     window.location.reload();
-                                }, 800);
+                                }, 1000);
                             }
                         },
                         (error) => {
@@ -91,6 +97,7 @@ const UpdateGrade = (student, prevGrade, handleOpen, assignmentId, classId) => {
                 console.error("Error fetching data:", error.message);
             }
         }
+
         updateGrade();
     }
 
