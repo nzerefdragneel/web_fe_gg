@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate} from "react-router-dom";
 import classService from '../../services/class.service';
 const TABLE_HEAD = ["User Id",
-"Enroll Date",
 "Student Id",
 "Fullname"];
 
@@ -82,6 +81,30 @@ export function TabEverybodyManager() {
       });
 
     }
+    const handleMapMssv= (studentId,mssv) => {
+      console.log(studentId,mssv);
+      classService.updatemssv(classId,studentId,mssv)
+      .then((response) => {
+        console.log(response);
+        setMessage(response.data.message);
+        setStudent(Student.map((Student) => {
+          if (Student.studentId === studentId) {
+            Student.mssv = mssv;
+          }
+          return Student;
+        }));
+      }
+      ).catch((error) => {
+        const resMessage =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+          setMessage(resMessage);
+      });
+
+    }
     useEffect(() => {
         fetchStudent();
     }, [currentpage,limit,ascending]);
@@ -143,25 +166,25 @@ export function TabEverybodyManager() {
                 return (
                     <tr key={Student.studentId}>
                       <td>{Student.studentId}</td>
-                      <td>{Student.enrollmentDate}</td>
-                      <td>{Student.mssv}</td>
-                      <td>{Student.studentenrollment.fullname}</td>
-                      <td><div className="actions">
+                      <td>{Student.mssv?Student.mssv:"Null"}</td>
+                      <td>{Student.studentenrollment.fullname?Student.studentenrollment.fullname:Student.studentenrollment.username}</td>
+                      {/* <td>
+                        <div className="actions">
                         {Student.studentenrollment.active===1&&
-                      <button type="button" onClick={() => handleActive(Student.id, Student.active)} class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm  me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Active</button>
+                       <button type="button" onClick={() => handleActive(Student.id, Student.active)} class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm  me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Active</button>
                         }
                         {Student.active===0&&
                         <button type="button"  class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Inactive</button>}
                         </div>
-                        </td>
-                     
+                      </td>
+                      */}
                       <td>
                         <div className="actions">
                         {Student.mssv===null&&
-                      <button type="button" onClick={() => handleActive(Student.id, Student.active)} class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm  me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Map ID</button>
+                      <button type="button" onClick={() => handleMapMssv(Student.studentId,Student.mssv)} class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm  me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Map ID</button>
                         }
                         {Student.active!==null&&
-                        <button type="button"  class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Unmap ID</button>}
+                        <button type="button" onClick={() => handleMapMssv(Student.studentId,"null")} class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Unmap ID</button>}
                       
                         </div>
                       </td>
