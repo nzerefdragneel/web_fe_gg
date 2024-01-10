@@ -6,7 +6,7 @@ export default class SimpleFooter extends Component {
             <div className="border-t bottom-0 px-40 pb-8 pt-20 flex flex-row flex-wrap gap-2 justify-between">
                 <div className="flex flex-col mt-2 mr-5">
                     <img
-                        src="./assets/logo.png"
+                        src="/assets/logo.png"
                         className="w-14 h-14 mb-4"
                         alt="logo"
                     />
@@ -56,28 +56,28 @@ export default class SimpleFooter extends Component {
                         <div className="flex flex-row items-center gap-2 mt-2">
                             <div className="rounded bg-neutral-200 flex justify-center items-center p-2">
                                 <img
-                                    src="./assets/facebook.svg"
+                                    src="/assets/facebook.svg"
                                     className="w-3 h-3"
                                     alt="Facebook"
                                 />
                             </div>
                             <div className="rounded bg-neutral-200 flex justify-center items-center p-2">
                                 <img
-                                    src="./assets/instagram.svg"
+                                    src="/assets/instagram.svg"
                                     className="w-3 h-3"
                                     alt="Facebook"
                                 />
                             </div>
                             <div className="rounded bg-neutral-200 flex justify-center items-center p-2">
                                 <img
-                                    src="./assets/twitter.svg"
+                                    src="/assets/twitter.svg"
                                     className="w-3 h-3"
                                     alt="Facebook"
                                 />
                             </div>
                             <div className="rounded bg-neutral-200 flex justify-center items-center p-2">
                                 <img
-                                    src="./assets/linkedin-in.svg"
+                                    src="/assets/linkedin-in.svg"
                                     className="w-3 h-3"
                                     alt="Facebook"
                                 />

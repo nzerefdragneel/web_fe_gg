@@ -189,7 +189,7 @@ class LoginForm extends Component {
                     >
                         <div className="rounded-lg bg-neutral-200 flex justify-center items-center p-2 mr-2 hover:cursor-pointer">
                             <img
-                                src="./assets/google.svg"
+                                src="/assets/google.svg"
                                 className="w-10 h-10"
                                 alt="Google"
                             />
@@ -200,7 +200,7 @@ class LoginForm extends Component {
                     >
                         <div className="rounded-lg bg-neutral-200 flex justify-center items-center p-2 hover:cursor-pointer">
                             <img
-                                src="./assets/facebook.svg"
+                                src="/assets/facebook.svg"
                                 className="w-10 h-10"
                                 alt="Facebook"
                             />

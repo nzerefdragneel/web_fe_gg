@@ -298,15 +298,15 @@ export function TabAssignment({ id }) {
                     </button>
                 </Link>
             </div>
-            <div className="grid grid-flow-row-dense gap-2 mx-40 my-4">
+            <div className="grid grid-flow-row-dense gap-2 mx-40 mt-4">
                 {loading && (
                     <div className="place-items-center mx-auto col-span-2">
                         <span className="spinner-border spinner-border-lg text-dark-green"></span>
                     </div>
                 )}
                 {!loading && listGrade.length === 0 && (
-                    <div className="text-gray-900 text-center">
-                        No grade structure found.
+                    <div className="text-xl font-semibold text-center text-dark-green">
+                        Class haven't any Grade Composition
                     </div>
                 )}
                 {!loading && listGrade?.length !== 0 && (

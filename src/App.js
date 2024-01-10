@@ -20,9 +20,7 @@ import ResetPassword from "./components/resetPassword.component";
 import Invitation from "./components/invitation.component";
 import Bus from "./common/bus";
 import { ClassDetail } from "./components/class/classdetail.component";
-import CreateClass, {
-    ClassCreate,
-} from "./components/class/createClass.component";
+import CreateClass from "./components/class/createClass.component";
 import { SidesMenuAdmin } from "./components/adminside/sidemenuadmin.component";
 import AdminHome from "./components/adminside/adminhome.component";
 import ClassManager from "./components/adminside/classmanager.component";
@@ -101,7 +99,7 @@ class App extends Component {
                 <div className="pt-3 pb-4 px-32 flex flex-row flex-wrap justify-between border-b">
                     <div className="flex flex-row flex-wrap text-lg items-center">
                         <img
-                            src="./assets/logo.png"
+                            src="/assets/logo.png"
                             className="w-10 h-10 mr-2"
                             alt="logo"
                         />
@@ -151,7 +149,7 @@ class App extends Component {
                 {status === true && (
                     <div>
                         <div className="min-h-screen flex">
-                            <div className="flex-none w-64 h-screen">
+                            <div className="flex-none w-64">
                                 {roles !== "admin" && currentUser && (
                                     <SidesMenu />
                                 )}

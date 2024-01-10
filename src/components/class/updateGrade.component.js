@@ -1,11 +1,8 @@
-import React, { useRef, useEffect } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
-import { tab } from "@material-tailwind/react";
+import React, { useRef } from "react";
 import {} from "@heroicons/react/24/solid";
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import { useState } from "react";
-import { ToastContainer, toast } from "react-toastify";
 
 import gradeService from "../../services/grade.service";
 
@@ -36,16 +33,21 @@ const checkPoint = (value) => {
     }
 };
 
-const UpdateGrade = (student, prevGrade, handleOpen, assignmentId, classId) => {
+const UpdateGrade = ({
+    student,
+    prevGrade,
+    handleClose,
+    assignmentId,
+    classId,
+    notifyUpdateSusscess,
+    notifyUpdateFail,
+}) => {
     const fref = useRef(null);
     const [grade, setGrade] = useState("");
     const [isLoading, setIsLoading] = useState(false);
-    const navigate = useNavigate();
     const [message, setMessage] = useState("");
     const [isSubmit, setIsSubmit] = useState(false);
 
-    const notifyUpdateSusscess = () => toast.success("Update Grade Success!");
-    const notifyUpdateFail = () => toast.error("Update Grade Fail!");
     const teacherId = JSON.parse(localStorage.getItem("user")).id;
 
     function handleSubmit(e) {
@@ -69,10 +71,10 @@ const UpdateGrade = (student, prevGrade, handleOpen, assignmentId, classId) => {
                 }
                 gradeService
                     .updateGradeOfStudent(
-                        student.assignmentId,
-                        student.student.mssv,
+                        assignmentId,
+                        student.mssv,
                         grade,
-                        student.classId,
+                        classId,
                         teacherId
                     )
                     .then(
@@ -123,7 +125,7 @@ const UpdateGrade = (student, prevGrade, handleOpen, assignmentId, classId) => {
                                         className="form-control p-3 rounded required"
                                         name="classname"
                                         readOnly={true}
-                                        value={student.student.mssv}
+                                        value={student.mssv}
                                     />
                                 </div>
                                 <div className="form-group">
@@ -137,7 +139,7 @@ const UpdateGrade = (student, prevGrade, handleOpen, assignmentId, classId) => {
                                         type="number"
                                         className="form-control p-3 rounded"
                                         name="email"
-                                        placeholder={student.prevGrade}
+                                        placeholder={prevGrade}
                                         onChange={(e) => {
                                             setGrade(e.target.value);
                                         }}
@@ -151,7 +153,15 @@ const UpdateGrade = (student, prevGrade, handleOpen, assignmentId, classId) => {
                                 )}
                                 <div className="form-group text-right">
                                     <button
-                                        className="w-48 py-2.5 text-white bg-dark-green rounded-lg text-base mt-3"
+                                        className="w-32 py-2.5 text-white bg-error-color rounded-lg text-base mt-3 mr-3"
+                                        type="button"
+                                        onClick={handleClose}
+                                    >
+                                        Cancel
+                                    </button>
+                                    <button
+                                        type="submit"
+                                        className="w-32 py-2.5 text-white bg-dark-green rounded-lg text-base mt-3"
                                         onClick={() => {
                                             setIsLoading(true);
                                         }}
@@ -166,7 +176,6 @@ const UpdateGrade = (student, prevGrade, handleOpen, assignmentId, classId) => {
                         </Form>
                     </div>
                 </div>
-                <ToastContainer />
             </div>
         </>
     );
