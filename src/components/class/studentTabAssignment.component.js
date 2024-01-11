@@ -22,6 +22,7 @@ import gradeService from "../../services/grade.service";
 import ReviewRequest from "./reviewRequest.component";
 import gradereviewService from "../../services/gradereview.service";
 import { list } from "postcss";
+import classService from "../../services/class.service";
 
 const required = (value) => {
   if (!value) {
@@ -36,6 +37,7 @@ const required = (value) => {
 export function StudentTabAssignment({ id }) {
   const [listAssignments, setlistAssignments] = useState([]);
   const [listGrade, setListGrade] = useState([]);
+  const [listTeacher, setListTeacher] = useState([]);
   const [message, setMessage] = useState("");
   const [open, setOpen] = useState(false);
   const [chosenAssignment, setChosenAssignment] = useState();
@@ -83,10 +85,17 @@ export function StudentTabAssignment({ id }) {
         console.error("Error fetching data");
         setMessage("Error fetching data");
       }
+      try {
+        const res = await classService.getlistteachers(id);
+        setListTeacher(res?.data?.data);
+      } catch (error) {
+        console.error("Error fetching data");
+        setMessage("Error fetching data");
+      }
       setLoading(false);
     };
     fetchData();
-  }, [id, isSubmit]);
+  }, [id, userId]);
 
   return (
     <div className=" ">
@@ -162,9 +171,14 @@ export function StudentTabAssignment({ id }) {
                           )?.score || "N/A") +
                           (listGradeReview.find(
                             (item) => item.assignmentId === value.assignmentId
-                          )?.final_decision === null
-                            ? " (Review Requested)"
-                            : " (Resolved)")
+                          ) !== undefined
+                            ? listGradeReview.find(
+                                (item) =>
+                                  item.assignmentId === value.assignmentId
+                              )?.final_decision === null
+                              ? " (Review Requested)"
+                              : " (Resolved)"
+                            : "")
                         : "N/A"}
                     </div>
                   </Typography>
@@ -188,6 +202,7 @@ export function StudentTabAssignment({ id }) {
               handleOpen={() => {
                 setOpen(!open);
               }}
+              listTeacher={listTeacher}
             ></ReviewRequest>
           </DialogBody>
         </Dialog>

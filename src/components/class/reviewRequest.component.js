@@ -6,6 +6,7 @@ import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
+import notificationService from "../../services/notification.service";
 
 import gradeReviewService from "../../services/gradereview.service";
 
@@ -36,7 +37,13 @@ const checkPoint = (value) => {
   }
 };
 
-const ReviewRequest = (assignmentId, classId, score, handleOpen) => {
+const ReviewRequest = (
+  assignmentId,
+  classId,
+  score,
+  handleOpen,
+  listTeacher
+) => {
   const fref = useRef(null);
   const [grade, setGrade] = useState("");
   const [reason, setReason] = useState("");
@@ -74,6 +81,14 @@ const ReviewRequest = (assignmentId, classId, score, handleOpen) => {
           .then(
             (res) => {
               if (res.status === 201) {
+                notificationService.createBatchNotification(
+                  "Review Request",
+                  `Request for review grade of assignment ${assignmentId.assignmentId} in class ${assignmentId.classId}`,
+                  assignmentId.classId,
+                  studentId,
+                  assignmentId.listTeacher.map((teacher) => teacher.teacherId),
+                  assignmentId.assignmentId
+                );
                 notifyUpdateSusscess();
                 setIsLoading(false);
                 setTimeout(() => {

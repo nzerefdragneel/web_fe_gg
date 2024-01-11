@@ -19,7 +19,6 @@ import Input from "react-validation/build/input";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import gradeService from "../../services/grade.service";
-import ReviewRequest from "./reviewRequest.component";
 import gradereviewService from "../../services/gradereview.service";
 import { list } from "postcss";
 import classService from "../../services/class.service";

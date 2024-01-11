@@ -4,6 +4,7 @@ import gradeService from "../../services/grade.service";
 import classService from "../../services/class.service";
 import gradeReviewService from "../../services/gradereview.service";
 import commentService from "../../services/comment.service";
+import notificationService from "../../services/notification.service";
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import {
@@ -31,6 +32,7 @@ export function DetailReview() {
   const [assignment, setAssignment] = useState({});
   const [listStudents, setListStudents] = useState([]);
   const [listComments, setListComments] = useState([]);
+  const [listTeacher, setListTeacher] = useState([]);
   const [isTeacher, setIsTeacher] = useState(false);
   const [comment, setComment] = useState("");
   const [classData, setClassData] = useState({});
@@ -48,8 +50,19 @@ export function DetailReview() {
           .updateAcceptedGradeReview(gradeReview.reviewId, option)
           .then(
             (res) => {
-              if (res.status === 201) {
+              if (res.status === 200) {
+                notificationService.createNotification(
+                  "Grade Review Request",
+                  `Your grade review request has been ${option}`,
+                  classId,
+                  userId,
+                  studentId,
+                  assignmentId
+                );
                 notifyCreateSusscess();
+                setUpdateLoading(false);
+              } else {
+                notifyCreateFail();
                 setUpdateLoading(false);
               }
             },
@@ -74,11 +87,32 @@ export function DetailReview() {
     async function addComment() {
       try {
         if (comment !== "") {
-          await commentService.createComment(
-            gradeReview.reviewId,
-            comment,
-            userId
-          );
+          await commentService
+            .createComment(gradeReview.reviewId, comment, userId)
+            .then((res) => {
+              if (res.status !== 201) {
+                return;
+              }
+              if (isTeacher) {
+                notificationService.createNotification(
+                  "Teacher Reply",
+                  `Teacher commented on your grade review request`,
+                  classId,
+                  userId,
+                  studentId,
+                  assignmentId
+                );
+              } else {
+                notificationService.createBatchNotification(
+                  "Student Reply",
+                  `Student commented on the grade review request`,
+                  classId,
+                  userId,
+                  listTeacher.map((teacher) => teacher.teacherId),
+                  assignmentId
+                );
+              }
+            });
 
           setListComments([
             ...listComments,
@@ -124,6 +158,13 @@ export function DetailReview() {
         setMessage("Error fetching data");
       }
       try {
+        const res = await classService.getlistteachers(classId);
+        setListTeacher(res?.data?.data);
+      } catch (error) {
+        console.error("Error fetching data");
+        setMessage("Error fetching data");
+      }
+      try {
         const res =
           await gradeReviewService.getGradeReviewRequestByStudentIdAndAssignmentId(
             studentId,
@@ -138,7 +179,7 @@ export function DetailReview() {
       setLoading(false);
     };
     fetchData();
-  }, [assignmentId]);
+  }, [assignmentId, classId, studentId, userId]);
 
   return (
     <div className=" ">
@@ -169,63 +210,60 @@ export function DetailReview() {
           <div className="row">
             <div className="text-2xl text-dark-green font-bold mt-3 px-4">
               Review for Student{" "}
-              {listStudents.find((x) => x.studentId == studentId)?.mssv}
+              {listStudents.find((x) => x.studentId == studentId)
+                ?.studentenrollment?.fullname ?? ""}
             </div>
           </div>
           <div className="row">
-            <div className="text-2xl text-dark-green font-bold mt-3 px-4">
+            <div className="mt-3 px-4">
               Current Grade: {gradeReview.currentGrade}
             </div>
-          </div>
-          <div className="row">
-            <div className="text-2xl text-dark-green font-bold mt-3 px-4">
+            <div className="mt-3 px-4">
               Expectation Grade: {gradeReview.expectationGrade}
             </div>
           </div>
           <div className="row">
-            <div className="text-2xl text-dark-green font-bold mt-3 px-4">
+            <div className="mt-3 px-4">
               Student Explanation: {gradeReview.studentExplanation}
             </div>
           </div>
-          <div className="row py-4">
-            <div className="text-2xl text-dark-green font-bold mt-3 px-4">
-              <button
-                className="bg-dark-green text-white font-bold py-2 px-4 rounded"
-                onClick={() => {
-                  setUpdateLoading(true);
-                  handleRequest("accepted");
-                }}
-                disabled={updateLoading}
-              >
-                {updateLoading ? (
-                  <div className="place-items-center mx-auto col-span-2">
+          {isTeacher && (
+            <div className="row py-4">
+              <div className="mt-3 px-4">
+                <button
+                  className="bg-dark-green text-white py-2 px-4 rounded"
+                  onClick={() => {
+                    setUpdateLoading(true);
+                    handleRequest("accepted");
+                  }}
+                  disabled={updateLoading}
+                >
+                  {updateLoading ? (
                     <span className="spinner-border spinner-border-lg text-dark-green"></span>
-                  </div>
-                ) : (
-                  "Accept Request"
-                )}
-              </button>
-            </div>
-            <div className="text-2xl text-dark-green font-bold mt-3 px-4">
-              <button
-                className="bg-dark-green text-white font-bold py-2 px-4 rounded"
-                onClick={() => {
-                  setUpdateLoading(true);
-                  handleRequest("refused");
-                }}
-                disabled={updateLoading}
-              >
-                {updateLoading ? (
-                  <div className="place-items-center mx-auto col-span-2">
+                  ) : (
+                    "Accept Request"
+                  )}
+                </button>
+              </div>
+              <div className="mt-3 px-4">
+                <button
+                  className="bg-dark-green text-white py-2 px-4 rounded"
+                  onClick={() => {
+                    setUpdateLoading(true);
+                    handleRequest("refused");
+                  }}
+                  disabled={updateLoading}
+                >
+                  {updateLoading ? (
                     <span className="spinner-border spinner-border-lg text-dark-green"></span>
-                  </div>
-                ) : (
-                  "Refuse Request"
-                )}
-              </button>
+                  ) : (
+                    "Refuse Request"
+                  )}
+                </button>
+              </div>
             </div>
-          </div>
-          <div>
+          )}
+          <div className="py-4">
             <Form onSubmit={handleSubmit} ref={fref}>
               <div>
                 <div className="form-group">
@@ -246,7 +284,7 @@ export function DetailReview() {
             {listComments.map((comment) => {
               return (
                 <div className="row">
-                  <div className="text-2xl text-dark-green font-bold mt-3 px-4">
+                  <div className="mt-3 px-4">
                     {comment.commenterId === userId
                       ? "You"
                       : isTeacher
