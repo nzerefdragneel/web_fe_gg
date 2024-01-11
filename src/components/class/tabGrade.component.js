@@ -1,13 +1,5 @@
 import { useState, useEffect } from "react";
 import classService from "../../services/class.service";
-import {
-  List,
-  ListItem,
-  ListItemPrefix,
-  Avatar,
-  Card,
-  Typography,
-} from "@material-tailwind/react";
 import { read, utils, writeFile } from "xlsx";
 
 export function TabGrade(id) {
@@ -27,24 +19,6 @@ export function TabGrade(id) {
     fetchData();
   }, [id]);
 
-  const handleImport = ($event) => {
-    const files = $event.target.files;
-    if (files.length) {
-      const file = files[0];
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        const wb = read(event.target.result);
-        const sheets = wb.SheetNames;
-
-        if (sheets.length) {
-          const rows = utils.sheet_to_json(wb.Sheets[sheets[0]]);
-          console.log(rows);
-        }
-      };
-      reader.readAsArrayBuffer(file);
-    }
-  };
-
   const assignmentsList = [];
   scorings.forEach((scoring) => {
     scoring.studentScore.forEach((assignment) => {
@@ -59,8 +33,6 @@ export function TabGrade(id) {
       }
     });
   });
-
-  console.log("assignmentsList: ", assignmentsList);
 
   const studentsGrade = [];
   scorings.forEach((scoring) => {
@@ -83,8 +55,6 @@ export function TabGrade(id) {
     studentsGrade.push(studentGrade);
   });
 
-  console.log("studentGrade", studentsGrade);
-
   const templatesForGrade = () =>
     studentsGrade.map((user) => {
       const userGrade = {};
@@ -95,8 +65,6 @@ export function TabGrade(id) {
       userGrade["Total"] = user.total;
       return userGrade;
     });
-
-  console.log(templatesForGrade());
 
   const handleExport = () => {
     const headings = [["ID", ...assignmentsList, "Total"]];

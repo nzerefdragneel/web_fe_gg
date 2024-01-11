@@ -31,7 +31,6 @@ export function TabEverybody(id) {
       try {
         const res = await classService.getliststudents(id.id);
         setclassStudent(res.data.data);
-        console.log(classStudents);
         setMessageStudent("");
       } catch (error) {
         console.error("Error fetching data:", error.message);
@@ -69,7 +68,6 @@ export function TabEverybody(id) {
               },
             };
           });
-          console.log(id, students);
         }
         setclassStudent(students);
       };

@@ -7,7 +7,7 @@ import Input from "react-validation/build/input";
 import { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 
-import gradeService from "../../services/grade.service";
+import gradeReviewService from "../../services/gradereview.service";
 
 const required = (value) => {
   if (!value) {
@@ -36,24 +36,25 @@ const checkPoint = (value) => {
   }
 };
 
-const UpdateGrade = (student, prevGrade, handleOpen, assignmentId, classId) => {
+const ReviewRequest = (assignmentId, classId, score, handleOpen) => {
   const fref = useRef(null);
   const [grade, setGrade] = useState("");
+  const [reason, setReason] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const [message, setMessage] = useState("");
   const [isSubmit, setIsSubmit] = useState(false);
 
-  const notifyUpdateSusscess = () => toast.success("Update Grade Success!");
-  const notifyUpdateFail = () => toast.error("Update Grade Fail!");
-  const teacherId = JSON.parse(localStorage.getItem("user")).id;
+  const notifyUpdateSusscess = () => toast.success("Request Success!");
+  const notifyUpdateFail = () => toast.error("Request Fail!");
+  const studentId = JSON.parse(localStorage.getItem("user")).id;
 
   function handleSubmit(e) {
     e.preventDefault();
     if (fref.current) {
       fref.current.validateAll();
     }
-    async function updateGrade() {
+    async function submitReviewRequest() {
       try {
         if (grade === "") {
           notifyUpdateFail();
@@ -61,13 +62,14 @@ const UpdateGrade = (student, prevGrade, handleOpen, assignmentId, classId) => {
           setIsLoading(false);
           return;
         }
-        gradeService
-          .updateGradeOfStudent(
-            student.assignmentId,
-            student.student.mssv,
+        gradeReviewService
+          .createGradeReviewRequest(
+            studentId,
+            assignmentId.assignmentId,
+            assignmentId.classId,
+            assignmentId.score,
             grade,
-            student.classId,
-            teacherId
+            reason
           )
           .then(
             (res) => {
@@ -91,7 +93,7 @@ const UpdateGrade = (student, prevGrade, handleOpen, assignmentId, classId) => {
         console.error("Error fetching data:", error.message);
       }
     }
-    updateGrade();
+    submitReviewRequest();
   }
 
   return (
@@ -99,36 +101,48 @@ const UpdateGrade = (student, prevGrade, handleOpen, assignmentId, classId) => {
       <div className=" ">
         <div className="flex flex-col justify-end px-4">
           <div className="text-2xl text-dark-green font-bold mt-3">
-            Update Grade
+            Review Request
           </div>
           <div className="my-3">
             <Form onSubmit={handleSubmit} ref={fref}>
               <div>
                 <div className="form-group">
                   <label htmlFor="classname" className="font-semibold mb-2">
-                    Student ID
+                    Your current score
                   </label>
                   <Input
                     type="text"
                     className="form-control p-3 rounded required"
                     name="classname"
                     readOnly={true}
-                    value={student.student.mssv}
+                    value={assignmentId.score}
                   />
                 </div>
                 <div className="form-group">
                   <label htmlFor="email" className="font-semibold mb-2 mt-2">
-                    Grade
+                    Your desired score
                   </label>
                   <Input
                     type="text"
                     className="form-control p-3 rounded"
                     name="email"
-                    placeholder={student.prevGrade}
                     onChange={(e) => {
                       setGrade(e.target.value);
                     }}
                     validations={[required, checkPoint]}
+                  />
+                </div>
+                <div className="form-group">
+                  <label htmlFor="classname" className="font-semibold mb-2">
+                    Reason
+                  </label>
+                  <Input
+                    type="text"
+                    className="form-control p-3 rounded required"
+                    name="classname"
+                    onChange={(e) => {
+                      setReason(e.target.value);
+                    }}
                   />
                 </div>
                 {isSubmit && (
@@ -159,4 +173,4 @@ const UpdateGrade = (student, prevGrade, handleOpen, assignmentId, classId) => {
   );
 };
 
-export default UpdateGrade;
+export default ReviewRequest;

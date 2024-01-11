@@ -2,23 +2,25 @@ import React, { useState, useEffect } from "react";
 import { useLocation, Link } from "react-router-dom";
 import gradeService from "../../services/grade.service";
 import classService from "../../services/class.service";
+import notificationService from "../../services/notification.service";
 import {
-    List,
-    ListItem,
-    ListItemPrefix,
-    Avatar,
-    Dialog,
-    DialogBody,
+  List,
+  ListItem,
+  ListItemPrefix,
+  Avatar,
+  Dialog,
+  DialogBody,
 } from "@material-tailwind/react";
 import { read, utils, writeFile } from "xlsx";
 import UpdateGrade from "./updateGrade.component";
 import { ToastContainer, toast } from "react-toastify";
 
-export function DetailAssignment(id) {
+export function DetailAssignment() {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const classId = queryParams.get("id");
   const assignmentId = queryParams.get("assignmentId");
+  const userId = JSON.parse(localStorage.getItem("user")).id;
   const [open, setOpen] = useState(false);
   const [assignment, setAssignment] = useState({});
   const [chosenStudent, setChosenStudent] = useState({});
@@ -28,16 +30,17 @@ export function DetailAssignment(id) {
   const [students, setStudents] = useState([]);
   const [grades, setGrades] = useState([]);
   const [finalizeLoading, setFinalizeLoading] = useState(false);
+  const [isFinalized, setIsFinalized] = useState(false);
   const [importLoading, setImportLoading] = useState(false);
   const [hasImported, setHasImported] = useState();
   const [message, setMessage] = useState("");
   const [messageImport, setMessageImport] = useState("");
 
-    const handleOpen = (student, grade) => {
-        setChosenStudent(student);
-        setChosenScore(grade);
-        setOpen(!open);
-    };
+  const handleOpen = (student, grade) => {
+    setChosenStudent(student);
+    setChosenScore(grade);
+    setOpen(!open);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -57,7 +60,6 @@ export function DetailAssignment(id) {
       try {
         const res = await gradeService.getSingleAssignment(assignmentId);
         setAssignment(res?.data?.data);
-        console.log(res?.data?.data);
         setMessage("");
       } catch (error) {
         console.error("Error fetching data");
@@ -72,8 +74,7 @@ export function DetailAssignment(id) {
         setMessage("Error fetching data");
       }
       try {
-        const user = JSON.parse(localStorage.getItem("user"));
-        const res = await classService.checkteacher(classId, user.id);
+        const res = await classService.checkteacher(classId, userId);
         setIsTeacher(res.data.data);
       } catch (error) {
         console.error("Error fetching data:", error.message);
@@ -103,20 +104,24 @@ export function DetailAssignment(id) {
               score: row.Grade,
             };
           });
+          tempGradeList = grades.map((grade) => {
+            return {
+              studentId: grade.studentId,
+              score: sheetGrade.find(
+                (sheetGrade) => sheetGrade.studentId === grade.studentId
+              )?.score
+                ? sheetGrade.find(
+                    (sheetGrade) => sheetGrade.studentId === grade.studentId
+                  )?.score
+                : grade.score,
+            };
+          });
+          setGrades(
+            sheetGrade.length > tempGradeList.length
+              ? sheetGrade
+              : tempGradeList
+          );
         }
-        tempGradeList = grades.map((grade) => {
-          return {
-            studentId: grade.studentId,
-            score: sheetGrade.find(
-              (sheetGrade) => sheetGrade.studentId === grade.studentId
-            )?.score
-              ? sheetGrade.find(
-                  (sheetGrade) => sheetGrade.studentId === grade.studentId
-                )?.score
-              : grade.score,
-          };
-        });
-        setGrades(tempGradeList);
       };
       reader.readAsArrayBuffer(file);
     }
@@ -151,8 +156,6 @@ export function DetailAssignment(id) {
           : "N/A",
       };
     });
-
-  console.log(templatesForClass());
 
   const handleExport = () => {
     const headings = [["MSSV", "Grade"]];
@@ -261,7 +264,7 @@ export function DetailAssignment(id) {
             </ListItem>
           ))}
         </List>
-        {!assignment.isFinalized && (
+        {!isFinalized && !assignment.isFinalized && (
           <button
             className="px-4 py-2.5 text-white bg-dark-green rounded-lg text-sm mt-3"
             onClick={async () => {
@@ -271,6 +274,14 @@ export function DetailAssignment(id) {
                   .finalizeGrade(assignmentId, classId)
                   .then((res) => {
                     if (res.status === 201) {
+                      notificationService.createBatchNotification(
+                        `Finalized ${assignment.name} for ${classData.className}`,
+                        `${assignment.name} in ${classData.className} has been finalized. Go check your score. Any review requests should be proceed within 3 days.`,
+                        classId,
+                        userId,
+                        students.map((student) => student.studentId),
+                        assignmentId
+                      );
                       alert("Finalize Grade Success");
                       setFinalizeLoading(false);
                     } else {
