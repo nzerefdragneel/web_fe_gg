@@ -5,6 +5,7 @@ import classService from "../../services/class.service";
 import gradeReviewService from "../../services/gradereview.service";
 import commentService from "../../services/comment.service";
 import notificationService from "../../services/notification.service";
+import { ChevronRightIcon } from "@heroicons/react/24/solid";
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import { ToastContainer, toast } from "react-toastify";
@@ -154,6 +155,7 @@ export function DetailReview() {
                 console.error("Error fetching data");
             }
             try {
+                console.log(studentId, assignmentId);
                 const res =
                     await gradeReviewService.getGradeReviewRequestByStudentIdAndAssignmentId(
                         studentId,
@@ -169,61 +171,75 @@ export function DetailReview() {
         fetchData();
     }, [assignmentId, classId, studentId, userId]);
 
+    console.log(gradeReview.currentGrade);
+
     return (
         <div className=" ">
             {loading && (
-                <div className="place-items-center mx-auto col-span-2">
+                <div className=" mx-auto text-center mt-4">
                     <span className="spinner-border spinner-border-lg text-dark-green"></span>
                 </div>
             )}
             {!loading && (
                 <div>
-                    <div className="row">
-                        <Link to={`/home`}>
-                            <div className="text-xl font-bold text-dark-green mt-1 not-italic ml-2">
+                    <div className="ml-2 mt-1 row flex flex-row items-center">
+                        <Link
+                            to={`/home`}
+                            className="hover:decoration-dark-green"
+                        >
+                            <div className="text-xl text-dark-green not-italic ">
                                 Home
                             </div>
                         </Link>
-                        <p className="text-xl font-bold mt-1 not-italic ml-2">
-                            {" "}
-                            /{" "}
-                        </p>
-                        <Link to={`/class/detail?id=${classId}`}>
-                            <div className="text-xl font-bold text-dark-green mt-1 not-italic ml-2">
+                        <ChevronRightIcon className="w-5 h-5 mx-2 mt-1" />
+                        <Link
+                            to={`/class/detail?id=${classId}`}
+                            className="hover:decoration-dark-green"
+                        >
+                            <div className="text-xl text-dark-green not-italic">
                                 {classData.className}
                             </div>
                         </Link>
-                        <p className="text-xl font-bold mt-1 not-italic ml-2">
-                            {" "}
-                            /{" "}
-                        </p>
-                        <div className="text-xl font-bold mt-1 not-italic ml-2">
+                        <ChevronRightIcon className="w-5 h-5 mx-2 mt-1" />
+                        <div className="text-xl  not-italic ">
                             {assignment.name}
                         </div>
                     </div>
-                    <div className="row">
-                        <div className="text-2xl text-dark-green font-bold mt-3 px-4">
-                            Review for Student{" "}
-                            {listStudents.find((x) => x.studentId == studentId)
-                                ?.studentenrollment?.fullname ?? ""}
+                    <hr className=" text-light-green mx-auto w-full" />
+                    <div className="row ml-2">
+                        <div className="text-xl text-dark-green font-semibold mt-3 px-4">
+                            Review for Student:
+                            <span className="break-words ml-2 text-2xl font-bold">
+                                {listStudents.find(
+                                    (x) => x.studentId == studentId
+                                )?.studentenrollment?.fullname ?? ""}
+                            </span>
                         </div>
                     </div>
-                    <div className="row">
-                        <div className="mt-3 px-4">
-                            Current Grade: {gradeReview.currentGrade}
+                    <div className="flex flex-wrap flex-row justify-center gap-x-2">
+                        <div className="mt-3 px-4 text-base italic">
+                            Current Grade:
+                            <span className="text-2xl ml-2 font-semibold text-dark-green not-italic">
+                                {gradeReview.currentGrade}
+                            </span>
                         </div>
-                        <div className="mt-3 px-4">
-                            Expectation Grade: {gradeReview.expectationGrade}
+                        <div className="mt-3 px-4 text-base italic">
+                            Expectation Grade:
+                            <span className="text-2xl ml-2  font-semibold text-error-color not-italic">
+                                {gradeReview.expectationGrade}
+                            </span>
                         </div>
                     </div>
-                    <div className="row">
-                        <div className="mt-3 px-4">
-                            Student Explanation:{" "}
-                            {gradeReview.studentExplanation}
+                    <div className="row mt-2 ml-4 mr-4">
+                        <div className="mt-3 px-4 text-lg italic">
+                            Student Explanation:
+                            <span className="break-words ml-2 text-base not-italic">
+                                {gradeReview.studentExplanation}
+                            </span>
                         </div>
                     </div>
                     {isTeacher && (
-                        <div className="row py-4">
+                        <div className="py-4 flex flex-row justify-center gap-x-2">
                             <div className="mt-3 px-4">
                                 <button
                                     className="bg-dark-green text-white py-2 px-4 rounded"
@@ -234,7 +250,7 @@ export function DetailReview() {
                                     disabled={updateLoading}
                                 >
                                     {updateLoading ? (
-                                        <span className="spinner-border spinner-border-lg text-dark-green"></span>
+                                        <span className="spinner-border spinner-border-lg text-dark-green hover:cursor-pointer"></span>
                                     ) : (
                                         "Accept Request"
                                     )}
@@ -242,7 +258,7 @@ export function DetailReview() {
                             </div>
                             <div className="mt-3 px-4">
                                 <button
-                                    className="bg-dark-green text-white py-2 px-4 rounded"
+                                    className="bg-error-color text-white py-2 px-4 rounded hover:cursor-pointer"
                                     onClick={() => {
                                         setUpdateLoading(true);
                                         handleRequest("refused");

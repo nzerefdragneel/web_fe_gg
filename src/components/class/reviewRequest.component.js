@@ -35,13 +35,15 @@ const checkPoint = (value) => {
     }
 };
 
-const ReviewRequest = (
+const ReviewRequest = ({
     assignmentId,
     classId,
     score,
-    handleOpen,
-    listTeacher
-) => {
+    handleClose,
+    listTeacher,
+    notifyUpdateSusscess,
+    notifyUpdateFail,
+}) => {
     const fref = useRef(null);
     const [grade, setGrade] = useState("");
     const [reason, setReason] = useState("");
@@ -49,8 +51,6 @@ const ReviewRequest = (
     const [message, setMessage] = useState("");
     const [isSubmit, setIsSubmit] = useState(false);
 
-    const notifyUpdateSusscess = () => toast.success("Request Success!");
-    const notifyUpdateFail = () => toast.error("Request Fail!");
     const studentId = JSON.parse(localStorage.getItem("user")).id;
 
     function handleSubmit(e) {
@@ -69,9 +69,9 @@ const ReviewRequest = (
                 gradeReviewService
                     .createGradeReviewRequest(
                         studentId,
-                        assignmentId.assignmentId,
-                        assignmentId.classId,
-                        assignmentId.score,
+                        assignmentId,
+                        classId,
+                        score,
                         grade,
                         reason
                     )
@@ -80,13 +80,13 @@ const ReviewRequest = (
                             if (res.status === 201) {
                                 notificationService.createBatchNotification(
                                     "Review Request",
-                                    `Request for review grade of assignment ${assignmentId.assignmentId} in class ${assignmentId.classId}`,
-                                    assignmentId.classId,
+                                    `Request for review grade of assignment ${assignmentId} in class ${classId}`,
+                                    classId,
                                     studentId,
-                                    assignmentId.listTeacher.map(
+                                    listTeacher.map(
                                         (teacher) => teacher.teacherId
                                     ),
-                                    assignmentId.assignmentId,
+                                    assignmentId,
                                     "gradereview"
                                 );
                                 notifyUpdateSusscess();
@@ -133,7 +133,7 @@ const ReviewRequest = (
                                         className="form-control p-3 rounded required"
                                         name="classname"
                                         readOnly={true}
-                                        value={assignmentId.score}
+                                        value={score}
                                     />
                                 </div>
                                 <div className="form-group">
@@ -176,7 +176,13 @@ const ReviewRequest = (
                                 )}
                                 <div className="form-group text-right">
                                     <button
-                                        className="w-48 py-2.5 text-white bg-dark-green rounded-lg text-base mt-3"
+                                        className="w-32 py-2.5 text-white bg-error-color hover:cursor-pointer rounded-lg text-base mt-3 mr-2"
+                                        onClick={handleClose}
+                                    >
+                                        Cancel
+                                    </button>
+                                    <button
+                                        className="w-32 py-2.5 text-white bg-dark-green hover:cursor-pointer  rounded-lg text-base mt-3"
                                         onClick={() => {
                                             setIsLoading(true);
                                         }}
@@ -191,7 +197,6 @@ const ReviewRequest = (
                         </Form>
                     </div>
                 </div>
-                <ToastContainer />
             </div>
         </>
     );

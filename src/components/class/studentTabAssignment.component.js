@@ -8,7 +8,7 @@ import {
     DialogBody,
 } from "@material-tailwind/react";
 import { ChevronDoubleRightIcon } from "@heroicons/react/24/solid";
-import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer, toast } from "react-toastify";
 import gradeService from "../../services/grade.service";
 import ReviewRequest from "./reviewRequest.component";
 import gradereviewService from "../../services/gradereview.service";
@@ -26,6 +26,9 @@ export function StudentTabAssignment({ id }) {
     const [loading, setLoading] = useState(false);
 
     const userId = JSON.parse(localStorage.getItem("user")).id;
+
+    const notifyUpdateSusscess = () => toast.success("Request Success!");
+    const notifyUpdateFail = () => toast.error("Request Fail!");
 
     const handleOpen = (assignmentId, grade) => {
         setChosenAssignment(assignmentId);
@@ -78,6 +81,10 @@ export function StudentTabAssignment({ id }) {
         };
         fetchData();
     }, [id, userId]);
+
+    function handleClose() {
+        setOpen(false);
+    }
 
     return (
         <div className=" ">
@@ -199,14 +206,15 @@ export function StudentTabAssignment({ id }) {
                             assignmentId={chosenAssignment}
                             classId={id}
                             score={chosenScore}
-                            handleOpen={() => {
-                                setOpen(!open);
-                            }}
+                            handleClose={handleClose}
                             listTeacher={listTeacher}
+                            notifyUpdateFail={notifyUpdateFail}
+                            notifyUpdateSusscess={notifyUpdateSusscess}
                         ></ReviewRequest>
                     </DialogBody>
                 </Dialog>
             </div>
+            <ToastContainer />
         </div>
     );
 }

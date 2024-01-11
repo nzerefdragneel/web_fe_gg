@@ -105,9 +105,11 @@ export default class EditUserManager extends Component {
         return (
             <div className=" px-5 py-2 my-5 mx-16">
                 <div className="flex flex-col  w-full">
-                    <div className="pt-3 pb-4 px-32 flex flex-row justify-between">
+                    <div className="pt-3 pb-2 px-12 flex flex-row justify-between">
                         <div className="flex flex-row text-lg">
-                            <h2>Edit User Profile</h2>
+                            <h2 className="text-dark-green">
+                                Edit User Profile
+                            </h2>
                         </div>
                     </div>
                 </div>
@@ -120,12 +122,8 @@ export default class EditUserManager extends Component {
                     {!this.state.successful && (
                         <>
                             <div className="flex flex-col  w-full ">
-                                <div className="border-b border-gray-900/10">
-                                    <h1 className="text-base font-semibold leading-7 text-gray-900">
-                                        Edit user Profile
-                                    </h1>
-
-                                    <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 ">
+                                <div className="">
+                                    <div className="mt-4 grid grid-cols-1 gap-x-6 gap-y-8 ">
                                         <div className="sm:col-span-4">
                                             <label
                                                 htmlFor="username"
@@ -145,7 +143,7 @@ export default class EditUserManager extends Component {
                                                         this.onChangeUsername
                                                     }
                                                     placeholder="username"
-                                                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                                    className="block w-full rounded-md border pl-3 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                                 />
                                             </div>
                                         </div>
@@ -167,7 +165,7 @@ export default class EditUserManager extends Component {
                                                         this.onChangeEmail
                                                     }
                                                     placeholder="email"
-                                                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                                    className="block w-full rounded-md border pl-3 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                                 />
                                             </div>
                                         </div>
@@ -189,7 +187,7 @@ export default class EditUserManager extends Component {
                                                         this.onChangeFullname
                                                     }
                                                     placeholder="fullname"
-                                                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                                    className="pl-3 py-2 block w-full rounded-md border text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                                 />
                                             </div>
                                         </div>
@@ -211,46 +209,56 @@ export default class EditUserManager extends Component {
                                                     onChange={
                                                         this.onChangePassword
                                                     }
-                                                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                                    className="pl-3 py-2 block w-full rounded-md border  text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                                 />
                                             </div>
                                         </div>
-                                        <select
-                                            id="active"
-                                            onChange={this.onChangeActive}
-                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                        >
-                                            <option value={this.state.active}>
-                                                {this.state.active === true
-                                                    ? "Active"
-                                                    : "Inactive"}
-                                            </option>
-                                            {this.state.active === false ? (
-                                                <option value={true}>
-                                                    Active
+                                        <div className="sm:col-span-4">
+                                            <label
+                                                htmlFor="status"
+                                                className="block text-sm font-medium leading-6 text-gray-900"
+                                            >
+                                                Status
+                                            </label>
+                                            <select
+                                                id="active"
+                                                onChange={this.onChangeActive}
+                                                class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                                            >
+                                                <option
+                                                    value={this.state.active}
+                                                >
+                                                    {this.state.active === true
+                                                        ? "Active"
+                                                        : "Inactive"}
                                                 </option>
-                                            ) : (
-                                                <option value={false}>
-                                                    Inactive
-                                                </option>
-                                            )}
-                                        </select>
+                                                {this.state.active === false ? (
+                                                    <option value={true}>
+                                                        Active
+                                                    </option>
+                                                ) : (
+                                                    <option value={false}>
+                                                        Inactive
+                                                    </option>
+                                                )}
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
 
                             <div className="mt-6 flex items-center justify-end gap-x-6">
                                 <Link
-                                    to={"/manageruser"}
+                                    to={"/manageuser"}
                                     className=" text-gray-900 hover:none"
                                 >
-                                    <button className="rounded-md text-gray-900 bg-gray-100 px-3 py-2 text-sm font-semibold shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+                                    <button className="  rounded-md text-white bg-error-color px-4 py-2.5 text-sm font-semibold shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
                                         Cancel
                                     </button>
                                 </Link>
                                 <button
                                     type="submit"
-                                    className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                                    className="rounded-md bg-dark-green px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-medium-green focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                                 >
                                     Save
                                 </button>
