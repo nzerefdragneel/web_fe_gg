@@ -6,7 +6,7 @@ import userService from "./services/user.service";
 import AuthVerify from "./common/authVerify";
 import { Routes, BrowserRouter, Navigate, Route, Link } from "react-router-dom";
 
-import { SidesMenu } from "./components/sidebar.component";
+import SidesMenu from "./components/sidebar.component";
 import LoginScreen from "./screen/loginScreen";
 import Home from "./components/home.component";
 import Lading from "./components/lading.component";

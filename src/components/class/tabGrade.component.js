@@ -11,7 +11,12 @@ export function TabGrade(id) {
         const fetchData = async () => {
             try {
                 const res = await classService.getScorings(id.id);
-                setScorings(res.data.data);
+                setScorings(
+                    res?.data.data.sort(
+                        (a, b) =>
+                            a.studentScore.position - b.studentScore.position
+                    )
+                );
             } catch (error) {
                 console.error("Error fetching data:", error.message);
             }

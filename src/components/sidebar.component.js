@@ -1,8 +1,32 @@
+import React, { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { appRouters } from "../routes/route.config";
+import notificationService from "../services/notification.service";
 
-export function SidesMenu(props) {
+function SidesMenu(props) {
     const { collapsed } = props;
+    const [noticeCount, setNoticeCount] = useState([]);
+
+    const user = JSON.parse(localStorage.getItem("user"));
+
+    useEffect(() => {
+        async function fetchNotice() {
+            try {
+                const res =
+                    await notificationService.getNotificationByReceiverId(
+                        user?.id
+                    );
+                setNoticeCount(
+                    res?.data?.filter((x) => x.status === "unread").length
+                );
+            } catch (error) {
+                console.log(error);
+                setNoticeCount(0);
+            }
+        }
+        fetchNotice();
+    }, [user?.id]);
+
     return (
         <div
             className={`h-full ${
@@ -37,9 +61,17 @@ export function SidesMenu(props) {
                                             <route.icon className="h-6 w-6" />
                                         )}
                                     </span>
-                                    <span className="text-base">
+                                    <span className="text-base grow">
                                         {route.name}
                                     </span>
+                                    {route.name === "Notification" &&
+                                        noticeCount > 0 && (
+                                            <div>
+                                                <span className="inline-flex items-center rounded-full bg-error-color px-2 py-1 text-xs font-bold text-light-green ring-1 ring-inset ring-gray-500/10 mr-1">
+                                                    {noticeCount}
+                                                </span>
+                                            </div>
+                                        )}
                                 </NavLink>
                             </li>
                         ))}
@@ -48,3 +80,5 @@ export function SidesMenu(props) {
         </div>
     );
 }
+
+export default SidesMenu;

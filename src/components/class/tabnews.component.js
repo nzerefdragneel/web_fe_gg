@@ -1,11 +1,9 @@
 import { Classheader } from "./classheader.component";
 import React, { useState, useEffect } from "react";
 import classService from "../../services/class.service";
-import Popup from "reactjs-popup";
 import {
     Button,
     Dialog,
-    DialogHeader,
     DialogBody,
     DialogFooter,
     Typography,

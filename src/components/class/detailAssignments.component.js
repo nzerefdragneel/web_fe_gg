@@ -310,7 +310,7 @@ export function DetailAssignment() {
                         </List>
                         {!isFinalized && !assignment.isFinalized && (
                             <button
-                                className="px-4 py-2.5 text-white bg-dark-green rounded-lg text-sm mt-3"
+                                className="px-4 py-2.5 text-white bg-dark-green rounded-lg text-sm mt-3 float-right"
                                 onClick={async () => {
                                     setFinalizeLoading(true);
                                     try {
@@ -330,7 +330,8 @@ export function DetailAssignment() {
                                                             (student) =>
                                                                 student.studentId
                                                         ),
-                                                        assignmentId
+                                                        assignmentId,
+                                                        "grade"
                                                     );
                                                     alert(
                                                         "Finalize Grade Success"
