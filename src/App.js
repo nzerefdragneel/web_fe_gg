@@ -30,6 +30,7 @@ import CreateGrade from "./components/class/createGrade.component";
 import { DetailAssignment } from "./components/class/detailAssignments.component";
 import UpdateGrade from "./components/class/updateGrade.component";
 import { ClassDetailManager } from "./components/adminside/classdetail.component";
+import Notification from "./components/notification.component";
 class App extends Component {
     constructor(props) {
         super(props);
@@ -181,7 +182,7 @@ class App extends Component {
                                                     )
                                                 }
                                             />
-                                             <Route
+                                            <Route
                                                 path="/home"
                                                 element={<ManagerUser />}
                                             />
@@ -213,6 +214,10 @@ class App extends Component {
                                             <Route
                                                 path="/profile"
                                                 element={<Profile />}
+                                            />
+                                            <Route
+                                                path="/notification"
+                                                element={<Notification />}
                                             />
                                             <Route
                                                 path="/forgot-password"
@@ -268,6 +273,10 @@ class App extends Component {
                                             <Route
                                                 path="/profile"
                                                 element={<Profile />}
+                                            />
+                                            <Route
+                                                path="/notification"
+                                                element={<Notification />}
                                             />
                                             <Route
                                                 path="/forgot-password"

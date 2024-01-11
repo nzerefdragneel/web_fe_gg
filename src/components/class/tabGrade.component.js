@@ -124,7 +124,7 @@ export function TabGrade(id) {
                         </div>
                     )}
                     <div className="mt-3">
-                        {studentsGrade.length === 0 && (
+                        {studentsGrade?.length === 0 && (
                             <div className="text-center text-xl font-semibold text-dark-green">
                                 Class haven't any Student
                             </div>
@@ -159,7 +159,7 @@ export function TabGrade(id) {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {!studentsGrade?.length === 0 &&
+                                    {studentsGrade?.length > 0 &&
                                         studentsGrade.map((student) => (
                                             <tr
                                                 key={student.studentId}
