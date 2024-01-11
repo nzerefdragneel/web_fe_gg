@@ -30,6 +30,7 @@ import CreateGrade from "./components/class/createGrade.component";
 import { DetailAssignment } from "./components/class/detailAssignments.component";
 import UpdateGrade from "./components/class/updateGrade.component";
 import { ClassDetailManager } from "./components/adminside/classdetail.component";
+import { DetailReview } from "./components/class/detailReview.component";
 import Notification from "./components/notification.component";
 class App extends Component {
     constructor(props) {
@@ -313,6 +314,10 @@ class App extends Component {
                                             <Route
                                                 path="/class/grade/create"
                                                 element={<CreateGrade />}
+                                            />
+                                            <Route
+                                                path="/class/gradereview/details"
+                                                element={<DetailReview />}
                                             />
                                         </Routes>
                                     )}

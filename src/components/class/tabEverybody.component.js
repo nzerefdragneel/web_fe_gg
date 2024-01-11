@@ -62,7 +62,6 @@ export function TabEverybody(id) {
                             },
                         };
                     });
-                    console.log(id, students);
                 }
                 setclassStudent(students);
             };

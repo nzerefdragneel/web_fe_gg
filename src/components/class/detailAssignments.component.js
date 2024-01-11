@@ -2,18 +2,19 @@ import React, { useState, useEffect } from "react";
 import { useLocation, Link } from "react-router-dom";
 import gradeService from "../../services/grade.service";
 import classService from "../../services/class.service";
-import { List, ListItem, Dialog, DialogBody } from "@material-tailwind/react";
+import notificationService from "../../services/notification.service";
 import { ToastContainer, toast } from "react-toastify";
 import { ChevronRightIcon } from "@heroicons/react/24/solid";
-
+import { List, ListItem, Dialog, DialogBody } from "@material-tailwind/react";
 import { read, utils, writeFile } from "xlsx";
 import UpdateGrade from "./updateGrade.component";
 
-export function DetailAssignment(id) {
+export function DetailAssignment() {
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
     const classId = queryParams.get("id");
     const assignmentId = queryParams.get("assignmentId");
+    const userId = JSON.parse(localStorage.getItem("user")).id;
     const [open, setOpen] = useState(false);
     const [assignment, setAssignment] = useState({});
     const [chosenStudent, setChosenStudent] = useState({});
@@ -23,8 +24,10 @@ export function DetailAssignment(id) {
     const [students, setStudents] = useState([]);
     const [grades, setGrades] = useState([]);
     const [finalizeLoading, setFinalizeLoading] = useState(false);
+    const [isFinalized, setIsFinalized] = useState(false);
     const [importLoading, setImportLoading] = useState(false);
     const [hasImported, setHasImported] = useState();
+    const [message, setMessage] = useState("");
     const [messageImport, setMessageImport] = useState("");
     const [loadData, setLoadData] = useState(false);
 
@@ -101,22 +104,27 @@ export function DetailAssignment(id) {
                             score: row.Grade,
                         };
                     });
+                    tempGradeList = grades.map((grade) => {
+                        return {
+                            studentId: grade.studentId,
+                            score: sheetGrade.find(
+                                (sheetGrade) =>
+                                    sheetGrade.studentId === grade.studentId
+                            )?.score
+                                ? sheetGrade.find(
+                                      (sheetGrade) =>
+                                          sheetGrade.studentId ===
+                                          grade.studentId
+                                  )?.score
+                                : grade.score,
+                        };
+                    });
+                    setGrades(
+                        sheetGrade.length > tempGradeList.length
+                            ? sheetGrade
+                            : tempGradeList
+                    );
                 }
-                tempGradeList = grades.map((grade) => {
-                    return {
-                        studentId: grade.studentId,
-                        score: sheetGrade.find(
-                            (sheetGrade) =>
-                                sheetGrade.studentId === grade.studentId
-                        )?.score
-                            ? sheetGrade.find(
-                                  (sheetGrade) =>
-                                      sheetGrade.studentId === grade.studentId
-                              )?.score
-                            : grade.score,
-                    };
-                });
-                setGrades(tempGradeList);
             };
             reader.readAsArrayBuffer(file);
         }
@@ -300,7 +308,7 @@ export function DetailAssignment(id) {
                                 </>
                             ))}
                         </List>
-                        {!assignment.isFinalized && (
+                        {!isFinalized && !assignment.isFinalized && (
                             <button
                                 className="px-4 py-2.5 text-white bg-dark-green rounded-lg text-sm mt-3"
                                 onClick={async () => {
@@ -313,6 +321,17 @@ export function DetailAssignment(id) {
                                             )
                                             .then((res) => {
                                                 if (res.status === 201) {
+                                                    notificationService.createBatchNotification(
+                                                        `Finalized ${assignment.name} for ${classData.className}`,
+                                                        `${assignment.name} in ${classData.className} has been finalized. Go check your score. Any review requests should be proceed within 3 days.`,
+                                                        classId,
+                                                        userId,
+                                                        students.map(
+                                                            (student) =>
+                                                                student.studentId
+                                                        ),
+                                                        assignmentId
+                                                    );
                                                     alert(
                                                         "Finalize Grade Success"
                                                     );

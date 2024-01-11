@@ -64,6 +64,19 @@ class GradeService {
       }
     );
   }
+  getSingleStudentScore(classId, studentId) {
+    return axios.post(
+      API_URL + `getSingleStudentScore`,
+      {
+        classId: classId,
+        studentId: studentId,
+      },
+      {
+        headers: headers,
+        mode: "no-cors",
+      }
+    );
+  }
   getGradeByAssignmentId(assignmentId) {
     return axios.get(API_URL + `getGradeByAssignmentId?id=${assignmentId}`, {
       headers: headers,
