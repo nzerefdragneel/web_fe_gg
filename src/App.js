@@ -168,6 +168,24 @@ class App extends Component {
                                         <Routes>
                                             {/* <Route path="/home" element={<AdminHome />} /> */}
                                             <Route
+                                                exact
+                                                path="/"
+                                                element={
+                                                    currentUser ? (
+                                                        <Navigate
+                                                            replace
+                                                            to="/manageuser"
+                                                        />
+                                                    ) : (
+                                                        <Lading />
+                                                    )
+                                                }
+                                            />
+                                             <Route
+                                                path="/home"
+                                                element={<ManagerUser />}
+                                            />
+                                            <Route
                                                 path="/classmanager"
                                                 element={<ClassManager />}
                                             />

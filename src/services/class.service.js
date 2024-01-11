@@ -82,12 +82,13 @@ class ClassService {
             mode: "no-cors",
         });
     }
-    getAllClassesAdmin() {
-        return axios.get(API_URL + `getallclasses`, {
+    getAllClassesAdmin(page,limit){
+        return axios.get(API_URL + `getall?page=${page}&size=${limit}`,
+        {
             headers: headers,
             mode: "no-cors",
-        });
-    }
+        }
+      )};
 
     getClassByTeacherId(userId) {
         return axios.get(API_URL + `getbyteacherid?id=${userId}`, {
@@ -212,8 +213,24 @@ class ClassService {
       )
     }
     async getAllStudentAdmin(classId,page,limit,asc){
-      return await axios.get(API_URL + `getallstudentinclass?classId=${classId}&page=${page}&size=${limit}&asc=${asc}`
+      return await axios.get(API_URL + `getallstudentinclass?classId=${classId}&page=${page}&size=${limit}&asc=${asc}`,
+      {
+        headers: headers,
+        mode: "no-cors",
+    }
     )}
+    async importStudentIdAdmin(classId,students){
+        return await axios.post(API_URL + `importbatchstudentid`,{
+            data:{
+                classId:classId,
+                students:students
+            }
+            },
+            {
+            headers: headers,
+            mode: "no-cors",
+        })}
 }
+
 
 export default new ClassService();

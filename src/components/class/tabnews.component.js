@@ -25,34 +25,28 @@ export function TabNews(id) {
     const handleOpen = () => {
         setOpen(!open);
     };
+    const fetchData = async () => {
+        try {
+            const res = await classService.getbyid(id.id);
+            const user = JSON.parse(localStorage.getItem("user"));
+            const istecher = await classService.checkteacher(id.id, user.id);
+            await setIsTeacher(istecher.data.data);
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const res = await classService.getbyid(id.id);
-                const user = JSON.parse(localStorage.getItem("user"));
-                const istecher = await classService.checkteacher(
-                    id.id,
-                    user.id
-                );
-                setIsTeacher(istecher.data.data);
+            setClassdetail(res.data.data);
+            const linkstudent = await classService.getivitelinkstudent(id.id);
+            setlinkstu(linkstudent.data.data);
 
-                setClassdetail(res.data.data);
-                const linkstudent = await classService.getivitelinkstudent(
+            if (istecher.data.data === true) {
+                const linkteacher = await classService.getivitelinkteacher(
                     id.id
                 );
-                setlinkstu(linkstudent.data.data);
-
-                if (isTeacher === true) {
-                    const linkteacher = await classService.getivitelinkteacher(
-                        id.id
-                    );
-                    setinviteteacher(linkteacher.data.data);
-                }
-            } catch (error) {
-                console.error("Error fetching data:", error.message);
+                setinviteteacher(linkteacher.data.data);
             }
-        };
+        } catch (error) {
+            console.error("Error fetching data:", error.message);
+        }
+    };
+    useEffect(() => {
         fetchData();
     }, [id]);
     const handleinvitestudent = () => {
@@ -109,7 +103,6 @@ export function TabNews(id) {
                     handler={handleOpen}
                     className="w-96 border-4"
                 >
-                    <DialogHeader>Invite People</DialogHeader>
                     <DialogBody>
                         <div className="mb-1 flex flex-col gap-6">
                             <Typography
@@ -155,11 +148,11 @@ export function TabNews(id) {
                             </div>
                         )}
 
-                        <div className="mt-5 mb-1 flex flex-col gap-6">
+                        <div className=" mb-1 flex flex-col gap-6">
                             <Typography
                                 variant="h6"
                                 color="blue-gray"
-                                className="-mb-3"
+                                className="mb-3"
                             >
                                 Invite people by email
                             </Typography>
@@ -173,7 +166,7 @@ export function TabNews(id) {
                                 }}
                             />
                         </div>
-                        <div className=" mt-5 mb-1 flex flex-col gap-6">
+                        <div className="  mb-1 flex flex-col gap-6">
                             <button
                                 onClick={handleinvitestudent}
                                 className="m-2 py-2.5 text-white bg-dark-green rounded-lg text-base mt-3"
