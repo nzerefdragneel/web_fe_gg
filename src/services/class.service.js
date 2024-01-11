@@ -219,6 +219,18 @@ class ClassService {
         mode: "no-cors",
     }
     )}
+    async importStudentIdAdmin(classId,students){
+        return await axios.post(API_URL + `importbatchstudentid`,{
+            data:{
+                classId:classId,
+                students:students
+            }
+            },
+            {
+            headers: headers,
+            mode: "no-cors",
+        })}
 }
+
 
 export default new ClassService();

@@ -1,10 +1,23 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect ,useRef} from 'react';
 import { useLocation, useNavigate} from "react-router-dom";
 import classService from '../../services/class.service';
+import Popup from "reactjs-popup";
+import { read, utils, writeFile } from "xlsx";
+import { ToastContainer, toast } from "react-toastify";
+import {
+  Button,
+  Dialog,
+  DialogHeader,
+  DialogBody,
+  DialogFooter,
+  Typography,
+  Input
+} from "@material-tailwind/react";
 const TABLE_HEAD = ["User Id",
 "Student Id",
 "Fullname"];
+
 
 export function TabEverybodyManager() {
     const [Student, setStudent] = useState([]);
@@ -18,6 +31,88 @@ export function TabEverybodyManager() {
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
     const classId = queryParams.get("id");
+    const [open, setOpen] = React.useState(false);
+    const fileInputRef = useRef(null);
+    const [newStudentId, setnewStudentId] = useState("");
+    const notifyUpdateSusscess = () => toast.success("Update Student ID Success!");
+    const notifyExisted = (message) => toast.error(message);
+    const handleOpen = () => {
+      setnewStudentId("");  
+      setOpen(!open)
+    };
+    const templatesForStudentId= () =>
+    Student.map((user) => {
+      console.log(user);
+      const userGrade = {};
+      userGrade["UserId"] = user.studentId;
+      userGrade["Fullname"] = user.studentenrollment.fullname;
+      userGrade["StudentId"] = user.mssv;
+      return userGrade;
+    });
+    const handleExport = () => {
+      const headings = [["UserId", "Fullname", "StudentId"]];
+      const data = templatesForStudentId();
+      const wb = utils.book_new();
+      const ws = utils.json_to_sheet([]);
+      utils.sheet_add_aoa(ws, headings);
+      utils.sheet_add_json(ws, data, {
+        origin: "A2",
+        skipHeader: true,
+      });
+      utils.book_append_sheet(wb, ws, "ListStudent");
+      writeFile(wb, 'StudentList'+classId+'.xlsx');
+    };
+    const handleClickImportbutton = () => {
+      // Trigger the file input click event
+      fileInputRef.current.click();
+    }
+    const handleImport = ($event) => 
+    {
+      console.log('Begin import');
+      const files = $event.target.files;
+      let sheetStudent = [];
+      let tempStudentList = [];
+      if (files.length) {
+        const file = files[0];
+        const reader = new FileReader();
+        reader.onload = async (event) => {
+          const wb = read(event.target.result);
+          const sheets = wb.SheetNames;
+          if (sheets.length) {
+            const rows = utils.sheet_to_json(wb.Sheets[sheets[0]]);
+            sheetStudent = rows.map((row) => {
+              return {
+                UserId: row["UserId"],
+                Fullname:row["Fullname"], 
+                StudentId: row["StudentId"],
+              };
+            });
+            console.log("sheet",sheetStudent);
+            await classService.importStudentIdAdmin(classId,sheetStudent)
+            .then((response) => {
+              console.log("ok",response);
+              toast.success("Update Success!");
+              fetchStudent();
+            }
+            ).catch((error) => {
+              const resMessage =
+              (error.response &&
+                error.response.data &&
+                error.response.data.message) ||
+              error.message ||
+              error.toString();
+                setMessage(resMessage);
+              toast.error(resMessage);
+            });
+
+            
+          }
+        
+        };
+        reader.readAsArrayBuffer(file);
+    };
+  }
+
     const fetchStudent = async () => {
       await classService.getAllStudentAdmin(classId,currentpage,limit,ascending)
       .then((response) => {
@@ -58,34 +153,13 @@ export function TabEverybodyManager() {
       e.preventDefault();
       fetchStudentSearch();
     }
-    const handleActive= (id,active) => {
-      classService.updateactive(id,1-active)
-      .then((response) => {
-        console.log(response);
-        setMessage(response.data.message);
-        setStudent(Student.map((Student) => {
-          if (Student.id === id) {
-            Student.active = 1-active;
-          }
-          return Student;
-        }));
-      }
-      ).catch((error) => {
-        const resMessage =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
-        error.message ||
-        error.toString();
-          setMessage(resMessage);
-      });
-
-    }
-    const handleMapMssv= (studentId,mssv) => {
+   
+    const handleUnMapMssv= (studentId,mssv) => {
       console.log(studentId,mssv);
       classService.updatemssv(classId,studentId,mssv)
       .then((response) => {
         console.log(response);
+        notifyExisted("Unmap Success!")
         setMessage(response.data.message);
         setStudent(Student.map((Student) => {
           if (Student.studentId === studentId) {
@@ -95,6 +169,7 @@ export function TabEverybodyManager() {
         }));
       }
       ).catch((error) => {
+
         const resMessage =
         (error.response &&
           error.response.data &&
@@ -102,8 +177,54 @@ export function TabEverybodyManager() {
         error.message ||
         error.toString();
           setMessage(resMessage);
+          notifyExisted(resMessage);
       });
 
+    }
+   
+    const handleMapMssv= (studentId) => {
+      console.log(studentId);
+      if (newStudentId===""){
+        setMessage("Student ID is not null");
+        return;
+
+      }
+      classService.checkmssv(classId, newStudentId)
+      .then((response) => {
+        if (response.status === 200) {
+          console.log(response);
+          return classService.updatemssv(classId, studentId, newStudentId);
+        } else {
+          const resMessage = (response.data &&
+            response.data.message) ||
+            response.message ||
+            response.toString();
+          throw new Error(resMessage);
+        }
+      })
+      .then((res) => {
+        setnewStudentId("");
+        notifyUpdateSusscess();
+        setMessage(res.data.message);
+        setStudent(Student.map((Student) => {
+          if (Student.studentId === studentId) {
+            Student.mssv = newStudentId;
+          }
+          return Student;
+        }));
+      })
+      .catch((error) => {
+        setnewStudentId("");
+       
+        const resMessage =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+          setMessage(resMessage);
+          notifyExisted(resMessage);
+      });
     }
     useEffect(() => {
         fetchStudent();
@@ -111,6 +232,7 @@ export function TabEverybodyManager() {
     const onsortchange = () => {
       setascending(!ascending);
     }
+    
     return (
 <div className="flex flex-wrap flex-col ">
       <div className="page-header">
@@ -140,7 +262,26 @@ export function TabEverybodyManager() {
                 <option value="true" selected>Ascending</option>
                 <option value="false">Descending</option>
              </select>
-             
+             <button
+            onClick={handleExport}
+            className="btn btn-primary float-right"
+          >
+            Export <i className="fa fa-download"></i>
+          </button>
+          <div>
+          <input
+            type="file"
+            ref={fileInputRef}
+            style={{ display: 'none' }}
+            onChange={handleImport}
+          />
+            <button
+              onClick={handleClickImportbutton}
+              className="btn btn-primary float-right"
+            >
+              Import <i className="fa fa-upload"></i>
+            </button>
+          </div>
             </div>
           </div>
         </div>
@@ -168,24 +309,55 @@ export function TabEverybodyManager() {
                       <td>{Student.studentId}</td>
                       <td>{Student.mssv?Student.mssv:"Null"}</td>
                       <td>{Student.studentenrollment.fullname?Student.studentenrollment.fullname:Student.studentenrollment.username}</td>
-                      {/* <td>
-                        <div className="actions">
-                        {Student.studentenrollment.active===1&&
-                       <button type="button" onClick={() => handleActive(Student.id, Student.active)} class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm  me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Active</button>
-                        }
-                        {Student.active===0&&
-                        <button type="button"  class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Inactive</button>}
-                        </div>
-                      </td>
-                      */}
+                     
                       <td>
                         <div className="actions">
-                        {Student.mssv===null&&
-                      <button type="button" onClick={() => handleMapMssv(Student.studentId,Student.mssv)} class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm  me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Map ID</button>
+                        {(Student.mssv===null||Student.mssv==="")&&
+                        <div>
+                      <button type="button" onClick={handleOpen} class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm  me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Map ID</button>
+                      <Dialog open={open} handler={handleOpen} className="w-96 border-4" >
+                          <DialogBody>
+                          <div className="mb-1 flex flex-col gap-6">
+                              <Typography variant="h6" color="blue-gray" className="-mb-3">
+                              Type Student ID
+                              </Typography>
+                              <Input
+                                size="lg"
+                                
+                                placeholder="Student ID"
+                                className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
+                                labelProps={{
+                                  className: "before:content-none after:content-none",
+                                }}
+                                value={newStudentId}
+                                onChange={(e) => {setnewStudentId(e.target.value)}}
+                              />
+                          </div>
+                          </DialogBody>
+                          <DialogFooter>
+                          <Button
+                              variant="text"
+                              color="red"
+                              onClick={handleOpen}
+                              className="mr-1"
+                            >
+                              <span>Cancel</span>
+                            </Button>
+                            <Button
+                              variant="text"
+                              color="green"
+                           onClick={() => handleMapMssv(Student.studentId)}
+                              className="mr-1"
+                            >
+                              <span>Map Student ID</span>
+                            </Button>
+                          </DialogFooter>
+                        </Dialog>
+                        </div>
                         }
-                        {Student.active!==null&&
-                        <button type="button" onClick={() => handleMapMssv(Student.studentId,"null")} class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Unmap ID</button>}
-                      
+                        {Student.mssv!==null&&Student.mssv!==""&&
+                        <button type="button" onClick={() => handleUnMapMssv(Student.studentId,"")} class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Unmap ID</button>}
+                        
                         </div>
                       </td>
                     </tr>
@@ -214,5 +386,6 @@ export function TabEverybodyManager() {
           </div>
         </div>
       </div>
+      <ToastContainer />
     </div>
     )}

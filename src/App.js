@@ -183,7 +183,10 @@ class App extends Component {
                                                     )
                                                 }
                                             />
-
+                                             <Route
+                                                path="/home"
+                                                element={<ManagerUser />}
+                                            />
                                             <Route
                                                 path="/classmanager"
                                                 element={<ClassManager />}
