@@ -295,10 +295,7 @@ class App extends Component {
                                                 path="/class/create-class"
                                                 element={<CreateClass />}
                                             />
-                                            <Route
-                                                path="/invitation"
-                                                element={<Invitation />}
-                                            />
+                                           
                                             <Route
                                                 path="/updateStudentId"
                                                 element={<StudentJoinInClass />}
@@ -332,6 +329,10 @@ class App extends Component {
                                             path="/signup"
                                             element={<Signup />}
                                         />
+                                         <Route
+                                                path="/invitation"
+                                                element={<Invitation />}
+                                            />
                                     </Routes>
                                 </div>
                             </div>
