@@ -37,12 +37,11 @@ export function DetailAssignment() {
     setOpen(!open);
   };
 
-    const notifyUpdateSusscess = () => toast.success("Update Grade Success!");
-    const notifyUpdateFail = () => toast.error("Update Grade Fail!");
+  const notifyUpdateSusscess = () => toast.success("Update Grade Success!");
+  const notifyUpdateFail = () => toast.error("Update Grade Fail!");
 
-    const notifyFinalizeSuccess = () =>
-        toast.success("Finalize Grade Success!");
-    const notifyFinalizeFail = () => toast.error("Finalize Grade Fail!");
+  const notifyFinalizeSuccess = () => toast.success("Finalize Grade Success!");
+  const notifyFinalizeFail = () => toast.error("Finalize Grade Fail!");
 
   useEffect(() => {
     setLoadData(true);
@@ -187,171 +186,151 @@ export function DetailAssignment() {
         </div>
       )}
 
-            {!loadData && (
+      {!loadData && (
+        <>
+          <div className="ml-2 mt-1 row flex flex-row items-center">
+            <Link to={`/home`} className="hover:decoration-dark-green">
+              <div className="text-xl text-dark-green not-italic ">Home</div>
+            </Link>
+            <ChevronRightIcon className="w-5 h-5 mx-2 mt-1" />
+            <Link
+              to={`/class/detail?id=${classId}`}
+              className="hover:decoration-dark-green"
+            >
+              <div className="text-xl text-dark-green not-italic">
+                {classData.className}
+              </div>
+            </Link>
+            <ChevronRightIcon className="w-5 h-5 mx-2 mt-1" />
+            <div className="text-xl  not-italic ">{assignment.name}</div>
+          </div>
+          <hr className=" text-light-green mx-auto w-full" />
+          {isTeacher && (
+            <div className="row mt-8 mx-8 mb-8">
+              <div className=" ml-6 input-group col-md-6">
+                <div className="custom-file">
+                  <input
+                    type="file"
+                    name="file"
+                    className="custom-file-input"
+                    id="inputGroupFile"
+                    required
+                    onChange={handleUpload}
+                    accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+                  />
+                  <label
+                    className="custom-file-label italic"
+                    htmlFor="inputGroupFile"
+                  >
+                    Choose file to import grade
+                  </label>
+                </div>
+              </div>
+              <div className="col-md-5">
+                <button
+                  onClick={handleExport}
+                  className="float-right px-4 py-2.5 text-white bg-dark-green rounded-lg text-sm"
+                >
+                  Export
+                </button>
+              </div>
+            </div>
+          )}
+          <div className="text-3xl text-dark-green font-bold mt-4 ml-8 mb-2">
+            List Student
+          </div>
+          <div className="mx-auto w-8/12 mt-3">
+            <List className="gap-0">
+              <ListItem className="px-8 py-4 rounded-none border-b border-dark-green hover:cursor-default pointer-events-none">
+                <div className="grid lg:grid-cols-12 md:grid-cols-6 grid-cols-1 justify-items-start content-center w-full gap-x-2 gap-y-1">
+                  <div className="italic text-base col-span-1">STT</div>
+                  <div className="text-base italic lg:col-span-3 md:col-span-3 col-span-1">
+                    MSSV
+                  </div>
+                  <div className="text-base italic lg:col-span-6 md:col-span-5 col-span-1">
+                    Full Name
+                  </div>
+                  <div className="justify-self-end text-base italic lg:col-span-2 md:col-span-1 col-span-1">
+                    Grade
+                  </div>
+                </div>
+              </ListItem>
+              {students?.map((student, index) => (
                 <>
-                    <div className="ml-2 mt-1 row flex flex-row items-center">
-                        <Link
-                            to={`/home`}
-                            className="hover:decoration-dark-green"
-                        >
-                            <div className="text-xl text-dark-green not-italic ">
-                                Home
-                            </div>
-                        </Link>
-                        <ChevronRightIcon className="w-5 h-5 mx-2 mt-1" />
-                        <Link
-                            to={`/class/detail?id=${classId}`}
-                            className="hover:decoration-dark-green"
-                        >
-                            <div className="text-xl text-dark-green not-italic">
-                                {classData.className}
-                            </div>
-                        </Link>
-                        <ChevronRightIcon className="w-5 h-5 mx-2 mt-1" />
-                        <div className="text-xl  not-italic ">
-                            {assignment.name}
-                        </div>
+                  <ListItem
+                    onClick={() => {
+                      handleOpen(
+                        student,
+                        grades.find(
+                          (grade) => grade.studentId === student.studentId
+                        )?.score
+                      );
+                    }}
+                    key={student.studentId}
+                    className="px-8 border-b  border-dark-green hover:bg-neutral-100 cursor-pointer rounded-none"
+                  >
+                    <div className="grid lg:grid-cols-12 md:grid-cols-6 grid-cols-1 justify-items-start content-center w-full gap-x-2 gap-y-1 py-3">
+                      <div className="italic font-semibold text-lg col-span-1 text-dark-green">
+                        {index + 1}
+                      </div>
+                      <div className="text-xl lg:col-span-3 md:col-span-3 col-span-1 font-semibold">
+                        {student?.mssv}
+                      </div>
+                      <div className="text-xl lg:col-span-6 md:col-span-5 col-span-1  font-semibold">
+                        {student?.studentenrollment?.fullname ??
+                          student?.studentenrollment?.username}
+                      </div>
+                      <div className="justify-self-end text-xl lg:col-span-2 md:col-span-1 col-span-1">
+                        {grades.find(
+                          (grade) => grade.studentId === student.studentId
+                        )?.score ?? "Not graded"}
+                      </div>
                     </div>
-                    <hr className=" text-light-green mx-auto w-full" />
-                    {isTeacher && (
-                        <div className="row mt-8 mx-8 mb-8">
-                            <div className=" ml-6 input-group col-md-6">
-                                <div className="custom-file">
-                                    <input
-                                        type="file"
-                                        name="file"
-                                        className="custom-file-input"
-                                        id="inputGroupFile"
-                                        required
-                                        onChange={handleUpload}
-                                        accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
-                                    />
-                                    <label
-                                        className="custom-file-label italic"
-                                        htmlFor="inputGroupFile"
-                                    >
-                                        Choose file to import grade
-                                    </label>
-                                </div>
-                            </div>
-                            <div className="col-md-5">
-                                <button
-                                    onClick={handleExport}
-                                    className="float-right px-4 py-2.5 text-white bg-dark-green rounded-lg text-sm"
-                                >
-                                    Export
-                                </button>
-                            </div>
-                        </div>
-                    )}
-                    <div className="text-3xl text-dark-green font-bold mt-4 ml-8 mb-2">
-                        List Student
-                    </div>
-                    <div className="mx-auto w-8/12 mt-3">
-                        <List className="gap-0">
-                            <ListItem className="px-8 py-4 rounded-none border-b border-dark-green hover:cursor-default pointer-events-none">
-                                <div className="grid lg:grid-cols-12 md:grid-cols-6 grid-cols-1 justify-items-start content-center w-full gap-x-2 gap-y-1">
-                                    <div className="italic text-base col-span-1">
-                                        STT
-                                    </div>
-                                    <div className="text-base italic lg:col-span-3 md:col-span-3 col-span-1">
-                                        MSSV
-                                    </div>
-                                    <div className="text-base italic lg:col-span-6 md:col-span-5 col-span-1">
-                                        Full Name
-                                    </div>
-                                    <div className="justify-self-end text-base italic lg:col-span-2 md:col-span-1 col-span-1">
-                                        Grade
-                                    </div>
-                                </div>
-                            </ListItem>
-                            {students?.map((student, index) => (
-                                <>
-                                    <ListItem
-                                        onClick={() => {
-                                            handleOpen(
-                                                student,
-                                                grades.find(
-                                                    (grade) =>
-                                                        grade.studentId ===
-                                                        student.studentId
-                                                )?.score
-                                            );
-                                        }}
-                                        key={student.studentId}
-                                        className="px-8 border-b  border-dark-green hover:bg-neutral-100 cursor-pointer rounded-none"
-                                    >
-                                        <div className="grid lg:grid-cols-12 md:grid-cols-6 grid-cols-1 justify-items-start content-center w-full gap-x-2 gap-y-1 py-3">
-                                            <div className="italic font-semibold text-lg col-span-1 text-dark-green">
-                                                {index + 1}
-                                            </div>
-                                            <div className="text-xl lg:col-span-3 md:col-span-3 col-span-1 font-semibold">
-                                                {student?.mssv}
-                                            </div>
-                                            <div className="text-xl lg:col-span-6 md:col-span-5 col-span-1  font-semibold">
-                                                {student?.studentenrollment
-                                                    ?.fullname ??
-                                                    student?.studentenrollment
-                                                        ?.username}
-                                            </div>
-                                            <div className="justify-self-end text-xl lg:col-span-2 md:col-span-1 col-span-1">
-                                                {grades.find(
-                                                    (grade) =>
-                                                        grade.studentId ===
-                                                        student.studentId
-                                                )?.score ?? "Not graded"}
-                                            </div>
-                                        </div>
-                                    </ListItem>
-                                </>
-                            ))}
-                        </List>
-                        {!isFinalized && !assignment.isFinalized && (
-                            <button
-                                className="px-4 py-2.5 text-white bg-dark-green rounded-lg text-sm mt-3 float-right"
-                                onClick={async () => {
-                                    setFinalizeLoading(true);
-                                    try {
-                                        await gradeService
-                                            .finalizeGrade(
-                                                assignmentId,
-                                                classId
-                                            )
-                                            .then((res) => {
-                                                if (res.status === 201) {
-                                                    notificationService.createBatchNotification(
-                                                        `Finalized ${assignment.name} for ${classData.className}`,
-                                                        `${assignment.name} in ${classData.className} has been finalized. Go check your score. Any review requests should be proceed within 3 days.`,
-                                                        classId,
-                                                        userId,
-                                                        students.map(
-                                                            (student) =>
-                                                                student.studentId
-                                                        ),
-                                                        assignmentId,
-                                                        "grade"
-                                                    );
-                                                    notifyFinalizeSuccess();
-                                                    setFinalizeLoading(false);
-                                                } else {
-                                                    notifyFinalizeFail();
-                                                    setFinalizeLoading(false);
-                                                }
-                                            });
-                                    } catch (error) {
-                                        console.log(error);
-                                    }
-                                    setFinalizeLoading(false);
-                                }}
-                                disabled={finalizeLoading}
-                            >
-                                {finalizeLoading ? (
-                                    <span className="spinner-border spinner-border-sm mr-1"></span>
-                                ) : (
-                                    <span>Finalize this assignment</span>
-                                )}
-                            </button>
-                        )}
+                  </ListItem>
+                </>
+              ))}
+            </List>
+            {!isFinalized && !assignment.isFinalized && (
+              <button
+                className="px-4 py-2.5 text-white bg-dark-green rounded-lg text-sm mt-3 float-right"
+                onClick={async () => {
+                  setFinalizeLoading(true);
+                  try {
+                    await gradeService
+                      .finalizeGrade(assignmentId, classId)
+                      .then((res) => {
+                        if (res.status === 201) {
+                          notificationService.createBatchNotification(
+                            `Finalized ${assignment.name} for ${classData.className}`,
+                            `${assignment.name} in ${classData.className} has been finalized. Go check your score. Any review requests should be proceed within 3 days.`,
+                            classId,
+                            userId,
+                            students.map((student) => student.studentId),
+                            assignmentId,
+                            "grade"
+                          );
+                          notifyFinalizeSuccess();
+                          setIsFinalized(true);
+                          setFinalizeLoading(false);
+                        } else {
+                          notifyFinalizeFail();
+                          setFinalizeLoading(false);
+                        }
+                      });
+                  } catch (error) {
+                    console.log(error);
+                  }
+                  setFinalizeLoading(false);
+                }}
+                disabled={finalizeLoading}
+              >
+                {finalizeLoading ? (
+                  <span className="spinner-border spinner-border-sm mr-1"></span>
+                ) : (
+                  <span>Finalize this assignment</span>
+                )}
+              </button>
+            )}
 
             {hasImported && (
               <button
