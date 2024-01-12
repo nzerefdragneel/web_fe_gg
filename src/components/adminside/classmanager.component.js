@@ -82,6 +82,7 @@ export default function ClassManager() {
     useEffect(() => {
         setloading(true);
         fetchClasses();
+        setloading(false);
     }, [currentpage, limit, ascending]);
     const onsortchange = () => {
         setascending(!ascending);

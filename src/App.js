@@ -323,11 +323,27 @@ class App extends Component {
                                     <Routes>
                                         <Route
                                             path="/login"
-                                            element={<LoginScreen />}
+                                            element={
+                                                currentUser ? (
+                                                    <Navigate
+                                                        replace
+                                                        to="/home"
+                                                    />
+                                                ) : (
+                                                    <LoginScreen />
+                                                )}
                                         />
                                         <Route
                                             path="/signup"
-                                            element={<Signup />}
+                                            element={
+                                                currentUser ? (
+                                                    <Navigate
+                                                        replace
+                                                        to="/home"
+                                                    />
+                                                ) : (
+                                                    <Signup />
+                                                )}
                                         />
                                          <Route
                                                 path="/invitation"
