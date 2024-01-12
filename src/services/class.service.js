@@ -87,8 +87,8 @@ class ClassService {
         {
             headers: headers,
             mode: "no-cors",
-        }
-      )};
+        });
+    }
 
     getClassByTeacherId(userId) {
         return axios.get(API_URL + `getbyteacherid?id=${userId}`, {
@@ -183,48 +183,53 @@ class ClassService {
             headers: headers,
         });
     }
-    async updateactive(classId,active){
-        return await axios.post(API_URL+'updateactive',{
-          data:{
-            id:classId,
-            active:active
-          }
-        },
-        {
-          headers: {
-              "Cache-Control": "no-cache",
-              "Content-Type": "application/x-www-form-urlencoded",
-              "Access-Control-Allow-Origin": "*",
-          },
-          mode: "no-cors",
-        }
-        )
-    }
-    async getclassactive(id){
-      return await axios.get(API_URL+`getactive?id=${id}`,
-      {
-        headers: {
-            "Cache-Control": "no-cache",
-            "Content-Type": "application/x-www-form-urlencoded",
-            "Access-Control-Allow-Origin": "*",
-        },
-        mode: "no-cors",
-      }
-      )
-    }
-    async getAllStudentAdmin(classId,page,limit,asc){
-      return await axios.get(API_URL + `getallstudentinclass?classId=${classId}&page=${page}&size=${limit}&asc=${asc}`,
-      {
-        headers: headers,
-        mode: "no-cors",
-    }
-    )}
-    async importStudentIdAdmin(classId,students){
-        return await axios.post(API_URL + `importbatchstudentid`,{
-            data:{
-                classId:classId,
-                students:students
+    async updateactive(classId, active) {
+        return await axios.post(
+            API_URL + "updateactive",
+            {
+                data: {
+                    id: classId,
+                    active: active,
+                },
+            },
+            {
+                headers: {
+                    "Cache-Control": "no-cache",
+                    "Content-Type": "application/x-www-form-urlencoded",
+                    "Access-Control-Allow-Origin": "*",
+                },
+                mode: "no-cors",
             }
+        );
+    }
+    async getclassactive(id) {
+        return await axios.get(API_URL + `getactive?id=${id}`, {
+            headers: {
+                "Cache-Control": "no-cache",
+                "Content-Type": "application/x-www-form-urlencoded",
+                "Access-Control-Allow-Origin": "*",
+            },
+            mode: "no-cors",
+        });
+    }
+    async getAllStudentAdmin(classId, page, limit, asc) {
+        return await axios.get(
+            API_URL +
+                `getallstudentinclass?classId=${classId}&page=${page}&size=${limit}&asc=${asc}`,
+            {
+                headers: headers,
+                mode: "no-cors",
+            }
+        );
+    }
+    async importStudentIdAdmin(classId, students) {
+        return await axios.post(
+            API_URL + `importbatchstudentid`,
+            {
+                data: {
+                    classId: classId,
+                    students: students,
+                },
             },
             {
             headers: headers,
@@ -242,6 +247,5 @@ class ClassService {
           )};
 
 }
-
 
 export default new ClassService();

@@ -1,238 +1,246 @@
-
-import React, { useState, useEffect ,useRef} from 'react';
-import { useLocation, useNavigate} from "react-router-dom";
-import classService from '../../services/class.service';
-import Popup from "reactjs-popup";
+import React, { useState, useEffect, useRef } from "react";
+import { useLocation } from "react-router-dom";
+import classService from "../../services/class.service";
 import { read, utils, writeFile } from "xlsx";
 import { ToastContainer, toast } from "react-toastify";
 import {
-  Button,
-  Dialog,
-  DialogHeader,
-  DialogBody,
-  DialogFooter,
-  Typography,
-  Input
+    Button,
+    Dialog,
+    DialogBody,
+    DialogFooter,
+    Typography,
+    Input,
 } from "@material-tailwind/react";
-const TABLE_HEAD = ["User Id",
-"Student Id",
-"Fullname"];
-
+const TABLE_HEAD = ["User Id", "Student Id", "Fullname"];
 
 export function TabEverybodyManager() {
     const [Student, setStudent] = useState([]);
-    const [currentpage,setcurrentpage] = useState(1);
-    const [limit,setlimit] = useState(5);
-    const [totalpage,settotalpage] = useState(1);
-    const [total,settotal]=useState(0);
+    const [currentpage, setcurrentpage] = useState(1);
+    const [limit, setlimit] = useState(5);
+    const [totalpage, settotalpage] = useState(1);
+    const [total, settotal] = useState(0);
     const [message, setMessage] = useState("");
     const [ascending, setascending] = useState(true);
-    const [search,setsearch] = useState("");
+    const [search, setsearch] = useState("");
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
     const classId = queryParams.get("id");
     const [open, setOpen] = React.useState(false);
     const fileInputRef = useRef(null);
     const [newStudentId, setnewStudentId] = useState("");
-    const notifyUpdateSusscess = () => toast.success("Update Student ID Success!");
+    const [loading, setLoading] = useState(false);
+
+    const notifyUpdateSusscess = () =>
+        toast.success("Update Student ID Success!");
     const notifyExisted = (message) => toast.error(message);
     const handleOpen = () => {
-      setnewStudentId("");  
-      setOpen(!open)
+        setnewStudentId("");
+        setOpen(!open);
     };
-    const templatesForStudentId= () =>
-    Student.map((user) => {
-      console.log(user);
-      const userGrade = {};
-      userGrade["UserId"] = user.studentId;
-      userGrade["Fullname"] = user.studentenrollment.fullname;
-      userGrade["StudentId"] = user.mssv;
-      return userGrade;
-    });
+    const templatesForStudentId = () =>
+        Student.map((user) => {
+            console.log(user);
+            const userGrade = {};
+            userGrade["UserId"] = user.studentId;
+            userGrade["Fullname"] = user.studentenrollment.fullname;
+            userGrade["StudentId"] = user.mssv;
+            return userGrade;
+        });
     const handleExport = () => {
-      const headings = [["UserId", "Fullname", "StudentId"]];
-      const data = templatesForStudentId();
-      const wb = utils.book_new();
-      const ws = utils.json_to_sheet([]);
-      utils.sheet_add_aoa(ws, headings);
-      utils.sheet_add_json(ws, data, {
-        origin: "A2",
-        skipHeader: true,
-      });
-      utils.book_append_sheet(wb, ws, "ListStudent");
-      writeFile(wb, 'StudentList'+classId+'.xlsx');
+        const headings = [["UserId", "Fullname", "StudentId"]];
+        const data = templatesForStudentId();
+        const wb = utils.book_new();
+        const ws = utils.json_to_sheet([]);
+        utils.sheet_add_aoa(ws, headings);
+        utils.sheet_add_json(ws, data, {
+            origin: "A2",
+            skipHeader: true,
+        });
+        utils.book_append_sheet(wb, ws, "ListStudent");
+        writeFile(wb, "StudentList" + classId + ".xlsx");
     };
     const handleClickImportbutton = () => {
-      // Trigger the file input click event
-      fileInputRef.current.click();
-    }
-    const handleImport = ($event) => 
-    {
-      console.log('Begin import');
-      const files = $event.target.files;
-      let sheetStudent = [];
-      let tempStudentList = [];
-      if (files.length) {
-        const file = files[0];
-        const reader = new FileReader();
-        reader.onload = async (event) => {
-          const wb = read(event.target.result);
-          const sheets = wb.SheetNames;
-          if (sheets.length) {
-            const rows = utils.sheet_to_json(wb.Sheets[sheets[0]]);
-            sheetStudent = rows.map((row) => {
-              return {
-                UserId: row["UserId"],
-                Fullname:row["Fullname"], 
-                StudentId: row["StudentId"],
-              };
-            });
-            console.log("sheet",sheetStudent);
-            await classService.importStudentIdAdmin(classId,sheetStudent)
-            .then((response) => {
-              console.log("ok",response);
-              toast.success("Update Success!");
-              fetchStudent();
-            }
-            ).catch((error) => {
-              const resMessage =
-              (error.response &&
-                error.response.data &&
-                error.response.data.message) ||
-              error.message ||
-              error.toString();
-                setMessage(resMessage);
-              toast.error(resMessage);
-            });
-
-            
-          }
-        
-        };
-        reader.readAsArrayBuffer(file);
+        // Trigger the file input click event
+        fileInputRef.current.click();
     };
-  }
+    const handleImport = ($event) => {
+        console.log("Begin import");
+        const files = $event.target.files;
+        let sheetStudent = [];
+        let tempStudentList = [];
+        if (files.length) {
+            const file = files[0];
+            const reader = new FileReader();
+            reader.onload = async (event) => {
+                const wb = read(event.target.result);
+                const sheets = wb.SheetNames;
+                if (sheets.length) {
+                    const rows = utils.sheet_to_json(wb.Sheets[sheets[0]]);
+                    sheetStudent = rows.map((row) => {
+                        return {
+                            UserId: row["UserId"],
+                            Fullname: row["Fullname"],
+                            StudentId: row["StudentId"],
+                        };
+                    });
+                    console.log("sheet", sheetStudent);
+                    await classService
+                        .importStudentIdAdmin(classId, sheetStudent)
+                        .then((response) => {
+                            console.log("ok", response);
+                            toast.success("Update Success!");
+                            fetchStudent();
+                        })
+                        .catch((error) => {
+                            const resMessage =
+                                (error.response &&
+                                    error.response.data &&
+                                    error.response.data.message) ||
+                                error.message ||
+                                error.toString();
+                            setMessage(resMessage);
+                            toast.error(resMessage);
+                        });
+                }
+            };
+            reader.readAsArrayBuffer(file);
+        }
+    };
 
     const fetchStudent = async () => {
-      await classService.getAllStudentAdmin(classId,currentpage,limit,ascending)
-      .then((response) => {
-        console.log(response);
-        setStudent(response.data.data.classes);
-        settotal(response.data.data.totalItems);
-        settotalpage(response.data.data.totalPages);
+        await classService
+            .getAllStudentAdmin(classId, currentpage, limit, ascending)
+            .then((response) => {
+                console.log(response);
+                setStudent(response.data.data.classes);
+                settotal(response.data.data.totalItems);
+                settotalpage(response.data.data.totalPages);
 
-        console.log(Student);
-      }).catch((error) => {
-        const resMessage =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
-        error.message ||
-        error.toString();
-          setMessage(resMessage);
-      });
-     }
-     const fetchStudentSearch = async () => {
-      await classService.getAllStudentSearch(currentpage,limit,ascending,search)
-      .then((response) => {
-        console.log(response);
-        setStudent(response.data.Student);
-        settotal(response.data.totalItems);
-        settotalpage(response.data.totalPages);
-      }).catch((error) => {
-        const resMessage =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
-        error.message ||
-        error.toString();
-          setMessage(resMessage);
-      });
-     }
+                console.log(Student);
+            })
+            .catch((error) => {
+                const resMessage =
+                    (error.response &&
+                        error.response.data &&
+                        error.response.data.message) ||
+                    error.message ||
+                    error.toString();
+                setMessage(resMessage);
+            });
+
+        setLoading(false);
+    };
+    const fetchStudentSearch = async () => {
+        await classService
+            .getAllStudentSearch(currentpage, limit, ascending, search)
+            .then((response) => {
+                console.log(response);
+                setStudent(response.data.Student);
+                settotal(response.data.totalItems);
+                settotalpage(response.data.totalPages);
+            })
+            .catch((error) => {
+                const resMessage =
+                    (error.response &&
+                        error.response.data &&
+                        error.response.data.message) ||
+                    error.message ||
+                    error.toString();
+                setMessage(resMessage);
+            });
+    };
     const handlesubmit = (e) => {
-      e.preventDefault();
-      fetchStudentSearch();
-    }
-   
-    const handleUnMapMssv= (studentId,mssv) => {
-      console.log(studentId,mssv);
-      classService.updatemssv(classId,studentId,mssv)
-      .then((response) => {
-        console.log(response);
-        notifyExisted("Unmap Success!")
-        setMessage(response.data.message);
-        setStudent(Student.map((Student) => {
-          if (Student.studentId === studentId) {
-            Student.mssv = mssv;
-          }
-          return Student;
-        }));
-      }
-      ).catch((error) => {
+        e.preventDefault();
+        fetchStudentSearch();
+    };
 
-        const resMessage =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
-        error.message ||
-        error.toString();
-          setMessage(resMessage);
-          notifyExisted(resMessage);
-      });
+    const handleUnMapMssv = (studentId, mssv) => {
+        console.log(studentId, mssv);
+        classService
+            .updatemssv(classId, studentId, mssv)
+            .then((response) => {
+                console.log(response);
+                notifyExisted("Unmap Success!");
+                setMessage(response.data.message);
+                setStudent(
+                    Student.map((Student) => {
+                        if (Student.studentId === studentId) {
+                            Student.mssv = mssv;
+                        }
+                        return Student;
+                    })
+                );
+            })
+            .catch((error) => {
+                const resMessage =
+                    (error.response &&
+                        error.response.data &&
+                        error.response.data.message) ||
+                    error.message ||
+                    error.toString();
+                setMessage(resMessage);
+                notifyExisted(resMessage);
+            });
+    };
 
-    }
-   
-    const handleMapMssv= (studentId) => {
-      console.log(studentId);
-      if (newStudentId===""){
-        setMessage("Student ID is not null");
-        return;
-
-      }
-      classService.checkmssv(classId, newStudentId)
-      .then((response) => {
-        if (response.status === 200) {
-          console.log(response);
-          return classService.updatemssv(classId, studentId, newStudentId);
-        } else {
-          const resMessage = (response.data &&
-            response.data.message) ||
-            response.message ||
-            response.toString();
-          throw new Error(resMessage);
+    const handleMapMssv = (studentId) => {
+        console.log(studentId);
+        if (newStudentId === "") {
+            setMessage("Student ID is not null");
+            return;
         }
-      })
-      .then((res) => {
-        setnewStudentId("");
-        notifyUpdateSusscess();
-        setMessage(res.data.message);
-        setStudent(Student.map((Student) => {
-          if (Student.studentId === studentId) {
-            Student.mssv = newStudentId;
-          }
-          return Student;
-        }));
-      })
-      .catch((error) => {
-        setnewStudentId("");
-       
-        const resMessage =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
-        error.message ||
-        error.toString();
-          setMessage(resMessage);
-          notifyExisted(resMessage);
-      });
-    }
+        classService
+            .checkmssv(classId, newStudentId)
+            .then((response) => {
+                if (response.status === 200) {
+                    console.log(response);
+                    return classService.updatemssv(
+                        classId,
+                        studentId,
+                        newStudentId
+                    );
+                } else {
+                    const resMessage =
+                        (response.data && response.data.message) ||
+                        response.message ||
+                        response.toString();
+                    throw new Error(resMessage);
+                }
+            })
+            .then((res) => {
+                setnewStudentId("");
+                notifyUpdateSusscess();
+                setMessage(res.data.message);
+                setStudent(
+                    Student.map((Student) => {
+                        if (Student.studentId === studentId) {
+                            Student.mssv = newStudentId;
+                        }
+                        return Student;
+                    })
+                );
+            })
+            .catch((error) => {
+                setnewStudentId("");
+
+                const resMessage =
+                    (error.response &&
+                        error.response.data &&
+                        error.response.data.message) ||
+                    error.message ||
+                    error.toString();
+                setMessage(resMessage);
+                notifyExisted(resMessage);
+            });
+    };
     useEffect(() => {
+        setLoading(true);
         fetchStudent();
-    }, [currentpage,limit,ascending]);
+    }, [currentpage, limit, ascending]);
     const onsortchange = () => {
-      setascending(!ascending);
-    }
-    
+        setascending(!ascending);
+    };
+
     return (
 <div className="flex flex-wrap flex-col ">
       <div className="page-header">
@@ -375,17 +383,26 @@ export function TabEverybodyManager() {
                 Previous
               </button>
 
-              <button
-               type='button'
-               onClick={() => setcurrentpage(currentpage<totalpage?currentpage +1:currentpage)}
-                className="flex items-center justify-center px-3 h-8 ms-3 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700"
-              >
-                Next
-              </button>
-            </div>
-          </div>
+                                    <button
+                                        type="button"
+                                        onClick={() =>
+                                            setcurrentpage(
+                                                currentpage < totalpage
+                                                    ? currentpage + 1
+                                                    : currentpage
+                                            )
+                                        }
+                                        className="flex items-center justify-center px-3 h-8 ms-3 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700"
+                                    >
+                                        Next
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <ToastContainer />
+                </>
+            )}
         </div>
-      </div>
-      <ToastContainer />
-    </div>
-    )}
+    );
+}

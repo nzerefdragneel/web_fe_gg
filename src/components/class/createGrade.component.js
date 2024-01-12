@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import { Navigate, useNavigate, Link } from "react-router-dom";
 import {} from "@material-tailwind/react";
 import {} from "@heroicons/react/24/solid";
 import Form from "react-validation/build/form";
@@ -101,7 +101,7 @@ const CreateGrade = () => {
                                     notifyCreateSusscess();
                                     setTimeout(() => {
                                         navigate(`/class/detail?id=${classId}`);
-                                    }, 800);
+                                    }, 1000);
                                     setIsLoading(false);
                                 }
                             },
@@ -120,6 +120,18 @@ const CreateGrade = () => {
             } catch (error) {
                 console.error("Error fetching data:", error.message);
             }
+        }
+        if (
+            scale === "" ||
+            gradeName === "" ||
+            !Number.isInteger(parseInt(scale)) ||
+            scale?.includes(".") ||
+            scale < 0 ||
+            scale > 100
+        ) {
+            notifyCreateFail();
+            setIsLoading(false);
+            return;
         }
         addGrade();
     }
@@ -177,8 +189,16 @@ const CreateGrade = () => {
                                     </div>
                                 )}
                                 <div className="form-group text-right">
+                                    <Link
+                                        to={`/class/detail?id=${classId}`}
+                                        className=" text-gray-900 hover:no-underline"
+                                    >
+                                        <button className="w-32 py-2.5 text-white bg-error-color rounded-lg text-base mt-3 mr-3">
+                                            Cancel
+                                        </button>
+                                    </Link>
                                     <button
-                                        className="w-48 py-2.5 text-white bg-dark-green rounded-lg text-base mt-3"
+                                        className="w-32 py-2.5 text-white bg-dark-green rounded-lg text-base mt-3"
                                         onClick={() => {
                                             setIsLoading(true);
                                         }}

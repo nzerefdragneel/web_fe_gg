@@ -6,7 +6,7 @@ import userService from "./services/user.service";
 import AuthVerify from "./common/authVerify";
 import { Routes, BrowserRouter, Navigate, Route, Link } from "react-router-dom";
 
-import { SidesMenu } from "./components/sidebar.component";
+import SidesMenu from "./components/sidebar.component";
 import LoginScreen from "./screen/loginScreen";
 import Home from "./components/home.component";
 import Lading from "./components/lading.component";
@@ -20,9 +20,7 @@ import ResetPassword from "./components/resetPassword.component";
 import Invitation from "./components/invitation.component";
 import Bus from "./common/bus";
 import { ClassDetail } from "./components/class/classdetail.component";
-import CreateClass, {
-    ClassCreate,
-} from "./components/class/createClass.component";
+import CreateClass from "./components/class/createClass.component";
 import { SidesMenuAdmin } from "./components/adminside/sidemenuadmin.component";
 import AdminHome from "./components/adminside/adminhome.component";
 import ClassManager from "./components/adminside/classmanager.component";
@@ -32,6 +30,8 @@ import CreateGrade from "./components/class/createGrade.component";
 import { DetailAssignment } from "./components/class/detailAssignments.component";
 import UpdateGrade from "./components/class/updateGrade.component";
 import { ClassDetailManager } from "./components/adminside/classdetail.component";
+import { DetailReview } from "./components/class/detailReview.component";
+import Notification from "./components/notification.component";
 class App extends Component {
     constructor(props) {
         super(props);
@@ -98,10 +98,10 @@ class App extends Component {
 
         return (
             <div className="">
-                <div className="pt-3 pb-4 px-32 flex flex-row flex-wrap justify-between border-b mb-2">
+                <div className="pt-3 pb-4 px-32 flex flex-row flex-wrap justify-between border-b">
                     <div className="flex flex-row flex-wrap text-lg items-center">
                         <img
-                            src="./assets/logo.png"
+                            src="/assets/logo.png"
                             className="w-10 h-10 mr-2"
                             alt="logo"
                         />
@@ -183,7 +183,7 @@ class App extends Component {
                                                     )
                                                 }
                                             />
-                                             <Route
+                                            <Route
                                                 path="/home"
                                                 element={<ManagerUser />}
                                             />
@@ -215,6 +215,10 @@ class App extends Component {
                                             <Route
                                                 path="/profile"
                                                 element={<Profile />}
+                                            />
+                                            <Route
+                                                path="/notification"
+                                                element={<Notification />}
                                             />
                                             <Route
                                                 path="/forgot-password"
@@ -272,6 +276,10 @@ class App extends Component {
                                                 element={<Profile />}
                                             />
                                             <Route
+                                                path="/notification"
+                                                element={<Notification />}
+                                            />
+                                            <Route
                                                 path="/forgot-password"
                                                 element={<ForgotPassword />}
                                             />
@@ -287,10 +295,7 @@ class App extends Component {
                                                 path="/class/create-class"
                                                 element={<CreateClass />}
                                             />
-                                            <Route
-                                                path="/invitation"
-                                                element={<Invitation />}
-                                            />
+                                           
                                             <Route
                                                 path="/updateStudentId"
                                                 element={<StudentJoinInClass />}
@@ -307,6 +312,10 @@ class App extends Component {
                                                 path="/class/grade/create"
                                                 element={<CreateGrade />}
                                             />
+                                            <Route
+                                                path="/class/gradereview/details"
+                                                element={<DetailReview />}
+                                            />
                                         </Routes>
                                     )}
 
@@ -320,6 +329,10 @@ class App extends Component {
                                             path="/signup"
                                             element={<Signup />}
                                         />
+                                         <Route
+                                                path="/invitation"
+                                                element={<Invitation />}
+                                            />
                                     </Routes>
                                 </div>
                             </div>

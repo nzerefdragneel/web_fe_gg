@@ -85,8 +85,10 @@ const Home = () => {
                         className=" text-gray-900 hover:no-underline "
                     >
                         <button className="bg-dark-green hover:bg-medium-green hover:text-black text-white font-bold py-2 px-4 rounded-full flex items-center">
-                            <PlusIcon className="w-5 h-5 mr-2" />
-                            Create a class
+                            <PlusIcon className="w-5 h-5 mr-2 " />
+                            <span className="hover:text-black">
+                                Create a class
+                            </span>
                         </button>
                     </Link>
                 </div>

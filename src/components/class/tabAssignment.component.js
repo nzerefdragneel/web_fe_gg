@@ -268,6 +268,18 @@ export function TabAssignment({ id }) {
                 setIsLoading(false);
             }
         }
+        if (
+            scale === "" ||
+            gradeName === "" ||
+            !Number.isInteger(parseInt(scale)) ||
+            scale?.includes(".") ||
+            scale < 0 ||
+            scale > 100
+        ) {
+            notifyUpdateFail();
+            setIsLoading(false);
+            return;
+        }
         updateGrade();
     }
 
@@ -280,19 +292,21 @@ export function TabAssignment({ id }) {
                 >
                     <button className="bg-dark-green hover:bg-medium-green  hover:text-black text-white font-bold py-2 px-4 rounded-full flex items-center">
                         <PlusIcon className="w-5 h-5 mr-2" />
-                        Create a grade composition
+                        <span className="hover:text-black">
+                            Create a grade composition
+                        </span>
                     </button>
                 </Link>
             </div>
-            <div className="grid grid-flow-row-dense gap-2 mx-40 my-4">
+            <div className="grid grid-flow-row-dense gap-2 mx-40 mt-4">
                 {loading && (
-                    <div className="place-items-center mx-auto col-span-2">
+                    <div className="place-self-center mx-auto col-span-2">
                         <span className="spinner-border spinner-border-lg text-dark-green"></span>
                     </div>
                 )}
                 {!loading && listGrade.length === 0 && (
-                    <div className="text-gray-900 text-center">
-                        No assignment found.
+                    <div className="text-xl font-semibold text-center text-dark-green">
+                        Class haven't any Grade Composition
                     </div>
                 )}
                 {!loading && listGrade?.length !== 0 && (
@@ -406,7 +420,7 @@ export function TabAssignment({ id }) {
                                             </Form>
                                         </div>
                                     </div>
-                                    <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+                                    <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6 ">
                                         <button
                                             type="button"
                                             className="inline-flex w-full justify-center rounded-md bg-dark-green px-3 py-2 text-sm font-semibold text-white hover:text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-medium-green sm:ml-3 sm:w-auto"
@@ -422,7 +436,7 @@ export function TabAssignment({ id }) {
                                         </button>
                                         <button
                                             type="button"
-                                            className="inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
+                                            className="inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto mr-1"
                                             onClick={() => setOpenUpdate(false)}
                                             ref={cancelButtonRef}
                                         >
