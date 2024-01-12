@@ -226,10 +226,10 @@ export function TabEverybody(id) {
                 </Card>
             </div>
             {hasImported && (
-                <div className="col-md-6">
+                <div className="mx-4">
                     <button
                         onClick={handleImport}
-                        className="btn btn-primary float-right"
+                        className="float-right px-4 py-2.5 text-white bg-dark-green rounded-lg text-sm mr-5"
                     >
                         Import <i className="fa fa-download"></i>
                     </button>

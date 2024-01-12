@@ -25,6 +25,7 @@ export function ClassDetail() {
     const queryParams = new URLSearchParams(location.search);
     const classId = queryParams.get("id");
     const navigate = useNavigate();
+
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true);
@@ -77,6 +78,7 @@ export function ClassDetail() {
             }
             setLoading(false);
         };
+        setActiveTab(location.state?.activeTab || "news");
         fetchData();
     }, [classId]);
 

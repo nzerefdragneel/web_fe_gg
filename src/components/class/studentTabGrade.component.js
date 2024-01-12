@@ -69,8 +69,8 @@ export function StudentTabGrade(id) {
                     <tr>
                         <th scope="col">Student ID</th>
                         {assignmentsList.length ? (
-                            assignmentsList.map((value) => (
-                                <th scope="col" key={value}>
+                            assignmentsList.map((value, index) => (
+                                <th scope="col" key={index}>
                                     {value}
                                 </th>
                             ))
@@ -82,8 +82,8 @@ export function StudentTabGrade(id) {
                 </thead>
                 <tbody>
                     {studentsGrade.length ? (
-                        studentsGrade.map((student) => (
-                            <tr key={student.studentId}>
+                        studentsGrade.map((student, index) => (
+                            <tr key={index}>
                                 <th scope="row">{student.studentId}</th>
                                 {student.assignments.length ? (
                                     student.assignments.map((score) => (
