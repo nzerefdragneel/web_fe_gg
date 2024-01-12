@@ -28,11 +28,13 @@ export function DetailReview() {
     const [classData, setClassData] = useState({});
     const [updateLoading, setUpdateLoading] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [update, setUpdate] = useState(false);
 
     const notifyCreateSusscess = () => toast.success("Update Request Success!");
     const notifyCreateFail = () => toast.error("Update Request Failed!");
 
     function handleRequest(option) {
+        setUpdateLoading(true);
         async function updateRequest() {
             try {
                 await gradeReviewService
@@ -55,6 +57,7 @@ export function DetailReview() {
                                 notifyCreateFail();
                                 setUpdateLoading(false);
                             }
+                            setUpdate(true);
                         },
                         (error) => {
                             notifyCreateFail();
@@ -155,7 +158,6 @@ export function DetailReview() {
                 console.error("Error fetching data");
             }
             try {
-                console.log(studentId, assignmentId);
                 const res =
                     await gradeReviewService.getGradeReviewRequestByStudentIdAndAssignmentId(
                         studentId,
@@ -170,8 +172,6 @@ export function DetailReview() {
         };
         fetchData();
     }, [assignmentId, classId, studentId, userId]);
-
-    console.log(gradeReview.currentGrade);
 
     return (
         <div className=" ">
@@ -240,38 +240,38 @@ export function DetailReview() {
                     </div>
                     {isTeacher && (
                         <div className="py-4 flex flex-row justify-center gap-x-2">
-                            <div className="mt-3 px-4">
-                                <button
-                                    className="bg-dark-green text-white py-2 px-4 rounded"
-                                    onClick={() => {
-                                        setUpdateLoading(true);
-                                        handleRequest("accepted");
-                                    }}
-                                    disabled={updateLoading}
-                                >
-                                    {updateLoading ? (
-                                        <span className="spinner-border spinner-border-lg text-dark-green hover:cursor-pointer"></span>
-                                    ) : (
-                                        "Accept Request"
-                                    )}
-                                </button>
-                            </div>
-                            <div className="mt-3 px-4">
-                                <button
-                                    className="bg-error-color text-white py-2 px-4 rounded hover:cursor-pointer"
-                                    onClick={() => {
-                                        setUpdateLoading(true);
-                                        handleRequest("refused");
-                                    }}
-                                    disabled={updateLoading}
-                                >
-                                    {updateLoading ? (
-                                        <span className="spinner-border spinner-border-lg text-dark-green"></span>
-                                    ) : (
-                                        "Refuse Request"
-                                    )}
-                                </button>
-                            </div>
+                            {!update && (
+                                <>
+                                    <div className="mt-3 px-4">
+                                        <button
+                                            className="bg-dark-green text-white py-2 px-4 rounded"
+                                            onClick={() => {
+                                                setUpdateLoading(true);
+                                                handleRequest("accepted");
+                                            }}
+                                        >
+                                            {updateLoading && (
+                                                <span className="spinner-border spinner-border-sm mr-1"></span>
+                                            )}
+                                            Accept Request
+                                        </button>
+                                    </div>
+                                    <div className="mt-3 px-4">
+                                        <button
+                                            className="bg-error-color text-white py-2 px-4 rounded hover:cursor-pointer"
+                                            onClick={() => {
+                                                setUpdateLoading(true);
+                                                handleRequest("refused");
+                                            }}
+                                        >
+                                            {updateLoading && (
+                                                <span className="spinner-border spinner-border-sm mr-1"></span>
+                                            )}
+                                            Refuse Request
+                                        </button>
+                                    </div>
+                                </>
+                            )}
                         </div>
                     )}
                     <div className="py-4">

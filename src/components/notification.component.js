@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import notificationService from "../services/notification.service";
 import classService from "../services/class.service";
-
 import { EnvelopeOpenIcon, EnvelopeIcon } from "@heroicons/react/24/solid";
 
 function Notification() {
@@ -22,7 +21,13 @@ function Notification() {
                     await notificationService.getNotificationByReceiverId(
                         user?.id
                     );
-                setNotice(res?.data?.reverse());
+                setNotice(
+                    res?.data?.sort(
+                        (a, b) =>
+                            new Date(b.createdAt).getTime() -
+                            new Date(a.createdAt).getTime()
+                    )
+                );
             } catch (error) {
                 console.log(error);
                 setNotice([]);
@@ -34,7 +39,6 @@ function Notification() {
 
     function handleClick(e, index) {
         e.preventDefault();
-        console.log(notice[index]);
         async function updateStatus() {
             try {
                 await notificationService.updatedStatus(
@@ -53,7 +57,6 @@ function Notification() {
                     user?.id
                 );
                 const isteacher = res?.data?.data;
-                console.log(isteacher);
                 if (isteacher) {
                     if (user?.id === notice[index]?.userId) {
                         studentId = notice[index]?.receiverId;
@@ -61,34 +64,27 @@ function Notification() {
                     if (user?.id === notice[index]?.receiverId) {
                         studentId = notice[index]?.userId;
                     }
-                    if (notice[index]?.type === "gradereview") {
-                        if (isteacher) {
-                            navigate(
-                                `/class/gradereview/details?classId=${notice[index]?.classNotification?.id}&assignmentId=${notice[index]?.assignmentNotification?.assignmentId}&studentId=${studentId}`,
-                                { relative: "path" }
-                            );
-                            window.location.reload();
-                        } else {
-                            navigate(
-                                `/class/gradereview/details?classId=${notice[index]?.classNotification?.id}&assignmentId=${notice[index]?.assignmentNotification?.assignmentId}&studentId=${studentId}`,
-                                { relative: "path" }
-                            );
-                            window.location.reload();
-                        }
-                    }
-                    if (notice[index]?.type === "grade") {
-                        navigate(
-                            `/class/detail?id=${notice[index]?.classNotification?.id}`,
-                            { relative: "path" }
-                        );
-                        window.location.reload();
-                    }
                 }
+                if (notice[index]?.type === "gradereview") {
+                    navigate(
+                        `/class/gradereview/details?classId=${notice[index]?.classNotification?.id}&assignmentId=${notice[index]?.assignmentNotification?.assignmentId}&studentId=${studentId}`,
+                        { relative: "path" }
+                    );
+                    window.location.reload();
+                }
+                if (notice[index]?.type === "grade") {
+                    navigate(
+                        `/class/detail?id=${notice[index]?.classNotification?.id}`,
+                        { relative: "path", state: { activeTab: "assignment" } }
+                    );
+                    window.location.reload();
+                }
+                console.log("errr");
             } catch (error) {
                 console.log(error);
             }
         }
-        updateStatus();
+        // updateStatus();
         coresponding();
     }
 
@@ -136,7 +132,7 @@ function Notification() {
                                         </div>
                                     </div>
                                     <div className="ml-3 flex-none text-xxs italic text-neutral-500">
-                                        {item.createdAt}
+                                        {item.createdAt.slice(0, 10)}
                                     </div>
                                 </div>
                             ))}

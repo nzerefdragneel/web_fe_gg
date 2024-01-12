@@ -40,6 +40,10 @@ export function DetailAssignment() {
     const notifyUpdateSusscess = () => toast.success("Update Grade Success!");
     const notifyUpdateFail = () => toast.error("Update Grade Fail!");
 
+    const notifyFinalizeSuccess = () =>
+        toast.success("Finalize Grade Success!");
+    const notifyFinalizeFail = () => toast.error("Finalize Grade Fail!");
+
     useEffect(() => {
         setLoadData(true);
         const fetchData = async () => {
@@ -333,14 +337,10 @@ export function DetailAssignment() {
                                                         assignmentId,
                                                         "grade"
                                                     );
-                                                    alert(
-                                                        "Finalize Grade Success"
-                                                    );
+                                                    notifyFinalizeSuccess();
                                                     setFinalizeLoading(false);
                                                 } else {
-                                                    alert(
-                                                        "Finalize Grade Fail"
-                                                    );
+                                                    notifyFinalizeFail();
                                                     setFinalizeLoading(false);
                                                 }
                                             });

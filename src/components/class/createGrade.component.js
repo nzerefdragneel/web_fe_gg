@@ -100,7 +100,14 @@ const CreateGrade = () => {
                                 if (res.status === 201) {
                                     notifyCreateSusscess();
                                     setTimeout(() => {
-                                        navigate(`/class/detail?id=${classId}`);
+                                        navigate(
+                                            `/class/detail?id=${classId}`,
+                                            {
+                                                state: {
+                                                    activeTab: "assignment",
+                                                },
+                                            }
+                                        );
                                     }, 1000);
                                     setIsLoading(false);
                                 }
@@ -191,6 +198,7 @@ const CreateGrade = () => {
                                 <div className="form-group text-right">
                                     <Link
                                         to={`/class/detail?id=${classId}`}
+                                        state={{ activeTab: "assignment" }}
                                         className=" text-gray-900 hover:no-underline"
                                     >
                                         <button className="w-32 py-2.5 text-white bg-error-color rounded-lg text-base mt-3 mr-3">
