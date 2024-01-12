@@ -134,7 +134,9 @@ export function DetailAssignment() {
       .then((res) => {
         if (res.status === 201) {
           setMessageImport(res.data.message);
+          notifyUpdateSusscess();
         } else {
+          notifyUpdateFail();
           setMessageImport("Import fail");
         }
       })
@@ -170,6 +172,8 @@ export function DetailAssignment() {
   const handleClose = () => {
     setOpen(false);
   };
+
+  console.log("grades", grades);
 
   return (
     <div className=" ">
@@ -283,47 +287,49 @@ export function DetailAssignment() {
                 </>
               ))}
             </List>
-            {!isFinalized && !assignment.isFinalized && (
-              <button
-                className="px-4 py-2.5 text-white bg-dark-green rounded-lg text-sm mt-3 float-right"
-                onClick={async () => {
-                  setFinalizeLoading(true);
-                  try {
-                    await gradeService
-                      .finalizeGrade(assignmentId, classId)
-                      .then((res) => {
-                        if (res.status === 201) {
-                          notificationService.createBatchNotification(
-                            `Finalized ${assignment.name} for ${classData.className}`,
-                            `${assignment.name} in ${classData.className} has been finalized. Go check your score. Any review requests should be proceed within 3 days.`,
-                            classId,
-                            userId,
-                            students.map((student) => student.studentId),
-                            assignmentId,
-                            "grade"
-                          );
-                          alert("Finalize Grade Success");
-                          setFinalizeLoading(false);
-                        } else {
-                          alert("Finalize Grade Fail");
-                          setFinalizeLoading(false);
-                        }
-                      });
-                    setIsFinalized(true);
-                  } catch (error) {
-                    console.log(error);
-                  }
-                  setFinalizeLoading(false);
-                }}
-                disabled={finalizeLoading}
-              >
-                {finalizeLoading ? (
-                  <span className="spinner-border spinner-border-sm mr-1"></span>
-                ) : (
-                  <span>Finalize this assignment</span>
-                )}
-              </button>
-            )}
+            {grades.length === students.length &&
+              !isFinalized &&
+              !assignment.isFinalized && (
+                <button
+                  className="px-4 py-2.5 text-white bg-dark-green rounded-lg text-sm mt-3 float-right"
+                  onClick={async () => {
+                    setFinalizeLoading(true);
+                    try {
+                      await gradeService
+                        .finalizeGrade(assignmentId, classId)
+                        .then((res) => {
+                          if (res.status === 201) {
+                            notificationService.createBatchNotification(
+                              `Finalized ${assignment.name} for ${classData.className}`,
+                              `${assignment.name} in ${classData.className} has been finalized. Go check your score. Any review requests should be proceed within 3 days.`,
+                              classId,
+                              userId,
+                              students.map((student) => student.studentId),
+                              assignmentId,
+                              "grade"
+                            );
+                            alert("Finalize Grade Success");
+                            setFinalizeLoading(false);
+                          } else {
+                            alert("Finalize Grade Fail");
+                            setFinalizeLoading(false);
+                          }
+                        });
+                      setIsFinalized(true);
+                    } catch (error) {
+                      console.log(error);
+                    }
+                    setFinalizeLoading(false);
+                  }}
+                  disabled={finalizeLoading}
+                >
+                  {finalizeLoading ? (
+                    <span className="spinner-border spinner-border-sm mr-1"></span>
+                  ) : (
+                    <span>Finalize this assignment</span>
+                  )}
+                </button>
+              )}
 
             {hasImported && (
               <button
@@ -346,8 +352,6 @@ export function DetailAssignment() {
                 )}
               </button>
             )}
-
-            {messageImport && <h1>{messageImport}</h1>}
 
             <div className="flex justify-center">
               <Dialog
