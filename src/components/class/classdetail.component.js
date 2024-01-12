@@ -14,17 +14,20 @@ import { TabGrade } from "./tabGrade.component";
 import { TabAssignment } from "./tabAssignment.component";
 import { StudentTabAssignment } from "./studentTabAssignment.component";
 import { StudentTabGrade } from "./studentTabGrade.component";
+import { TabGradeReview } from "./tabGradeReview.component";
 
 export function ClassDetail() {
     const [activeTab, setActiveTab] = useState("news");
     const [isteacher, setIsteacher] = useState(false);
     const [classactive, setclassactive] = useState(1);
+    const [loading, setLoading] = useState(false);
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
     const classId = queryParams.get("id");
     const navigate = useNavigate();
     useEffect(() => {
         const fetchData = async () => {
+            setLoading(true);
             try {
                 const user = JSON.parse(localStorage.getItem("user"));
 
@@ -50,7 +53,7 @@ export function ClassDetail() {
                     try {
                         const havsmssv = await classService.checkhavemssv(
                             classId,
-                            user.id
+                            user?.id
                         );
                         console.log(havsmssv);
 
@@ -72,13 +75,19 @@ export function ClassDetail() {
             } catch (error) {
                 console.error("Error fetching data:", error.message);
             }
+            setLoading(false);
         };
         fetchData();
     }, [classId]);
 
     return (
         <div className="">
-            {classactive === 1 && (
+            {loading && (
+                <div className="mx-auto text-center mt-4">
+                    <span className="spinner-border spinner-border-lg text-dark-green"></span>
+                </div>
+            )}
+            {!loading && classactive === 1 && (
                 <Tabs value={activeTab}>
                     <TabsHeader
                         className="rounded-none border-b border-blue-gray-50 bg-transparent p-0 text-base m-1 px-1 flex flex-row right-0 "
@@ -111,6 +120,20 @@ export function ClassDetail() {
                         >
                             Grade Structure
                         </Tab>
+                        {isteacher && (
+                            <Tab
+                                key="reviewList"
+                                value="reviewList"
+                                onClick={() => setActiveTab("reviewList")}
+                                className={
+                                    activeTab === "reviewList"
+                                        ? "text-gray-900 rounded-tr-md rounded-tl-md border-slate-900 font-semibold border-b-4"
+                                        : ""
+                                }
+                            >
+                                Grade Review Request List
+                            </Tab>
+                        )}
                         <Tab
                             key="everybody"
                             value="everybody"
@@ -149,6 +172,11 @@ export function ClassDetail() {
                                 ></StudentTabAssignment>
                             )}
                         </TabPanel>
+                        {isteacher && (
+                            <TabPanel key="reviewList" value="reviewList">
+                                <TabGradeReview id={classId}></TabGradeReview>
+                            </TabPanel>
+                        )}
                         <TabPanel key="everybody" value="everybody">
                             <TabEverybody id={classId}></TabEverybody>
                         </TabPanel>
@@ -162,7 +190,7 @@ export function ClassDetail() {
                     </TabsBody>
                 </Tabs>
             )}
-            {classactive === 0 && (
+            {!loading && classactive === 0 && (
                 <div className="flex flex-col items-center justify-center h-full">
                     <div className="text-3xl font-semibold text-gray-700">
                         This class is not active

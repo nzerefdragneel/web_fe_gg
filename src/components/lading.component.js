@@ -58,7 +58,7 @@ function Lading() {
                     </div>
                     <div className="justify-self-center">
                         <img
-                            src="./assets/online-class.jpg"
+                            src="/assets/online-class.jpg"
                             className="h-96 rounded-2xl"
                             alt="online-class"
                         />

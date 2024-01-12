@@ -3,8 +3,10 @@ import {} from "@heroicons/react/24/solid";
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import { useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import notificationService from "../../services/notification.service";
 
-import gradeService from "../../services/grade.service";
+import gradeReviewService from "../../services/gradereview.service";
 
 const required = (value) => {
     if (!value) {
@@ -33,29 +35,30 @@ const checkPoint = (value) => {
     }
 };
 
-const UpdateGrade = ({
-    student,
-    prevGrade,
-    handleClose,
+const ReviewRequest = ({
     assignmentId,
     classId,
+    score,
+    handleClose,
+    listTeacher,
     notifyUpdateSusscess,
     notifyUpdateFail,
 }) => {
     const fref = useRef(null);
     const [grade, setGrade] = useState("");
+    const [reason, setReason] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const [message, setMessage] = useState("");
     const [isSubmit, setIsSubmit] = useState(false);
 
-    const teacherId = JSON.parse(localStorage.getItem("user")).id;
+    const studentId = JSON.parse(localStorage.getItem("user")).id;
 
     function handleSubmit(e) {
         e.preventDefault();
         if (fref.current) {
             fref.current.validateAll();
         }
-        async function updateGrade() {
+        async function submitReviewRequest() {
             try {
                 if (grade === "") {
                     notifyUpdateFail();
@@ -63,28 +66,34 @@ const UpdateGrade = ({
                     setIsLoading(false);
                     return;
                 }
-                if (grade > 10 || grade < 0) {
-                    notifyUpdateFail();
-                    setMessage("Grade must be between 0 and 10");
-                    setIsLoading(false);
-                    return;
-                }
-                gradeService
-                    .updateGradeOfStudent(
+                gradeReviewService
+                    .createGradeReviewRequest(
+                        studentId,
                         assignmentId,
-                        student.mssv,
-                        grade,
                         classId,
-                        teacherId
+                        score,
+                        grade,
+                        reason
                     )
                     .then(
                         (res) => {
                             if (res.status === 201) {
+                                notificationService.createBatchNotification(
+                                    "Review Request",
+                                    `Request for review grade of assignment ${assignmentId} in class ${classId}`,
+                                    classId,
+                                    studentId,
+                                    listTeacher.map(
+                                        (teacher) => teacher.teacherId
+                                    ),
+                                    assignmentId,
+                                    "gradereview"
+                                );
                                 notifyUpdateSusscess();
                                 setIsLoading(false);
                                 setTimeout(() => {
                                     window.location.reload();
-                                }, 1000);
+                                }, 800);
                             }
                         },
                         (error) => {
@@ -99,8 +108,7 @@ const UpdateGrade = ({
                 console.error("Error fetching data:", error.message);
             }
         }
-
-        updateGrade();
+        submitReviewRequest();
     }
 
     return (
@@ -108,7 +116,7 @@ const UpdateGrade = ({
             <div className=" ">
                 <div className="flex flex-col justify-end px-4">
                     <div className="text-2xl text-dark-green font-bold mt-3">
-                        Update Grade
+                        Review Request
                     </div>
                     <div className="my-3">
                         <Form onSubmit={handleSubmit} ref={fref}>
@@ -118,14 +126,14 @@ const UpdateGrade = ({
                                         htmlFor="classname"
                                         className="font-semibold mb-2"
                                     >
-                                        Student ID
+                                        Your current score
                                     </label>
                                     <Input
                                         type="text"
                                         className="form-control p-3 rounded required"
                                         name="classname"
                                         readOnly={true}
-                                        value={student.mssv}
+                                        value={score}
                                     />
                                 </div>
                                 <div className="form-group">
@@ -133,17 +141,32 @@ const UpdateGrade = ({
                                         htmlFor="email"
                                         className="font-semibold mb-2 mt-2"
                                     >
-                                        Grade
+                                        Your desired score
                                     </label>
                                     <Input
-                                        type="number"
+                                        type="text"
                                         className="form-control p-3 rounded"
                                         name="email"
-                                        placeholder={prevGrade}
                                         onChange={(e) => {
                                             setGrade(e.target.value);
                                         }}
                                         validations={[required, checkPoint]}
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label
+                                        htmlFor="classname"
+                                        className="font-semibold mb-2"
+                                    >
+                                        Reason
+                                    </label>
+                                    <Input
+                                        type="text"
+                                        className="form-control p-3 rounded required"
+                                        name="classname"
+                                        onChange={(e) => {
+                                            setReason(e.target.value);
+                                        }}
                                     />
                                 </div>
                                 {isSubmit && (
@@ -153,15 +176,13 @@ const UpdateGrade = ({
                                 )}
                                 <div className="form-group text-right">
                                     <button
-                                        className="w-32 py-2.5 text-white bg-error-color rounded-lg text-base mt-3 mr-3"
-                                        type="button"
+                                        className="w-32 py-2.5 text-white bg-error-color hover:cursor-pointer rounded-lg text-base mt-3 mr-2"
                                         onClick={handleClose}
                                     >
                                         Cancel
                                     </button>
                                     <button
-                                        type="submit"
-                                        className="w-32 py-2.5 text-white bg-dark-green rounded-lg text-base mt-3"
+                                        className="w-32 py-2.5 text-white bg-dark-green hover:cursor-pointer  rounded-lg text-base mt-3"
                                         onClick={() => {
                                             setIsLoading(true);
                                         }}
@@ -181,4 +202,4 @@ const UpdateGrade = ({
     );
 };
 
-export default UpdateGrade;
+export default ReviewRequest;

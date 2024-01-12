@@ -15,11 +15,12 @@ class UserService {
             mode: "no-cors",
         });
     }
-    EditUser(userId, username, email, password) {
+    EditUser(userId, fullname, username, email, password) {
         return axios.put(
             API_TEST + "edituser",
             {
                 userId,
+                fullname,
                 username,
                 email,
                 password,

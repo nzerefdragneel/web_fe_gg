@@ -29,7 +29,6 @@ class LoginForm extends Component {
             password: "",
             loading: false,
             message: "",
-            rememberMe: false,
         };
     }
 
@@ -39,12 +38,6 @@ class LoginForm extends Component {
         });
         this.setState({ message: "" });
     }
-
-    onChangeRememberMe = () => {
-        this.setState({
-            rememberMe: !this.state.rememberMe,
-        });
-    };
 
     onChangePassword(e) {
         this.setState({
@@ -161,16 +154,6 @@ class LoginForm extends Component {
                     </div>
 
                     <div className="form-group">
-                        <input
-                            type="checkbox"
-                            value={this.state.rememberMe}
-                            onChange={this.onChangeRememberMe}
-                            id="rememberMe"
-                        />{" "}
-                        <label for="rememberMe">Remember me</label>
-                    </div>
-
-                    <div className="form-group">
                         <button
                             style={{
                                 backgroundColor: "#557C55",
@@ -206,7 +189,7 @@ class LoginForm extends Component {
                     >
                         <div className="rounded-lg bg-neutral-200 flex justify-center items-center p-2 mr-2 hover:cursor-pointer">
                             <img
-                                src="./assets/google.svg"
+                                src="/assets/google.svg"
                                 className="w-10 h-10"
                                 alt="Google"
                             />
@@ -217,7 +200,7 @@ class LoginForm extends Component {
                     >
                         <div className="rounded-lg bg-neutral-200 flex justify-center items-center p-2 hover:cursor-pointer">
                             <img
-                                src="./assets/facebook.svg"
+                                src="/assets/facebook.svg"
                                 className="w-10 h-10"
                                 alt="Facebook"
                             />
