@@ -158,16 +158,16 @@ function Notification() {
                                     Previous
                                 </button>
                                 <div className="mx-1.5 text-base text-neutral-600 italic">
-                                    {page}/{Math.round(notice.length / 10)}
+                                    {page}/{Math.ceil(notice.length / 10)}
                                 </div>
                                 <button
                                     className={`w-20 py-1.5 text-gray-800 border border-dark-green ${
                                         page !==
-                                            Math.round(notice.length / 10) &&
+                                            Math.ceil(notice.length / 10) &&
                                         "hover:bg-medium-green"
                                     }  rounded-lg text-xs mt-3 mr-1`}
                                     disabled={
-                                        page === Math.round(notice.length / 10)
+                                        page === Math.ceil(notice.length / 10)
                                     }
                                     onClick={() => {
                                         setPage(page + 1);
