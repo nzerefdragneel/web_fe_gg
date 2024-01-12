@@ -82,8 +82,8 @@ class ClassService {
             mode: "no-cors",
         });
     }
-    getAllClassesAdmin(page,limit){
-        return axios.get(API_URL + `getall?page=${page}&size=${limit}`,
+    getAllClassesAdmin(page,limit,asc){
+        return axios.get(API_URL + `getall?page=${page}&size=${limit}&asc=${asc}`, 
         {
             headers: headers,
             mode: "no-cors",
@@ -230,6 +230,17 @@ class ClassService {
             headers: headers,
             mode: "no-cors",
         })}
+        getAllClassesSearch(page,limit,asc,search){
+            return axios.get(API_URL + `filterclass?page=${page}&size=${limit}&asc=${asc}&className=${search}`, {
+              headers: {
+                  "Cache-Control": "no-cache",
+                  "Content-Type": "application/x-www-form-urlencoded",
+                  "Access-Control-Allow-Origin": "*",
+              },
+              mode: "no-cors",
+          }
+          )};
+
 }
 
 

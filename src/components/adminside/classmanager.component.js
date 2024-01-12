@@ -34,6 +34,9 @@ export default function ClassManager() {
       });
      }
      const fetchClassesSearch = async () => {
+      if (search==="") {
+        fetchClasses();
+      }
       await classService.getAllClassesSearch(currentpage,limit,ascending,search)
       .then((response) => {
         console.log(response);
