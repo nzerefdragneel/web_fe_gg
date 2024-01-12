@@ -279,14 +279,7 @@ class App extends Component {
                                                 path="/notification"
                                                 element={<Notification />}
                                             />
-                                            <Route
-                                                path="/forgot-password"
-                                                element={<ForgotPassword />}
-                                            />
-                                            <Route
-                                                path="/reset-password"
-                                                element={<ResetPassword />}
-                                            />
+                                           
                                             <Route
                                                 path="/class/detail"
                                                 element={<ClassDetail />}
@@ -348,6 +341,14 @@ class App extends Component {
                                          <Route
                                                 path="/invitation"
                                                 element={<Invitation />}
+                                            />
+                                             <Route
+                                                path="/forgot-password"
+                                                element={<ForgotPassword />}
+                                            />
+                                            <Route
+                                                path="/reset-password"
+                                                element={<ResetPassword />}
                                             />
                                     </Routes>
                                 </div>
