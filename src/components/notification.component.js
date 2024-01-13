@@ -7,6 +7,8 @@ import { EnvelopeOpenIcon, EnvelopeIcon } from "@heroicons/react/24/solid";
 function Notification() {
     const [loadData, setLoadData] = useState(false);
     const [notice, setNotice] = useState([]);
+    const [showNotices, setShowNotices] = useState([]);
+    const [page, setPage] = useState(1);
     // const [isteacher, setIsteacher] = useState(false);
 
     const navigate = useNavigate();
@@ -35,14 +37,21 @@ function Notification() {
             setLoadData(false);
         }
         fetchNotice();
+        setShowNotices(notice.slice(0, 10));
     }, [user?.id]);
+
+    useEffect(() => {
+        setShowNotices(notice.slice(10 * (page - 1), 10 * page));
+    }, [notice, page]);
 
     function handleClick(e, index) {
         e.preventDefault();
+        const noticeIndex = 10 * (page - 1) + index;
+        console.log(notice[noticeIndex]);
         async function updateStatus() {
             try {
                 await notificationService.updatedStatus(
-                    notice[index].notificationId,
+                    notice[noticeIndex].notificationId,
                     "read"
                 );
             } catch (error) {
@@ -53,28 +62,28 @@ function Notification() {
             let studentId = user?.id;
             try {
                 const res = await classService.checkteacher(
-                    notice[index]?.classNotification?.id,
+                    notice[noticeIndex]?.classNotification?.id,
                     user?.id
                 );
                 const isteacher = res?.data?.data;
                 if (isteacher) {
-                    if (user?.id === notice[index]?.userId) {
-                        studentId = notice[index]?.receiverId;
+                    if (user?.id === notice[noticeIndex]?.userId) {
+                        studentId = notice[noticeIndex]?.receiverId;
                     }
-                    if (user?.id === notice[index]?.receiverId) {
-                        studentId = notice[index]?.userId;
+                    if (user?.id === notice[noticeIndex]?.receiverId) {
+                        studentId = notice[noticeIndex]?.userId;
                     }
                 }
-                if (notice[index]?.type === "gradereview") {
+                if (notice[noticeIndex]?.type === "gradereview") {
                     navigate(
-                        `/class/gradereview/details?classId=${notice[index]?.classNotification?.id}&assignmentId=${notice[index]?.assignmentNotification?.assignmentId}&studentId=${studentId}`,
+                        `/class/gradereview/details?classId=${notice[noticeIndex]?.classNotification?.id}&assignmentId=${notice[noticeIndex]?.assignmentNotification?.assignmentId}&studentId=${studentId}`,
                         { relative: "path" }
                     );
                     window.location.reload();
                 }
-                if (notice[index]?.type === "grade") {
+                if (notice[noticeIndex]?.type === "grade") {
                     navigate(
-                        `/class/detail?id=${notice[index]?.classNotification?.id}`,
+                        `/class/detail?id=${notice[noticeIndex]?.classNotification?.id}`,
                         { relative: "path", state: { activeTab: "assignment" } }
                     );
                     window.location.reload();
@@ -84,7 +93,7 @@ function Notification() {
                 console.log(error);
             }
         }
-        // updateStatus();
+        updateStatus();
         coresponding();
     }
 
@@ -105,9 +114,9 @@ function Notification() {
                             You have no notification
                         </div>
                     )}
-                    {notice?.length > 0 && (
+                    {showNotices?.length > 0 && (
                         <div className="mt-2 mx-4">
-                            {notice?.map((item, index) => (
+                            {showNotices?.map((item, index) => (
                                 <div
                                     key={index}
                                     onClick={(e) => {
@@ -136,6 +145,37 @@ function Notification() {
                                     </div>
                                 </div>
                             ))}
+                            <div className="text-right mt-3 flex flex-row gap-x-1 justify-end items-end">
+                                <button
+                                    className={`w-20 py-1.5 text-gray-800 border border-dark-green ${
+                                        page !== 1 && "hover:bg-medium-green"
+                                    }  rounded-lg text-xs mt-3 mr-1`}
+                                    disabled={page === 1}
+                                    onClick={() => {
+                                        setPage(page - 1);
+                                    }}
+                                >
+                                    Previous
+                                </button>
+                                <div className="mx-1.5 text-base text-neutral-600 italic">
+                                    {page}/{Math.ceil(notice.length / 10)}
+                                </div>
+                                <button
+                                    className={`w-20 py-1.5 text-gray-800 border border-dark-green ${
+                                        page !==
+                                            Math.ceil(notice.length / 10) &&
+                                        "hover:bg-medium-green"
+                                    }  rounded-lg text-xs mt-3 mr-1`}
+                                    disabled={
+                                        page === Math.ceil(notice.length / 10)
+                                    }
+                                    onClick={() => {
+                                        setPage(page + 1);
+                                    }}
+                                >
+                                    Next
+                                </button>
+                            </div>
                         </div>
                     )}
                 </>
