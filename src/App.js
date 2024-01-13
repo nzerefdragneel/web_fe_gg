@@ -168,7 +168,6 @@ class App extends Component {
                                     {/* admin routes */}
                                     {roles === "admin" && currentUser && (
                                         <Routes>
-                                            {/* <Route path="/home" element={<AdminHome />} /> */}
                                             <Route
                                                 exact
                                                 path="/"
