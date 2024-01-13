@@ -86,10 +86,7 @@ function StudentJoinInClass() {
                             <div className="text-3xl text-dark-green font-bold mt-3">
                                 Classroom
                             </div>
-                            <div className="text-lg mt-3 ml-4">Welcom</div>
-                            <div className="text-xs mt-3 text-neutral-600 ml-4">
-                                Chào
-                            </div>
+                            <div className="text-lg mt-3 ml-4">Hi!</div>
                         </div>
                     </div>
                     <div className="bg-gray-50 m-3 p-5">
